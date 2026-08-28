@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.component.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="co.id.controller.pages.ExamScheduleFormController"
+            fitToWidth="true">
+    <content>
+        <VBox spacing="10" styleClass="form-background">
+
+            <Label text="Form Jadwal Ujian" styleClass="form-label"/>
+
+            <ComboBox fx:id="comboExamType" promptText="Jenis Ujian">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="UTS"/>
+                        <String fx:value="UAS"/>
+                        <String fx:value="UKK"/>
+                        <String fx:value="PRAKTIK"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <ComboBox fx:id="comboSemester" promptText="Semester">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Ganjil"/>
+                        <String fx:value="Genap"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <TextField fx:id="textFieldAcademicYear" promptText="Tahun Akademik (contoh: 2026/2027)"/>
+
+            <DatePicker fx:id="datePickerDate" promptText="Tanggal Ujian"/>
+
+            <HBox spacing="10">
+                <TextField fx:id="textFieldStartTime" promptText="Jam Mulai (HH:mm)" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="textFieldEndTime" promptText="Jam Selesai (HH:mm)" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <LookupBox fx:id="lookupBoxClassroom" promptText="Pilih Kelas"/>
+
+            <ComboBox fx:id="comboSubject" promptText="Pilih Kelas terlebih dahulu"/>
+
+            <LookupBox fx:id="lookupBoxRoom" promptText="Pilih Ruangan"/>
+
+            <LookupBox fx:id="lookupBoxTeacher" promptText="Pilih Pengawas"/>
+
+            <TextArea fx:id="textAreaNotes" promptText="Keterangan (opsional)" prefRowCount="2"/>
+
+            <VBox styleClass="form-vbox"/>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Button text="Simpan" fx:id="saveBtn" onAction="#saveEntity" styleClass="form-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/save.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+
+        </VBox>
+    </content>
+</ScrollPane>

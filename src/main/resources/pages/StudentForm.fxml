@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.component.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="co.id.controller.pages.StudentFormController"
+      spacing="12" styleClass="form-background">
+
+    <Label text="Form Siswa" styleClass="form-label"/>
+
+    <TextField fx:id="textFieldNis" promptText="NIS"/>
+    <TextField fx:id="textFieldName" promptText="Nama Siswa"/>
+
+    <LookupBox fx:id="lookupBoxClassroom" promptText="Pilih Kelas"/>
+
+    <HBox spacing="10">
+        <Label text="Jenis Kelamin :"/>
+        <RadioButton fx:id="radioMale" text="Laki-laki"/>
+        <RadioButton fx:id="radioFemale" text="Perempuan"/>
+    </HBox>
+
+    <TextField fx:id="textFieldPhone" promptText="No. HP"/>
+    <TextArea fx:id="textAreaAddress" promptText="Alamat" prefRowCount="3"/>
+
+    <VBox styleClass="form-vbox"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Simpan" fx:id="saveBtn" onAction="#saveEntity" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image><Image url="@/icons/save.png"/></image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>

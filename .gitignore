@@ -1,0 +1,7 @@
+target/
+*.class
+photos/
+*.log
+.idea/
+*.iml
+nbproject/private/

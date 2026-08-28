@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.model.Major?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="co.id.controller.pages.ClassroomFormController"
+      spacing="12" styleClass="form-background">
+
+    <Label text="Form Kelas" styleClass="form-label"/>
+
+    <ComboBox fx:id="comboGrade" promptText="Tingkat">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="X"/>
+                <String fx:value="XI"/>
+                <String fx:value="XII"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <ComboBox fx:id="comboMajor" promptText="Jurusan"/>
+
+    <ComboBox fx:id="comboRombel" promptText="Rombel">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="A"/>
+                <String fx:value="B"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label fx:id="lblPreview" text="Nama kelas: -" styleClass="form-preview-label"/>
+
+    <VBox styleClass="form-vbox"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Simpan" fx:id="saveBtn" onAction="#saveEntity" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image><Image url="@/icons/save.png"/></image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>

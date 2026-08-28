@@ -1,0 +1,202 @@
+.login-background{
+    -fx-background-color: linear-gradient(to bottom right, #1A3D6D, #27496D);
+}
+.login-card{
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 40 30 40 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 8);
+}
+.login-title{
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A3D6D;
+}
+.login-subtitle{
+    -fx-font-size: 12px;
+    -fx-text-fill: #888;
+}
+.login-input{
+    -fx-pref-width: 250;
+    -fx-pref-height: 38;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #DDD;
+    -fx-padding: 0 10 0 10;
+}
+.login-button{
+    -fx-background-color: #1A3D6D;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-pref-height: 40;
+    -fx-background-radius: 6;
+}
+.login-button:hover{
+    -fx-background-color: #27496D;
+    -fx-cursor: hand;
+}
+.login-error{
+    -fx-text-fill: #F44336;
+    -fx-font-size: 12px;
+}
+
+.menu-brand{
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.menu-background{
+    -fx-background-color: linear-gradient(to bottom, #1A3D6D, #27496D);
+    -fx-padding: 20;
+}
+
+.menu-parent{
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.menu-parent-collapsed{
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-max-width: infinity;
+    -fx-padding: 8 0 8 0;
+}
+
+.menu-child{
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 20;
+}
+
+.menu-section-label{
+    -fx-text-fill: #9FB3D1;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 0 2 20;
+}
+
+.navbar-background{
+    -fx-background-color: white;
+    -fx-padding:10 20;
+}
+
+.navbar-toggle{
+    -fx-background-color: transparent;
+    -fx-font-size: 18px;
+}
+
+.navbar-menu{
+    -fx-background-color: transparent;
+    -fx-text-fill:#333;
+}
+
+.sidebar-scroll{
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.sidebar-scroll .viewport{
+    -fx-background-color: transparent;
+}
+
+.sidebar-scroll .scroll-bar:vertical{
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+.sidebar-scroll .scroll-bar:vertical .thumb{
+    -fx-background-color: rgba(255,255,255,0.3);
+    -fx-background-radius: 4;
+}
+.sidebar-scroll .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+}
+
+.form-background{
+    -fx-padding:20;
+    -fx-background-color: white;
+}
+
+.form-label{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.dashboard-title{
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+}
+
+.dashboard-card{
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 25;
+    -fx-spacing: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-pref-width: 260;
+    -fx-pref-height: 130;
+}
+.dashboard-card-title{
+    -fx-font-size: 15px;
+    -fx-text-fill: #888;
+}
+.dashboard-card-value{
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A3D6D;
+}
+
+.btn-edit{
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+}
+.btn-delete{
+    -fx-background-color: #F44336;
+    -fx-text-fill: white;
+}
+
+.btn-duplicate{
+    -fx-background-color: #FF9800;
+    -fx-text-fill: white;
+}
+
+.list-menu-background{
+    -fx-background-color: #F7FAFF;
+    -fx-padding:40;
+}
+.list-menu-top-vbox{
+    -fx-padding:0 0 10 0;
+}
+.list-menu-top-label{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.list-menu-top-button{
+    -fx-background-color: #4CAF50;
+    -fx-text-fill:white;
+}
+.list-menu-center-vbox{
+    -fx-padding:10 0 10 0;
+}
+.list-menu-bottom-vbox{
+    -fx-padding:10 0 0 0;
+}
+.form-vbox{
+    -fx-pref-height:20;
+}
+.form-button{
+    -fx-background-color: #4CAF50;
+    -fx-text-fill:white;
+}
+
+.form-preview-label{
+    -fx-font-style: italic;
+    -fx-text-fill: #555;
+    -fx-font-size: 13px;
+}

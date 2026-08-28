@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<HBox xmlns="http://javafx.com/javafx" 
+      xmlns:fx="http://javafx.com/fxml"
+      spacing="10" alignment="CENTER_LEFT"   
+      fx:controller="co.id.controller.layout.NavbarController"
+      styleClass="navbar-background">
+    <!-- Toggle sidebar Button -->
+    <Button fx:id = "toggleSidebarBtn" text="☰" styleClass="navbar-toggle"/>
+    <!-- spacer -->
+    <HBox HBox.hgrow="ALWAYS" />
+    <!-- Profile Icon + Menu -->
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+        <!-- Bulatkan ImageView dengan stackPane -->
+        <StackPane>
+            <ImageView fx:id="profileImage" fitWidth="32" fitHeight="32">
+            </ImageView>  
+        </StackPane>
+        <!-- User Dropdown -->
+        <MenuButton fx:id="menuButtonUser" text="User" styleClass="navbar-menu">
+            <items>
+                <MenuItem text="Edit Profile" onAction="#handleEditProfile"/>
+                <MenuItem text="Account Setting" onAction="#handleAccountSetting"/>
+                <SeparatorMenuItem />
+                <MenuItem fx:id="menuItemLogout" text="Logout" onAction="#handleLogout"/>
+            </items>
+        </MenuButton> 
+    </HBox>
+</HBox>

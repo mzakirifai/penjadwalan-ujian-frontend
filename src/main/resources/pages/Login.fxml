@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import co.id.component.*?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="co.id.controller.pages.LoginController"
+      styleClass="login-background">
+
+    <VBox spacing="15" alignment="CENTER" maxWidth="350" maxHeight="400" styleClass="login-card">
+
+        <ImageView fitWidth="60" fitHeight="60" preserveRatio="true">
+            <image>
+                <Image url="@/images/logo_smk_adiluhur.png"/>
+            </image>
+        </ImageView>
+
+        <Label text="Sistem Penjadwalan Ujian" styleClass="login-title"/>
+        <Label text="Silakan login untuk melanjutkan" styleClass="login-subtitle"/>
+
+        <TextField fx:id="textFieldUsername" promptText="Username" styleClass="login-input"/>
+        <PasswordToggleField fx:id="passwordFieldPassword" styleClass="login-input"/>
+
+        <Label fx:id="lblErrorMessage" styleClass="login-error" visible="false" managed="false"/>
+
+        <Button text="Login" fx:id="btnLogin" onAction="#handleLogin" styleClass="login-button" maxWidth="Infinity"/>
+
+    </VBox>
+
+</StackPane>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane fx:id="sidebar"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="co.id.controller.layout.SidebarController"
+      styleClass="menu-background" prefWidth="240">
+
+    <top>
+        <Label fx:id="brandLabel" text="Penjadwalan Ujian" styleClass="menu-brand">
+            <graphic>
+                <ImageView fitWidth="35" fitHeight="35" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/logo_smk_adiluhur.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+            <BorderPane.margin>
+                <Insets bottom="15"/>
+            </BorderPane.margin>
+        </Label>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="sidebar-scroll">
+            <content>
+                <VBox fx:id="scrollableMenu" spacing="8">
+
+                    <Button fx:id="dashboardBtn" text="Dashboard" onAction="#handleDashboardClick" styleClass="menu-parent">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
+                                <image><Image url="@/icons/dashboard.png"/></image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <!-- Master -->
+                    <Button fx:id="masterMenu" text="Master ▸"
+                            onAction="#toggleMasterMenu" styleClass="menu-parent">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
+                                <image><Image url="@/icons/master.png"/></image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <VBox fx:id="masterMenuBox" spacing="5" visible="false" managed="false">
+                        <Button text="Guru" onAction="#handleTeacherClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/teacher.png"/></image></ImageView></graphic>
+                        </Button>
+                        <Button text="Jurusan" onAction="#handleMajorClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/major.png"/></image></ImageView></graphic>
+                        </Button>
+                        <Button text="Kelas" onAction="#handleClassroomClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/classroom.png"/></image></ImageView></graphic>
+                        </Button>
+                        <Button text="Siswa" onAction="#handleStudentClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/student.png"/></image></ImageView></graphic>
+                        </Button>
+                        <Button text="Mapel" onAction="#handleSubjectClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/subject.png"/></image></ImageView></graphic>
+                        </Button>
+                        <Button text="Ruangan" onAction="#handleRoomClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/room.png"/></image></ImageView></graphic>
+                        </Button>
+                    </VBox>
+
+                    <!-- Transaksi -->
+                    <Button fx:id="transactionMenu" text="Transaksi ▸"
+                            onAction="#toggleTransactionMenu" styleClass="menu-parent">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
+                                <image><Image url="@/icons/transaction.png"/></image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <VBox fx:id="transactionMenuBox" spacing="5" visible="false" managed="false">
+                        <Button text="Jadwal Ujian" onAction="#handleExamScheduleClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/exam_schedule.png"/></image></ImageView></graphic>
+                        </Button>
+                        <Button text="Peserta Ujian" onAction="#handleExamParticipantClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/exam_participant.png"/></image></ImageView></graphic>
+                        </Button>
+                        <Button text="Nilai Ujian" onAction="#handleExamScoreClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/exam_score.png"/></image></ImageView></graphic>
+                        </Button>
+                    </VBox>
+
+                    <!-- Laporan -->
+                    <Button fx:id="reportMenu" text="Laporan ▸"
+                            onAction="#toggleReportMenu" styleClass="menu-parent">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
+                                <image><Image url="@/icons/report.png"/></image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <VBox fx:id="reportMenuBox" spacing="3" visible="false" managed="false">
+                        <Label text="Data &amp; Identitas" styleClass="menu-section-label"/>
+                        <Button text="Data Jurusan" onAction="#handleReportMajorClick" styleClass="menu-child"/>
+                        <Button text="Data Kelas" onAction="#handleReportClassroomClick" styleClass="menu-child"/>
+                        <Button text="Data Ruangan" onAction="#handleReportRoomClick" styleClass="menu-child"/>
+                        <Button text="Mapel per Jurusan" onAction="#handleReportSubjectClick" styleClass="menu-child"/>
+                        <Button text="Kartu Siswa" onAction="#handleReportStudentCardClick" styleClass="menu-child"/>
+                        <Button text="Profil Guru" onAction="#handleReportTeacherProfileClick" styleClass="menu-child"/>
+
+                        <Label text="Ujian" styleClass="menu-section-label"/>
+                        <Button text="Jadwal Ujian" onAction="#handleReportExamScheduleClick" styleClass="menu-child"/>
+                        <Button text="Kartu Peserta" onAction="#handleReportParticipantCardClick" styleClass="menu-child"/>
+                        <Button text="Hasil Ujian" onAction="#handleReportExamResultClick" styleClass="menu-child"/>
+                        <Button text="Rekap Nilai Kelas" onAction="#handleReportClassScoreClick" styleClass="menu-child"/>
+                        <Button text="Daftar Hadir Peserta" onAction="#handleReportAttendanceListClick" styleClass="menu-child"/>
+                        <Button text="Jadwal Mengawas Guru" onAction="#handleReportTeacherScheduleClick" styleClass="menu-child"/>
+                    </VBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <VBox fx:id="fixedFooter" spacing="8">
+            <BorderPane.margin>
+                <Insets top="15"/>
+            </BorderPane.margin>
+            <Button fx:id="userManagementBtn" text="User Management" onAction="#handleUserManagementClick" styleClass="menu-parent">
+                <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/user.png"/></image></ImageView></graphic>
+            </Button>
+            <Button fx:id="settingsBtn" text="Settings" onAction="#handleSettingsClick" styleClass="menu-parent">
+                <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/settings.png"/></image></ImageView></graphic>
+            </Button>
+            <Button fx:id="helpBtn" text="Help" onAction="#handleHelpClick" styleClass="menu-parent">
+                <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/help.png"/></image></ImageView></graphic>
+            </Button>
+            <Button fx:id="aboutBtn" text="About" onAction="#handleAboutClick" styleClass="menu-parent">
+                <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/about.png"/></image></ImageView></graphic>
+            </Button>
+        </VBox>
+    </bottom>
+
+</BorderPane>

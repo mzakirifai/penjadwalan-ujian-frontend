@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="co.id.controller.pages.StudentController"
+            styleClass="list-menu-background">
+
+    <top>
+        <VBox spacing="10" styleClass="list-menu-top-vbox">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Siswa" styleClass="list-menu-top-label"/>
+                <TextField fx:id="searchField" promptText="Cari..." />
+                <Button fx:id="filterBtn" text="Cari">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/loupe.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="refreshBtn" text="Refresh">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/refresh.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="addBtn" text="Tambah" styleClass="list-menu-top-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/add.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" styleClass="list-menu-center-vbox">
+            <TableView fx:id="tableView" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
+                    <TableColumn fx:id="tableColumnNis" text="NIS" prefWidth="110"/>
+                    <TableColumn fx:id="tableColumnName" text="Nama" prefWidth="180"/>
+                    <TableColumn fx:id="tableColumnClassroom" text="Kelas" prefWidth="120"/>
+                    <TableColumn fx:id="tableColumnGender" text="Jenis Kelamin" prefWidth="110"/>
+                    <TableColumn fx:id="tableColumnPhone" text="No. HP" prefWidth="120"/>
+                    <TableColumn fx:id="tableColumnAddress" text="Alamat" prefWidth="180"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox spacing="10" alignment="CENTER" styleClass="list-menu-bottom-vbox">
+            <Pagination fx:id="pagination" pageCount="10" maxPageIndicatorCount="5"/>
+        </VBox>
+    </bottom>
+</BorderPane>
