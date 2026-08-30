@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.component.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="co.id.controller.pages.ExamParticipantController"
+            styleClass="list-menu-background">
+
+    <top>
+        <VBox spacing="10" styleClass="list-menu-top-vbox">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Peserta Ujian" styleClass="list-menu-top-label"/>
+                <HBox HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Pilih Jadwal Ujian:" styleClass="form-field-label"/>
+                <LookupBox fx:id="lookupBoxExamSchedule" promptText="Klik untuk pilih jadwal ujian" prefWidth="1000"/>
+                <Label fx:id="lblCapacityInfo" text="" styleClass="form-field-label"/>
+                <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="registerAllBtn" text="Daftarkan Semua Siswa Kelas Ini" styleClass="list-menu-top-button"/>
+                <Button fx:id="addBtn" text="Tambah 1 Siswa" styleClass="list-menu-top-button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" styleClass="list-menu-center-vbox">
+            <TableView fx:id="tableView" prefHeight="420">
+                <columns>
+                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
+                    <TableColumn fx:id="tableColumnCode" text="Kode Peserta" prefWidth="120"/>
+                    <TableColumn fx:id="tableColumnNis" text="NIS" prefWidth="100"/>
+                    <TableColumn fx:id="tableColumnName" text="Nama Siswa" prefWidth="200"/>
+                    <TableColumn fx:id="tableColumnParticipantNumber" text="No. Peserta" prefWidth="110"/>
+                    <TableColumn fx:id="tableColumnSeatNumber" text="No. Kursi" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

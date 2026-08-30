@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.component.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="co.id.controller.pages.ExamParticipantFormController"
+      spacing="12" styleClass="form-background">
+
+    <Label text="Tambah Peserta Ujian" styleClass="form-label"/>
+
+    <LookupBox fx:id="lookupBoxStudent" promptText="Pilih Siswa"/>
+
+    <TextField fx:id="textFieldParticipantNumber" promptText="No. Peserta"/>
+    <TextField fx:id="textFieldSeatNumber" promptText="No. Kursi"/>
+
+    <VBox styleClass="form-vbox"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Simpan" fx:id="saveBtn" onAction="#saveEntity" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image><Image url="@/icons/save.png"/></image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>
