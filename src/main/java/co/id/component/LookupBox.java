@@ -80,6 +80,10 @@ public class LookupBox<T> extends HBox{
         textField.setPromptText(text);
     }
     
+    public void setFieldWidth(double width) {
+        textField.setPrefWidth(width);
+    }
+    
     public String getPromptText(){
         return promptText;
     }

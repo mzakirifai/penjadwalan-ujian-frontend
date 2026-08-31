@@ -29,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,6 +45,8 @@ public class ExamParticipantController {
     @FXML private Button registerAllBtn;
     @FXML private Button addBtn;
     @FXML private TableView<ExamParticipant> tableView;
+    @FXML private TextField searchField;
+    @FXML private Button filterBtn;
 
     @FXML private TableColumn<ExamParticipant, String> tableColumnCode, tableColumnNis, tableColumnName,
             tableColumnParticipantNumber, tableColumnSeatNumber;
@@ -92,6 +95,7 @@ public class ExamParticipantController {
                 es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubject().getName() : "-")
                         + " - " + (es.getClassroom() != null ? es.getClassroom().getName() : "-")
         );
+        lookupBoxExamSchedule.setFieldWidth(350);
 
         lookupBoxExamSchedule.selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedExamSchedule = newVal;
@@ -207,8 +211,31 @@ public class ExamParticipantController {
             }
         });
 
+        filterBtn.setOnAction(e -> filterParticipants());
         addBtn.setOnAction(e -> openAddForm());
         registerAllBtn.setOnAction(e -> registerAllStudents());
+    }
+    
+    private void filterParticipants() {
+        if (selectedExamSchedule == null) {
+            return;
+        }
+
+        String keyword = searchField.getText();
+        List<ExamParticipant> all = examParticipantService.getByExamSchedule(selectedExamSchedule.getId());
+
+        if (keyword == null || keyword.isBlank()) {
+            observableList.setAll(all);
+        } else {
+            String lowerKeyword = keyword.toLowerCase();
+            List<ExamParticipant> filtered = all.stream()
+                    .filter(p -> (p.getStudent().getName() != null && p.getStudent().getName().toLowerCase().contains(lowerKeyword))
+                            || (p.getStudent().getNis() != null && p.getStudent().getNis().toLowerCase().contains(lowerKeyword)))
+                    .toList();
+            observableList.setAll(filtered);
+        }
+
+        tableView.setItems(observableList);
     }
 
     private void refreshTable() {
