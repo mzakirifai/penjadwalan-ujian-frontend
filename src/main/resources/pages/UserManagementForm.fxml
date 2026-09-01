@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.component.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.collections.FXCollections?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="co.id.controller.pages.UserManagementFormController"
+      spacing="12" styleClass="form-background">
+
+    <Label text="Form User" styleClass="form-label"/>
+
+    <TextField fx:id="textFieldUsername" promptText="Username"/>
+    
+    <PasswordToggleField fx:id="passwordField" promptText="Password (kosongkan jika tidak diubah)"/>
+
+    <ComboBox fx:id="comboRole" promptText="Role">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="admin"/>
+                <String fx:value="guru"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <TextField fx:id="textFieldFullName" promptText="Nama Lengkap (khusus Admin)"/>
+
+    <LookupBox fx:id="lookupBoxTeacher" promptText="Pilih Guru (khusus role Guru)"/>
+
+    <VBox styleClass="form-vbox"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Simpan" fx:id="saveBtn" onAction="#saveEntity" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image><Image url="@/icons/save.png"/></image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>
