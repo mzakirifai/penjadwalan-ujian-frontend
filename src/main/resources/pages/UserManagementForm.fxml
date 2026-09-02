@@ -18,7 +18,7 @@
 
     <TextField fx:id="textFieldUsername" promptText="Username"/>
     
-    <PasswordToggleField fx:id="passwordField" promptText="Password (kosongkan jika tidak diubah)"/>
+    <PasswordToggleField fx:id="passwordField"/>
 
     <ComboBox fx:id="comboRole" promptText="Role">
         <items>

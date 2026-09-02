@@ -40,6 +40,8 @@ public class UserManagementFormController {
     public void initialize() {
         userService = new UserServiceImpl();
         masterService = new MasterServiceImpl();
+        
+        passwordField.setPromptText("Password (min. 6 karakter)");
 
         TableColumn<Teacher, String> colTeacherName = new TableColumn<>("Guru");
         colTeacherName.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getName()));
@@ -67,7 +69,12 @@ public class UserManagementFormController {
 
         if (user != null) {
             textFieldUsername.setText(user.getUsername());
+            textFieldUsername.setDisable(true); // username tidak boleh diubah saat edit
             comboRole.setValue(user.getRole());
+
+            // Sembunyikan field password saat edit — ganti password lewat tombol Reset Password di tabel
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
 
             boolean isGuru = ROLE_GURU.equalsIgnoreCase(user.getRole());
             lookupBoxTeacher.setDisable(!isGuru);
@@ -78,8 +85,6 @@ public class UserManagementFormController {
             } else {
                 textFieldFullName.setText(user.getFullName());
             }
-
-            passwordField.setPromptText("Password (kosongkan jika tidak diubah)");
         }
     }
 
@@ -103,13 +108,18 @@ public class UserManagementFormController {
             new Alert(AlertType.WARNING, "Guru wajib dipilih untuk role Guru").showAndWait();
             return;
         }
-        if (selectedUser == null && (password == null || password.isBlank())) {
-            new Alert(AlertType.WARNING, "Password wajib diisi untuk user baru").showAndWait();
-            return;
-        }
 
         try {
             if (selectedUser == null) {
+                if (password == null || password.isBlank()) {
+                    new Alert(AlertType.WARNING, "Password wajib diisi untuk user baru").showAndWait();
+                    return;
+                }
+                if (password.length() < 6) {
+                    new Alert(AlertType.WARNING, "Password minimal 6 karakter").showAndWait();
+                    return;
+                }
+
                 User newUser = new User();
                 newUser.setUsername(username);
                 newUser.setRole(role);
@@ -119,11 +129,21 @@ public class UserManagementFormController {
                 userService.register(newUser, password, AuthContext.getCurrentUsername());
                 new Alert(AlertType.INFORMATION, "User berhasil ditambahkan").showAndWait();
             } else {
-                selectedUser.setUsername(username);
                 selectedUser.setRole(role);
                 selectedUser.setFullName(ROLE_ADMIN.equals(role) ? fullName : null);
                 selectedUser.setTeacher(ROLE_GURU.equals(role) ? teacher : null);
+                
+                if ("admin".equalsIgnoreCase(selectedUser.getRole()) && ROLE_GURU.equalsIgnoreCase(role)) {
+                    long totalAdmin = userService.getAllUsers().stream()
+                            .filter(u -> "admin".equalsIgnoreCase(u.getRole()))
+                            .count();
 
+                    if (totalAdmin <= 1) {
+                        new Alert(AlertType.WARNING, "Tidak bisa mengubah role Admin terakhir menjadi Guru.").showAndWait();
+                        return;
+                    }
+                }
+                
                 userService.updateProfile(selectedUser, AuthContext.getCurrentUsername());
                 new Alert(AlertType.INFORMATION, "User berhasil diperbarui").showAndWait();
             }

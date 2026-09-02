@@ -94,6 +94,23 @@ public class UserManagementController {
                 buttonDelete.setOnAction(eh -> {
                     User user = getTableView().getItems().get(getIndex());
 
+                    User currentUser = AuthContext.getCurrentUser();
+                    if (currentUser != null && currentUser.getId() == user.getId()) {
+                        new Alert(AlertType.WARNING, "Anda tidak bisa menghapus akun Anda sendiri yang sedang login").showAndWait();
+                        return;
+                    }
+
+                    if ("admin".equalsIgnoreCase(user.getRole())) {
+                        long totalAdmin = userService.getAllUsers().stream()
+                                .filter(u -> "admin".equalsIgnoreCase(u.getRole()))
+                                .count();
+
+                        if (totalAdmin <= 1) {
+                            new Alert(AlertType.WARNING, "Tidak bisa menghapus Admin terakhir. Sistem harus punya minimal 1 Admin.").showAndWait();
+                            return;
+                        }
+                    }
+
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                             "Yakin ingin menghapus akun \"" + user.getUsername() + "\"?",
                             ButtonType.YES, ButtonType.NO);
