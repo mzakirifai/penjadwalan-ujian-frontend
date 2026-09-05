@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.component.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="co.id.controller.pages.ReportSubjectController"
+            styleClass="form-report">
+    <top>
+        <VBox spacing="10" styleClass="form-report-vbox">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Laporan Data Mata Pelajaran" styleClass="list-menu-top-label"/>
+                <LookupBox fx:id="lookupBoxMajor" promptText="Mapel Berdasarkan Jurusan" />
+                <Button fx:id="btnViewReport" text="Lihat Laporan" styleClass="form-report-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image>
+                                <Image url="@/icons/overview.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="reportPane" prefWidth="800" prefHeight="600"/>
+    </center>
+</BorderPane>
