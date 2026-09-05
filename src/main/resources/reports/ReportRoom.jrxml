@@ -42,7 +42,7 @@
 			<staticText>
 				<reportElement x="236" y="2" width="169" height="30" uuid="e7392fbf-fb84-4604-a236-294742369668"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="18" isBold="true"/>
+					<font fontName="Times New Roman" size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SMK ADILUHUR]]></text>
 			</staticText>
@@ -51,7 +51,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jalan Raya Condet No. 4, Jakarta Timur]]></text>
 			</staticText>
@@ -60,7 +60,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Telp. (021) 8400 108]]></text>
 			</staticText>
@@ -69,7 +69,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Email: smkadiluhurjakarta@gmail.com]]></text>
 			</staticText>
@@ -296,7 +296,7 @@ new java.text.SimpleDateFormat(
 				<text><![CDATA[NIP. 199008172020041001]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="11" width="131" height="20" uuid="671903c6-7513-46ad-8f7b-ff4428dfc44d">
+				<reportElement x="30" y="11" width="131" height="20" uuid="671903c6-7513-46ad-8f7b-ff4428dfc44d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -305,7 +305,7 @@ new java.text.SimpleDateFormat(
 				<text><![CDATA[Jumlah Ruangan	:]]></text>
 			</staticText>
 			<textField pattern="#,##0">
-				<reportElement x="132" y="11" width="150" height="20" uuid="e564951e-b14d-414b-9508-ca78edee3a7a">
+				<reportElement x="161" y="11" width="150" height="20" uuid="e564951e-b14d-414b-9508-ca78edee3a7a">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
