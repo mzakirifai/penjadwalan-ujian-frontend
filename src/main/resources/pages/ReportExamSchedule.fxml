@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="co.id.controller.pages.ReportExamScheduleController"
+            styleClass="form-report">
+
+    <top>
+        <VBox spacing="10" styleClass="form-report-vbox">
+            <Label text="Laporan Jadwal Ujian" styleClass="form-report-label"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>
+                <ComboBox fx:id="comboSemester" promptText="Semester"/>
+                <TextField fx:id="textFieldAcademicYear" promptText="Tahun Akademik (contoh: 2026/2027)"/>
+                <Button fx:id="btnViewReport" text="Lihat Laporan" styleClass="form-report-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image>
+                                <Image url="@/icons/report.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="reportPane" prefWidth="800" prefHeight="600"/>
+    </center>
+</BorderPane>
