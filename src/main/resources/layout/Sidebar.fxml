@@ -108,8 +108,8 @@
                         <Button text="Data Kelas" onAction="#handleReportClassroomClick" styleClass="menu-child"/>
                         <Button text="Data Ruangan" onAction="#handleReportRoomClick" styleClass="menu-child"/>
                         <Button text="Mapel per Jurusan" onAction="#handleReportSubjectClick" styleClass="menu-child"/>
-                        <Button text="Kartu Siswa" onAction="#handleReportStudentCardClick" styleClass="menu-child"/>
-                        <Button text="Profil Guru" onAction="#handleReportTeacherProfileClick" styleClass="menu-child"/>
+                        <Button text="Daftar Siswa" onAction="#handleReportStudentListClick" styleClass="menu-child"/>
+                        <Button text="Data Guru" onAction="#handleReportTeacherClick" styleClass="menu-child"/>
 
                         <Label text="Ujian" styleClass="menu-section-label"/>
                         <Button text="Jadwal Ujian" onAction="#handleReportExamScheduleClick" styleClass="menu-child"/>

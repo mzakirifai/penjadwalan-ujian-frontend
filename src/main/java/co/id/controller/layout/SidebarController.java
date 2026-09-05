@@ -167,15 +167,15 @@ public class SidebarController {
         if (collapsed) {
             showFlyoutMenu(reportMenu,
                     new String[]{"Data Jurusan", "Data Kelas", "Data Ruangan", "Mapel per Jurusan",
-                            "Kartu Siswa", "Profil Guru", "Jadwal Ujian", "Kartu Peserta",
+                            "Daftar Siswa", "Data Guru", "Jadwal Ujian", "Kartu Peserta",
                             "Hasil Ujian", "Rekap Nilai Kelas", "Daftar Hadir Peserta", "Jadwal Mengawas Guru"},
                     new Runnable[]{
                             this::handleReportMajorClick,
                             this::handleReportClassroomClick,
                             this::handleReportRoomClick,
                             this::handleReportSubjectClick,
-                            this::handleReportStudentCardClick,
-                            this::handleReportTeacherProfileClick,
+                            this::handleReportStudentListClick,
+                            this::handleReportTeacherClick,
                             this::handleReportExamScheduleClick,
                             this::handleReportParticipantCardClick,
                             this::handleReportExamResultClick,
@@ -208,8 +208,8 @@ public class SidebarController {
     @FXML private void handleReportClassroomClick() { loadPage("/pages/ReportClassroom.fxml"); }
     @FXML private void handleReportRoomClick() { loadPage("/pages/ReportRoom.fxml"); }
     @FXML private void handleReportSubjectClick() { loadPage("/pages/ReportSubject.fxml"); }
-    @FXML private void handleReportStudentCardClick() { loadPage("/pages/ReportStudentCard.fxml"); }
-    @FXML private void handleReportTeacherProfileClick() { loadPage("/pages/ReportTeacherProfile.fxml"); }
+    @FXML private void handleReportStudentListClick() { loadPage("/pages/ReportStudentList.fxml"); }
+    @FXML private void handleReportTeacherClick() { loadPage("/pages/ReportTeacher.fxml"); }
     @FXML private void handleReportExamScheduleClick() { loadPage("/pages/ReportExamSchedule.fxml"); }
     @FXML private void handleReportParticipantCardClick() { loadPage("/pages/ReportParticipantCard.fxml"); }
     @FXML private void handleReportExamResultClick() { loadPage("/pages/ReportExamResult.fxml"); }
