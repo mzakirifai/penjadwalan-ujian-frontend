@@ -1,21 +1,25 @@
 .login-background{
     -fx-background-color: linear-gradient(to bottom right, #1A3D6D, #27496D);
 }
+
 .login-card{
     -fx-background-color: white;
     -fx-background-radius: 12;
     -fx-padding: 40 30 40 30;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 8);
 }
+
 .login-title{
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: #1A3D6D;
 }
+
 .login-subtitle{
     -fx-font-size: 12px;
     -fx-text-fill: #888;
 }
+
 .login-input{
     -fx-pref-width: 250;
     -fx-pref-height: 38;
@@ -24,6 +28,7 @@
     -fx-border-color: #DDD;
     -fx-padding: 0 10 0 10;
 }
+
 .login-button{
     -fx-background-color: #1A3D6D;
     -fx-text-fill: white;
@@ -31,10 +36,12 @@
     -fx-pref-height: 40;
     -fx-background-radius: 6;
 }
+
 .login-button:hover{
     -fx-background-color: #27496D;
     -fx-cursor: hand;
 }
+
 .login-error{
     -fx-text-fill: #F44336;
     -fx-font-size: 12px;
@@ -102,6 +109,7 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
+
 .sidebar-scroll .viewport{
     -fx-background-color: transparent;
 }
@@ -110,10 +118,12 @@
     -fx-background-color: transparent;
     -fx-pref-width: 8;
 }
+
 .sidebar-scroll .scroll-bar:vertical .thumb{
     -fx-background-color: rgba(255,255,255,0.3);
     -fx-background-radius: 4;
 }
+
 .sidebar-scroll .scroll-bar:vertical .track{
     -fx-background-color: transparent;
 }
@@ -142,10 +152,12 @@
     -fx-pref-width: 260;
     -fx-pref-height: 130;
 }
+
 .dashboard-card-title{
     -fx-font-size: 15px;
     -fx-text-fill: #888;
 }
+
 .dashboard-card-value{
     -fx-font-size: 36px;
     -fx-font-weight: bold;
@@ -156,6 +168,7 @@
     -fx-background-color: #2196F3;
     -fx-text-fill: white;
 }
+
 .btn-delete{
     -fx-background-color: #F44336;
     -fx-text-fill: white;
@@ -170,26 +183,52 @@
     -fx-background-color: #F7FAFF;
     -fx-padding:40;
 }
+
 .list-menu-top-vbox{
     -fx-padding:0 0 10 0;
 }
+
 .list-menu-top-label{
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
+
 .list-menu-top-button{
     -fx-background-color: #4CAF50;
     -fx-text-fill:white;
 }
+
 .list-menu-center-vbox{
     -fx-padding:10 0 10 0;
 }
+
 .list-menu-bottom-vbox{
     -fx-padding:10 0 0 0;
 }
+
+.form-report{
+    -fx-background-color: #F7FAFF;
+    -fx-padding: 40;
+}
+
+.form-report-vbox{
+    -fx-padding: 0 0 10 0;
+}
+
+.form-report-label{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.form-report-button{
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
 .form-vbox{
     -fx-pref-height:20;
 }
+
 .form-button{
     -fx-background-color: #4CAF50;
     -fx-text-fill:white;
