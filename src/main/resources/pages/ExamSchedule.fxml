@@ -50,6 +50,7 @@
                     <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
                     <TableColumn fx:id="tableColumnCode" text="Kode Ujian" prefWidth="90"/>
                     <TableColumn fx:id="tableColumnType" text="Jenis" prefWidth="80"/>
+                    <TableColumn fx:id="tableColumnAcademicYear" text="Tahun Akademik" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnDate" text="Tanggal" prefWidth="100"/>
                     <TableColumn fx:id="tableColumnStartTime" text="Jam Mulai" prefWidth="80"/>
                     <TableColumn fx:id="tableColumnEndTime" text="Jam Selesai" prefWidth="80"/>

@@ -1,6 +1,6 @@
 package co.id.controller.pages;
 
-import co.id.model.ExamSchedule;
+import co.id.model.report.ExamScheduleReportItem;
 import co.id.service.ReportService;
 import co.id.service.impl.ReportServiceImpl;
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public class ReportExamScheduleController {
                 getClass().getResourceAsStream("/reports/ReportExamSchedule.jasper")
             );
 
-            List<ExamSchedule> data = reportService.getExamScheduleReport(examType, semester, academicYear);
+            List<ExamScheduleReportItem> data = reportService.getExamScheduleReport(examType, semester, academicYear);
 
             if (data.isEmpty()) {
                 new Alert(Alert.AlertType.INFORMATION, "Tidak ada jadwal ujian untuk periode ini.", ButtonType.OK).showAndWait();
@@ -66,7 +66,8 @@ public class ReportExamScheduleController {
 
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("EXAM_TYPE", examType);
-            parameters.put("SEMESTER", semester);
+            parameters.put("EXAM_TYPE_LABEL", toExamTypeLabel(examType));
+            parameters.put("SEMESTER", semester.toUpperCase());
             parameters.put("ACADEMIC_YEAR", academicYear);
 
             JRDataSource dataSource = new JRBeanCollectionDataSource(data);
@@ -79,5 +80,15 @@ public class ReportExamScheduleController {
             ex.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Gagal memuat laporan: " + ex.getMessage()).showAndWait();
         }
+    }
+
+    private String toExamTypeLabel(String examType) {
+        return switch (examType) {
+            case "UTS" -> "UJIAN TENGAH SEMESTER";
+            case "UAS" -> "UJIAN AKHIR SEMESTER";
+            case "UKK" -> "UJIAN KENAIKAN KELAS";
+            case "PRAKTIK" -> "UJIAN PRAKTIK";
+            default -> examType;
+        };
     }
 }

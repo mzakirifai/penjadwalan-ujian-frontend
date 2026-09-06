@@ -37,8 +37,8 @@ public class ExamScheduleController {
     @FXML private Button addBtn;
     @FXML private TableView<ExamSchedule> tableView;
 
-    @FXML private TableColumn<ExamSchedule, String> tableColumnCode, tableColumnType, tableColumnDate,
-            tableColumnStartTime, tableColumnEndTime, tableColumnSubject, tableColumnClassroom,
+    @FXML private TableColumn<ExamSchedule, String> tableColumnCode, tableColumnType, tableColumnAcademicYear,
+            tableColumnDate, tableColumnStartTime, tableColumnEndTime, tableColumnSubject, tableColumnClassroom,
             tableColumnRoom, tableColumnTeacher;
     @FXML private TableColumn<ExamSchedule, Void> tableColumnAction;
 
@@ -64,10 +64,11 @@ public class ExamScheduleController {
             addBtn.setManaged(false);
         }
 
-        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tableColumnCode.setCellValueFactory(e -> new SimpleStringProperty(e.getValue().getCode()));
         tableColumnType.setCellValueFactory(e -> new SimpleStringProperty(e.getValue().getExamType()));
+        tableColumnAcademicYear.setCellValueFactory(e -> new SimpleStringProperty(e.getValue().getAcademicYear()));
         tableColumnDate.setCellValueFactory(e ->
                 new SimpleStringProperty(e.getValue().getDate() != null ? e.getValue().getDate().toString() : "-"));
         tableColumnStartTime.setCellValueFactory(e ->
