@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportExamSchedule" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6fd8a573-2760-4a92-9b07-77b443f49753">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportParticipantCard" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="03c111d0-323d-433c-b591-6927227b5b76">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="STUDENT_NAME" class="java.lang.String"/>
+	<parameter name="STUDENT_NIS" class="java.lang.String"/>
+	<parameter name="CLASSROOM_NAME" class="java.lang.String"/>
+	<parameter name="MAJOR_NAME" class="java.lang.String"/>
 	<parameter name="EXAM_TYPE_LABEL" class="java.lang.String"/>
 	<parameter name="SEMESTER" class="java.lang.String"/>
 	<parameter name="ACADEMIC_YEAR" class="java.lang.String"/>
@@ -12,28 +16,28 @@
 	<field name="startTime" class="java.lang.String"/>
 	<field name="endTime" class="java.lang.String"/>
 	<field name="subjectName" class="java.lang.String"/>
-	<field name="classroomName" class="java.lang.String"/>
 	<field name="roomName" class="java.lang.String"/>
-	<field name="teacherName" class="java.lang.String"/>
+	<field name="participantNumber" class="java.lang.String"/>
+	<field name="seatNumber" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="115" splitType="Stretch">
+		<band height="290" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image>
-				<reportElement x="40" y="10" width="115" height="90" uuid="10a85d6b-b0d6-4dc2-a1d2-df4e1437c6f1"/>
+				<reportElement x="40" y="9" width="103" height="80" uuid="eeabd3c9-09b3-4f53-ba83-79f745984ec5"/>
 				<imageExpression><![CDATA["D:/Belajar Visual/Latihan NetBeans/aplikasiPenjadwalan/src/gambar/logo smk adi luhur.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="316" y="10" width="169" height="30" uuid="5bb38d50-e718-4301-9e46-e56ff109cf3e"/>
+				<reportElement x="236" y="2" width="169" height="30" uuid="12cb0975-d85e-4041-b1d4-7af6cc641589"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SMK ADILUHUR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="40" width="294" height="20" uuid="763a4a53-a072-4796-879f-b6371928a2a3">
+				<reportElement x="173" y="32" width="294" height="20" uuid="4cedeb57-5cd3-4988-9f8c-91a3277b2a2f">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -42,7 +46,7 @@
 				<text><![CDATA[Jalan Raya Condet No. 4, Jakarta Timur]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="60" width="294" height="20" uuid="2bf01a43-3fd3-47f9-94af-0828588c955e">
+				<reportElement x="173" y="52" width="294" height="20" uuid="804ffecc-bdf8-4f3e-bea1-661d13230068">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -51,7 +55,7 @@
 				<text><![CDATA[Telp. (021) 8400 108]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="80" width="294" height="20" uuid="07c9c787-0c46-4dc4-8533-1a5eeb4bb29f">
+				<reportElement x="173" y="72" width="294" height="20" uuid="558a259c-be4d-442e-95d9-31f4c4f218a9">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -60,39 +64,118 @@
 				<text><![CDATA[Email: smkadiluhurjakarta@gmail.com]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="100" width="800" height="1" uuid="3122d762-5d71-4fd6-a8a0-a8600dd74597">
+				<reportElement x="0" y="92" width="550" height="1" uuid="654d1dca-e07d-40e5-8929-ede870bb0a76">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="80" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField>
-				<reportElement x="113" y="0" width="574" height="30" uuid="a803e8de-611e-4657-91a9-913a7e2d3d0a"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="18" isBold="true"/>
+			<staticText>
+				<reportElement x="0" y="200" width="52" height="20" uuid="96a5b43a-838d-4791-a4d7-d8ae920df0bb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["JADWAL " + $P{EXAM_TYPE_LABEL}]]></textFieldExpression>
+				<text><![CDATA[Nama	:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="52" y="200" width="230" height="20" uuid="cbe53724-a54a-46f5-8dd6-7f18fd1c6a8a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{STUDENT_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="220" width="52" height="20" uuid="357c6cc3-df03-42d5-aab7-b31ae8d46f45">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[NIS	:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="52" y="220" width="230" height="20" uuid="e08cf4ea-277b-4556-96a0-f8f2f97dc907">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{STUDENT_NIS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="113" y="31" width="574" height="30" uuid="a57e8db2-d797-4e37-9507-951f9e2a995b"/>
+				<reportElement x="45" y="104" width="464" height="30" uuid="5b34450a-0b01-42d1-9c6f-bed685b84dca"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="18" isBold="true"/>
+					<font fontName="Times New Roman" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["KARTU PESERTA " + $P{EXAM_TYPE_LABEL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="45" y="135" width="464" height="30" uuid="d6e003ef-aa6e-4405-962e-01f06a92817e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[ "SEMESTER " + $P{SEMESTER} +" TAHUN AKADEMIK " + $P{ACADEMIC_YEAR}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="240" width="52" height="20" uuid="c7557226-88c7-427a-b86a-110698b35b43">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Kelas	:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="52" y="240" width="230" height="20" uuid="80ac8025-62e2-42b2-a64b-6752f9afebfd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CLASSROOM_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="260" width="52" height="20" uuid="e7610d7a-6171-4bc2-ba50-17526ecb2b60">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Jurusan	:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="52" y="260" width="230" height="20" uuid="02819e33-8661-46f5-9911-2cefd5072d14">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MAJOR_NAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="30" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement x="80" y="0" width="90" height="30" uuid="c746ac47-a8ec-40ce-90c3-6cd883ae6c39"/>
+				<reportElement x="30" y="0" width="90" height="30" backcolor="#E6E6E6" uuid="ce63be5e-4def-414b-b9a1-f00d297e96d4"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -105,7 +188,7 @@
 				<text><![CDATA[Tanggal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="0" width="150" height="30" uuid="eee88376-b749-4ade-bd4a-8d14498ced94"/>
+				<reportElement x="199" y="0" width="131" height="30" backcolor="#E6E6E6" uuid="31e7c6ea-813f-4005-9eff-2bd4421fc70d"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -118,7 +201,7 @@
 				<text><![CDATA[Mata Pelajaran]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="430" y="0" width="80" height="30" uuid="b4544488-9a67-49eb-812a-bf1154e5433f"/>
+				<reportElement x="330" y="0" width="106" height="30" backcolor="#E6E6E6" uuid="956d26d9-f0fc-4cc8-b528-9c527ae94f60"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -128,10 +211,12 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Kelas]]></text>
+				<text><![CDATA[Ruang]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="510" y="0" width="120" height="30" uuid="c0f2726f-015e-4c0e-90f3-8027c6ea4826"/>
+				<reportElement x="0" y="0" width="30" height="30" backcolor="#E6E6E6" uuid="0a3b6455-4d1d-447e-ac96-e04fdf8d1e59">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -140,37 +225,11 @@
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ruangan]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="630" y="0" width="149" height="30" uuid="f57a502a-1930-476d-8299-015a2d3782af"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Pengawas]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="40" y="0" width="40" height="30" uuid="68cc0c43-c131-4cbf-86c2-816005ca84b6"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="170" y="0" width="110" height="30" uuid="55d6f583-806a-4f22-b032-460a7ba83080"/>
+				<reportElement x="120" y="0" width="79" height="30" backcolor="#E6E6E6" uuid="399cb0fd-bf2f-4999-a2eb-95f7d4f1c30d"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -182,13 +241,55 @@
 				</textElement>
 				<text><![CDATA[Jam]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="436" y="0" width="63" height="30" backcolor="#E6E6E6" uuid="2733a970-6bcf-4576-b2e2-d4ef612e430f"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Peserta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="499" y="0" width="56" height="30" backcolor="#E6E6E6" uuid="0842788a-cc26-4bfa-b3c4-bb786ef2c769"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Kursi]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="30" splitType="Stretch">
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="80" y="0" width="90" height="30" uuid="04bea56e-4cf0-40bb-afb8-5f41e9aed180">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="074e9d84-c04f-4c2d-a097-028d3ef76202"/>
+			<textField>
+				<reportElement x="0" y="0" width="30" height="30" uuid="d4268d01-02a1-4b58-926c-fcdef45d126f">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="30" y="0" width="90" height="30" uuid="7c569e7c-6237-4b39-a448-5c65a730a42a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3276bb7-5420-4e36-9c42-009a3282ffe2"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -202,8 +303,25 @@
 				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="0" width="150" height="30" uuid="c3f47d04-30f4-49c4-b183-a1396bcf4e9d">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="115742b7-1061-4d29-8613-34b47b2248ee"/>
+				<reportElement x="120" y="0" width="79" height="30" uuid="2331e78b-9949-40eb-bfec-6b7728da7f00">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3276bb7-5420-4e36-9c42-009a3282ffe2"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{startTime} + " - " + $F{endTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="199" y="0" width="131" height="30" uuid="3b25928f-c1b9-4184-aaf7-b1a327786269">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6540b779-15a1-4959-829f-60c1d7fb7cd5"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -217,23 +335,10 @@
 				<textFieldExpression><![CDATA[$F{subjectName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="430" y="0" width="80" height="30" uuid="94a7e5f5-6576-4fea-9e7c-bbef50e8873f">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ff2a619b-8ab8-4b3f-9641-646b1e5c8a42"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{classroomName}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="510" y="0" width="120" height="30" uuid="23038f12-64c5-4079-b5ed-7edc47c61979">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a5ce33e0-4f94-4026-b790-367e13e71ff8"/>
+				<reportElement x="330" y="0" width="106" height="30" uuid="c1635a52-93e6-4a92-9273-d29a74149c53">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26e43855-0347-4a41-bbf1-63effba1116c"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -247,8 +352,10 @@
 				<textFieldExpression><![CDATA[$F{roomName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="630" y="0" width="149" height="30" uuid="9df35108-b9d2-4a60-a68f-7cc434bbe2ab">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a614400f-ab71-4d0d-965e-340f49ee3582"/>
+				<reportElement x="436" y="0" width="63" height="30" uuid="c805f4f2-4544-4b6a-a8c4-f02c21b329c8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26e43855-0347-4a41-bbf1-63effba1116c"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -259,10 +366,14 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{teacherName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{participantNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="40" y="0" width="40" height="30" uuid="039b45a0-fb76-457c-a25e-6a491061e2c8"/>
+				<reportElement x="499" y="0" width="56" height="30" uuid="ab87530f-f4bb-42f7-a143-931f94639373">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26e43855-0347-4a41-bbf1-63effba1116c"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -272,20 +383,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="170" y="0" width="110" height="30" uuid="e9bea6d4-90e5-4369-97f0-17edb1d9eed3"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{startTime} + " - " + $F{endTime}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{seatNumber}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -300,17 +398,16 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="164" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="176" splitType="Stretch">
 			<staticText>
-				<reportElement x="593" y="53" width="100" height="30" uuid="d898df9e-ebca-4db3-974d-cf1311101c3b"/>
+				<reportElement x="361" y="78" width="142" height="30" uuid="0a1a556e-eca4-4992-9de9-b9282b597ced"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Kepala Sekolah]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="593" y="29" width="190" height="30" uuid="35776d61-eff7-4c1f-b5f7-9cdce9563244"/>
+				<reportElement x="361" y="57" width="200" height="30" uuid="76aabde4-c936-4d36-bb96-ebf97ce08147"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
@@ -321,37 +418,19 @@ new java.text.SimpleDateFormat(
 ).format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="593" y="129" width="180" height="17" uuid="9a7355fc-2481-4161-b19a-a150f6c0bd47"/>
+				<reportElement x="361" y="141" width="202" height="17" uuid="8feb3c43-4259-4d97-a3b9-c2026742a913"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[(Dedi Haryanto, S.Kom., M.Pd.)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="593" y="149" width="150" height="15" uuid="95b64aed-a150-42d9-9a8d-725455643195"/>
+				<reportElement x="361" y="161" width="202" height="15" uuid="a8b15f29-b687-42c5-925b-32f859d9665c"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[NIP. 199008172020041001]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="41" y="11" width="91" height="20" uuid="a9a4e322-c420-432e-810c-b956d5a1eff5">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Total Sesi Ujian:]]></text>
-			</staticText>
-			<textField pattern="#,##0">
-				<reportElement x="127" y="11" width="150" height="20" uuid="6c0b7f59-295b-417d-9fbf-afd8ade31471">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
-			</textField>
 		</band>
 	</summary>
 </jasperReport>
