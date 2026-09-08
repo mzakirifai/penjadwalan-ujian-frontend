@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns="http://javafx.com/javafx" 
+      xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="co.id.controller.pages.SettingsController"
+      spacing="10" styleClass="form-background">
+    
+    <Label text="Settings" styleClass="form-label"/>
+    <Separator/> 
+    
+    <Label text="System Information" styleClass="section-title"/>
+    <Label text="Application Version : 1.0"/>
+    <Label text="Database Engine : SQLite"/>
+    <Label text="Database Location : data/dbhr.db"/>
+    
+    <Separator/>
+
+    <Label text="Technical Stack" styleClass="section-title"/>
+    <Label text="UI Framework : JavaFX"/>
+    <Label text="Report Engine : JasperReports"/>
+    <Label text="Connection Pool : HikariCP"/>
+
+    <Separator/>
+
+    <Label text="Default Configuration" styleClass="section-title"/>
+    <Label text="Rows per Page : 10"/>
+    
+</VBox>

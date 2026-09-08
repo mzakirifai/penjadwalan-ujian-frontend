@@ -187,9 +187,10 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="214" splitType="Stretch">
+		<band height="250" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<crosstab>
-				<reportElement x="13" y="14" width="778" height="200" uuid="df418363-e2f0-4484-a00d-cb86354ce242"/>
+				<reportElement x="13" y="14" width="778" height="93" uuid="df418363-e2f0-4484-a00d-cb86354ce242"/>
 				<crosstabHeaderCell>
 					<cellContents mode="Opaque" style="Crosstab_CH">
 						<staticText>
@@ -338,6 +339,38 @@
 					<cellContents/>
 				</crosstabCell>
 			</crosstab>
+			<staticText>
+				<reportElement x="600" y="139" width="100" height="30" uuid="519496bc-c742-4dbb-9137-9ca4748789d6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Kepala Sekolah]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="600" y="115" width="190" height="30" uuid="90813475-632e-415c-b16f-fa1dd17e672a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Jakarta, " +
+new java.text.SimpleDateFormat(
+    "EEEE, dd MMMM yyyy",
+    new java.util.Locale("id", "ID")
+).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="600" y="215" width="180" height="17" uuid="a37cebf9-2b61-44b8-af9d-4bb5517da4f9"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[(Dedi Haryanto, S.Kom., M.Pd.)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="235" width="150" height="15" uuid="6c8071d7-719f-47f9-a096-ff2c5aea8176"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[NIP. 199008172020041001]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>

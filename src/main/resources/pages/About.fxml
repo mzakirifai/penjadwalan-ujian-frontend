@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns="http://javafx.com/javafx" 
+      xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="co.id.controller.pages.AboutController"
+      spacing="10" styleClass="form-background">
+    
+    <ImageView fitHeight="60" fitWidth="60">
+        <image>
+            <Image url="@/images/logo.png"/>
+        </image>
+    </ImageView>
+    
+    <Label text="Sistem PenjadwalanUjian" styleClass="form-label"/>
+    <Label text="Version 1.0"/> 
+    
+    <Separator/> 
+    
+    <Label text="Developed by: Kelompok 2 - R7M"/>
+    <Label text="Universitas Indraprasta PGRI (UNINDRA)" />
+    
+    <Separator/>
+
+    <Label text="Built with : JavaFX, SQLite, JasperReports, HikariCP"/>
+
+</VBox>
