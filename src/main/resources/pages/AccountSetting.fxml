@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import co.id.component.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="co.id.controller.pages.AccountSettingController"
+      spacing="20" styleClass="form-background">
+      
+    <Label text="Account Setting" styleClass="form-label"/>
+    <Separator/>
+    
+    <VBox spacing="10" maxWidth="350">
+        <Label text="Old Password:"/>
+        <PasswordToggleField fx:id="fieldOldPassword"/>
+        
+        <Label text="New Password:"/>
+        <PasswordToggleField fx:id="fieldNewPassword"/>
+        
+        <Label text="Confirm New Password:"/>
+        <PasswordToggleField fx:id="fieldConfirmPassword"/>
+    </VBox>
+    
+    <VBox styleClass="form-vbox"/>
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Change Password" fx:id="saveBtn" onAction="#handleChangePassword" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image>
+                        <Image url="@/icons/save.png"/>
+                    </image>
+                </ImageView>                    
+            </graphic>
+        </Button>   
+    </HBox>
+    
+</VBox>

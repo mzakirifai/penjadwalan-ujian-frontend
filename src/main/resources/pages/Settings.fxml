@@ -17,8 +17,8 @@
     
     <Label text="System Information" styleClass="section-title"/>
     <Label text="Application Version : 1.0"/>
-    <Label text="Database Engine : SQLite"/>
-    <Label text="Database Location : data/dbhr.db"/>
+    <Label text="Database Engine : MySQL"/>
+    <Label text="Connection Pooling : Aktif (HikariCP)"/>
     
     <Separator/>
 

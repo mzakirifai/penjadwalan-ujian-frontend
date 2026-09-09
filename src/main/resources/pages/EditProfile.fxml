@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="co.id.controller.pages.EditProfileController"
+      spacing="20" styleClass="form-background">
+      
+    <Label text="Edit Profile" styleClass="form-label"/>
+    <Separator/>
+    
+    <VBox spacing="15" alignment="CENTER_LEFT">
+        
+        <StackPane>
+            <ImageView fx:id="profileImageView" fitWidth="100" fitHeight="100">
+            </ImageView>
+        </StackPane>
+        
+        <Button fx:id="btnChoosePhoto" text="Choose Photo" onAction="#handleChoosePhoto"/>
+        
+        <Label text="Full Name:"/>
+        <TextField fx:id="textFieldFullName"/>
+        
+        <Label fx:id="lblUsername" style="-fx-text-fill: #888;"/>
+        <Label fx:id="lblRole" style="-fx-text-fill: #888;"/>
+        
+    </VBox>
+    
+    <VBox styleClass="form-vbox"/>
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Save" fx:id="saveBtn" onAction="#saveProfile" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image>
+                        <Image url="@/icons/save.png"/>
+                    </image>
+                </ImageView>                    
+            </graphic>
+        </Button>   
+    </HBox>
+    
+</VBox>

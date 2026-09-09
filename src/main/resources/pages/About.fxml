@@ -14,11 +14,11 @@
     
     <ImageView fitHeight="60" fitWidth="60">
         <image>
-            <Image url="@/images/logo.png"/>
+            <Image url="@/images/logo_smk_adiluhur.png"/>
         </image>
     </ImageView>
     
-    <Label text="Sistem PenjadwalanUjian" styleClass="form-label"/>
+    <Label text="Sistem Penjadwalan Ujian" styleClass="form-label"/>
     <Label text="Version 1.0"/> 
     
     <Separator/> 
@@ -28,6 +28,6 @@
     
     <Separator/>
 
-    <Label text="Built with : JavaFX, SQLite, JasperReports, HikariCP"/>
+    <Label text="Built with : JavaFX, MySQL, JasperReports, HikariCP"/>
 
 </VBox>
