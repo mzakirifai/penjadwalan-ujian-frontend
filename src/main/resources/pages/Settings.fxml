@@ -7,29 +7,48 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 
-<VBox xmlns="http://javafx.com/javafx" 
-      xmlns:fx="http://javafx.com/fxml" 
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
       fx:controller="co.id.controller.pages.SettingsController"
       spacing="10" styleClass="form-background">
-    
-    <Label text="Settings" styleClass="form-label"/>
-    <Separator/> 
-    
-    <Label text="System Information" styleClass="section-title"/>
-    <Label text="Application Version : 1.0"/>
-    <Label text="Database Engine : MySQL"/>
-    <Label text="Connection Pooling : Aktif (HikariCP)"/>
-    
+
+    <Label text="Pengaturan" styleClass="form-label"/>
     <Separator/>
 
-    <Label text="Technical Stack" styleClass="section-title"/>
-    <Label text="UI Framework : JavaFX"/>
-    <Label text="Report Engine : JasperReports"/>
-    <Label text="Connection Pool : HikariCP"/>
+    <Label text="Profil Sekolah" styleClass="section-title"/>
+    <Label text="Nama Sekolah"/>
+    <TextField fx:id="textFieldSchoolName"/>
+    <Label text="Alamat"/>
+    <TextField fx:id="textFieldAddress"/>
+    <Label text="Telepon"/>
+    <TextField fx:id="textFieldPhone"/>
+    <Label text="Email"/>
+    <TextField fx:id="textFieldEmail"/>
+    <Label text="Nama Kepala Sekolah"/>
+    <TextField fx:id="textFieldPrincipalName"/>
+    <Label text="NIP Kepala Sekolah"/>
+    <TextField fx:id="textFieldPrincipalNip"/>
 
     <Separator/>
 
-    <Label text="Default Configuration" styleClass="section-title"/>
-    <Label text="Rows per Page : 10"/>
-    
+    <Label text="Periode Akademik Aktif" styleClass="section-title"/>
+    <Label text="Info ini otomatis dipakai sebagai nilai awal di semua halaman laporan yang butuh Semester &amp; Tahun Akademik." style="-fx-text-fill: #888; -fx-font-size: 11px;"/>
+    <Label text="Semester Aktif"/>
+    <ComboBox fx:id="comboActiveSemester" promptText="Pilih Semester"/>
+    <Label text="Tahun Akademik Aktif"/>
+    <TextField fx:id="textFieldActiveAcademicYear" promptText="contoh: 2026/2027"/>
+
+    <VBox styleClass="form-vbox"/>
+    <HBox alignment="CENTER_RIGHT">
+        <Button fx:id="saveBtn" text="Simpan" onAction="#saveSettings" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image>
+                        <Image url="@/icons/save.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
 </VBox>
