@@ -101,10 +101,15 @@ public class ExamScheduleFormController {
             return;
         }
 
+        // classroom hasil LookupBox (dari getAllClassrooms) belum JOIN ke Jurusan,
+        // jadi classroom.getMajor() masih null di titik ini. Ambil ulang detail
+        // lengkapnya dulu supaya filter type-nya (Umum/Kejuruan) bekerja benar.
+        Classroom classroomDetail = masterService.getByIdClassroom(classroom.getId());
+
         List<Subject> allSubjects = masterService.getAllSubjects();
 
         List<Subject> filtered = allSubjects.stream()
-                .filter(s -> isSubjectApplicable(s, classroom))
+                .filter(s -> isSubjectApplicable(s, classroomDetail))
                 .collect(Collectors.toList());
 
         comboSubject.setItems(FXCollections.observableArrayList(filtered));

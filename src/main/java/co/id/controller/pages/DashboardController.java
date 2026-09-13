@@ -1,16 +1,29 @@
 package co.id.controller.pages;
 
 import co.id.model.ExamSchedule;
+import co.id.model.SchoolSettings;
+import co.id.model.report.PassFailSummary;
 import co.id.service.ExamParticipantService;
 import co.id.service.ExamScheduleService;
 import co.id.service.ExamScoreService;
 import co.id.service.MasterService;
+import co.id.service.SchoolSettingsService;
 import co.id.service.impl.ExamParticipantServiceImpl;
 import co.id.service.impl.ExamScheduleServiceImpl;
 import co.id.service.impl.ExamScoreServiceImpl;
 import co.id.service.impl.MasterServiceImpl;
+import co.id.service.impl.SchoolSettingsServiceImpl;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -35,11 +48,16 @@ public class DashboardController {
     @FXML private TableColumn<ExamSchedule, String> colTodayJamMulai;
     @FXML private TableColumn<ExamSchedule, String> colTodayJamSelesai;
     @FXML private TableColumn<ExamSchedule, String> colTodayPengawas;
-    
+
+    @FXML private BarChart<String, Number> barChartExamLoad;
+    @FXML private PieChart pieChartPassFail;
+    @FXML private Label lblPassFailPeriod;
+
     private MasterService masterService;
     private ExamScheduleService examScheduleService;
     private ExamParticipantService examParticipantService;
     private ExamScoreService examScoreService;
+    private SchoolSettingsService schoolSettingsService;
     
     @FXML
     public void initialize(){
@@ -47,6 +65,7 @@ public class DashboardController {
         examScheduleService = new ExamScheduleServiceImpl();
         examParticipantService = new ExamParticipantServiceImpl();
         examScoreService = new ExamScoreServiceImpl();
+        schoolSettingsService = new SchoolSettingsServiceImpl();
 
         lblTotalTeacher.setText(String.valueOf(masterService.countTeachers()));
         lblTotalMajor.setText(String.valueOf(masterService.countMajors()));
@@ -60,6 +79,49 @@ public class DashboardController {
         lblTotalExamScore.setText(String.valueOf(examScoreService.countExamScores()));
         
         setupTodayScheduleTable();
+        setupExamLoadChart();
+        setupPassFailChart();
+    }
+
+    private void setupExamLoadChart() {
+        LocalDate today = LocalDate.now();
+        LocalDate end = today.plusDays(6);
+
+        Map<LocalDate, Integer> countPerDay = examScheduleService.getExamCountPerDay(today, end);
+        DateTimeFormatter labelFormatter = DateTimeFormatter.ofPattern("dd/MM");
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Jumlah Ujian");
+
+        for (LocalDate date = today; !date.isAfter(end); date = date.plusDays(1)) {
+            int count = countPerDay.getOrDefault(date, 0);
+            series.getData().add(new XYChart.Data<>(date.format(labelFormatter), count));
+        }
+
+        barChartExamLoad.getData().clear();
+        barChartExamLoad.getData().add(series);
+        barChartExamLoad.setLegendVisible(false);
+        barChartExamLoad.setAnimated(false);
+    }
+
+    private void setupPassFailChart() {
+        SchoolSettings settings = schoolSettingsService.getSettings();
+
+        if (settings == null || settings.getActiveSemester() == null || settings.getActiveAcademicYear() == null) {
+            lblPassFailPeriod.setText("Periode aktif belum diatur di menu Pengaturan.");
+            return;
+        }
+
+        lblPassFailPeriod.setText("Semester " + settings.getActiveSemester() + " — Tahun Akademik " + settings.getActiveAcademicYear());
+
+        PassFailSummary summary = examScoreService.getPassFailSummary(settings.getActiveSemester(), settings.getActiveAcademicYear());
+
+        pieChartPassFail.setData(FXCollections.observableArrayList(
+            new PieChart.Data("Lulus (" + summary.getPassCount() + ")", summary.getPassCount()),
+            new PieChart.Data("Tidak Lulus (" + summary.getFailCount() + ")", summary.getFailCount())
+        ));
+        pieChartPassFail.setLegendVisible(true);
+        pieChartPassFail.setAnimated(false);
     }
     
     private void setupTodayScheduleTable() {

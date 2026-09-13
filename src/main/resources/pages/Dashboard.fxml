@@ -5,74 +5,103 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
 
-<VBox xmlns="http://javafx.com/javafx" 
-      xmlns:fx="http://javafx.com/fxml" 
-      fx:controller="co.id.controller.pages.DashboardController"
-      spacing="20" styleClass="form-background" alignment="TOP_CENTER">
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.id.controller.pages.DashboardController"
+            fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="sidebar-scroll">
+    <content>
+        <VBox spacing="20" styleClass="form-background" alignment="TOP_CENTER">
 
-    <Label text="Dashboard" styleClass="dashboard-title"/>
-    <Separator/>
+            <Label text="Dashboard" styleClass="dashboard-title"/>
+            <Separator/>
 
-    <HBox spacing="20" alignment="CENTER">
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Guru" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalTeacher" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Jurusan" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalMajor" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Kelas" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalClassroom" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-    </HBox>
+            <HBox spacing="20" alignment="CENTER">
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Guru" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalTeacher" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Jurusan" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalMajor" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Kelas" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalClassroom" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+            </HBox>
 
-    <HBox spacing="20" alignment="CENTER">
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Siswa" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalStudent" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Mapel" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalSubject" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Ruangan" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalRoom" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-    </HBox>
-    
-    <HBox spacing="20" alignment="CENTER">
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Jadwal Ujian" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalExamSchedule" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Peserta Ujian" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalExamParticipant" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-        <VBox styleClass="dashboard-card">
-            <Label text="Total Nilai Ujian" styleClass="dashboard-card-title"/>
-            <Label fx:id="lblTotalExamScore" text="0" styleClass="dashboard-card-value"/>
-        </VBox>
-    </HBox>
-    
-    <Label text="Jadwal Ujian Hari Ini" styleClass="form-label"/>
-    <Separator/>
+            <HBox spacing="20" alignment="CENTER">
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Siswa" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalStudent" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Mapel" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalSubject" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Ruangan" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalRoom" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+            </HBox>
 
-    <TableView fx:id="tableTodaySchedule" prefHeight="220" fixedCellSize="35">
-        <columns>
-            <TableColumn fx:id="colTodayKode" text="Kode Ujian" prefWidth="90"/>
-            <TableColumn fx:id="colTodayJenis" text="Jenis" prefWidth="80"/>
-            <TableColumn fx:id="colTodayMapel" text="Mapel" prefWidth="130"/>
-            <TableColumn fx:id="colTodayKelas" text="Kelas" prefWidth="90"/>
-            <TableColumn fx:id="colTodayRuangan" text="Ruangan" prefWidth="100"/>
-            <TableColumn fx:id="colTodayJamMulai" text="Jam Mulai" prefWidth="90"/>
-            <TableColumn fx:id="colTodayJamSelesai" text="Jam Selesai" prefWidth="90"/>
-            <TableColumn fx:id="colTodayPengawas" text="Pengawas" prefWidth="140"/>
-        </columns>
-    </TableView>
+            <HBox spacing="20" alignment="CENTER">
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Jadwal Ujian" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalExamSchedule" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Peserta Ujian" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalExamParticipant" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                <VBox styleClass="dashboard-card">
+                    <Label text="Total Nilai Ujian" styleClass="dashboard-card-title"/>
+                    <Label fx:id="lblTotalExamScore" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+            </HBox>
 
-</VBox>
+            <HBox spacing="20" alignment="CENTER">
+                <VBox styleClass="dashboard-card, dashboard-chart-card" alignment="TOP_LEFT">
+                    <Label text="Beban Ujian 7 Hari ke Depan" styleClass="dashboard-chart-title" wrapText="true"/>
+                    <BarChart fx:id="barChartExamLoad" styleClass="exam-load-chart" prefHeight="260" animated="false">
+                        <xAxis>
+                            <CategoryAxis label="Tanggal"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Jumlah Sesi Ujian"/>
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+                <VBox styleClass="dashboard-card, dashboard-chart-card" alignment="TOP_LEFT">
+                    <Label text="Kelulusan (Periode Aktif)" styleClass="dashboard-chart-title" wrapText="true"/>
+                    <Label fx:id="lblPassFailPeriod" wrapText="true" style="-fx-text-fill: #888; -fx-font-size: 11px;"/>
+                    <PieChart fx:id="pieChartPassFail" styleClass="pass-fail-chart" prefHeight="240" legendSide="BOTTOM" animated="false"/>
+                </VBox>
+            </HBox>
+
+            <Label text="Jadwal Ujian Hari Ini" styleClass="form-label"/>
+            <Separator/>
+
+            <TableView fx:id="tableTodaySchedule" prefHeight="220" fixedCellSize="35">
+                <columns>
+                    <TableColumn fx:id="colTodayKode" text="Kode Ujian" prefWidth="90"/>
+                    <TableColumn fx:id="colTodayJenis" text="Jenis" prefWidth="80"/>
+                    <TableColumn fx:id="colTodayMapel" text="Mapel" prefWidth="130"/>
+                    <TableColumn fx:id="colTodayKelas" text="Kelas" prefWidth="90"/>
+                    <TableColumn fx:id="colTodayRuangan" text="Ruangan" prefWidth="100"/>
+                    <TableColumn fx:id="colTodayJamMulai" text="Jam Mulai" prefWidth="90"/>
+                    <TableColumn fx:id="colTodayJamSelesai" text="Jam Selesai" prefWidth="90"/>
+                    <TableColumn fx:id="colTodayPengawas" text="Pengawas" prefWidth="140"/>
+                </columns>
+            </TableView>
+
+            <padding>
+                <Insets bottom="20"/>
+            </padding>
+
+        </VBox>
+    </content>
+</ScrollPane>
