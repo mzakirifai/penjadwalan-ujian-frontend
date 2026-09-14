@@ -15,6 +15,7 @@
 
     <top>
         <VBox spacing="10" styleClass="form-report-vbox">
+            <Label text="Daftar Siswa" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <LookupBox fx:id="lookupBoxClassroom" promptText="Daftar Siswa per Kelas" />
                 <Button fx:id="btnViewReport" text="Lihat Laporan" styleClass="form-report-button">

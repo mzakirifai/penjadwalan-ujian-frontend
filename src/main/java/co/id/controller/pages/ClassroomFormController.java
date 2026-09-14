@@ -138,7 +138,7 @@ public class ClassroomFormController {
 
         Alert alert;
         try {
-            masterService.saveOrUpdateClassroom(classroom, AuthContext.getCurrentUsername());
+            masterService.saveOrUpdateClassroom(classroom, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
             alert = new Alert(AlertType.INFORMATION,
                     selectedClassroom == null ? "Data kelas berhasil disimpan" : "Data kelas berhasil diperbarui");
         } catch (Exception ex) {

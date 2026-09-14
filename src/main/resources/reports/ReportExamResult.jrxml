@@ -29,7 +29,7 @@
 			<staticText>
 				<reportElement x="236" y="2" width="169" height="30" uuid="c067a5d7-f91a-422c-876d-a00a82eba1de"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="18" isBold="true"/>
+					<font fontName="Times New Roman" size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SMK ADILUHUR]]></text>
 			</staticText>
@@ -38,7 +38,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jalan Raya Condet No. 4, Jakarta Timur]]></text>
 			</staticText>
@@ -47,7 +47,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Telp. (021) 8400 108]]></text>
 			</staticText>
@@ -56,7 +56,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Email: smkadiluhurjakarta@gmail.com]]></text>
 			</staticText>
@@ -168,11 +168,11 @@
 				<textFieldExpression><![CDATA[$P{ACADEMIC_YEAR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="123" y="2" width="309" height="20" uuid="bae172c1-4c24-4c42-a33c-fc08f141b296"/>
+				<reportElement x="123" y="0" width="309" height="20" uuid="bae172c1-4c24-4c42-a33c-fc08f141b296"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["HASIL UJIAN "]]></textFieldExpression>
+				<textFieldExpression><![CDATA["LAPORAN HASIL UJIAN "]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

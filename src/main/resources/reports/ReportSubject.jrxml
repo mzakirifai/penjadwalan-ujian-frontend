@@ -80,7 +80,7 @@
 				<text><![CDATA[Jurusan	:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="159" width="110" height="20" uuid="55f91189-67e5-48a0-a9a6-b6a1dc87b0eb">
+				<reportElement x="70" y="159" width="217" height="20" uuid="55f91189-67e5-48a0-a9a6-b6a1dc87b0eb">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>

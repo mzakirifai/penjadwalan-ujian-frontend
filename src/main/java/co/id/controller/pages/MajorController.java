@@ -96,7 +96,7 @@ public class MajorController {
                     confirm.showAndWait().ifPresent(response -> {
                         if (response == ButtonType.YES) {
                             try {
-                                masterService.deleteMajor(major.getId());
+                                masterService.deleteMajor(major.getId(), AuthContext.getCurrentRole());
                                 refreshTable();
                             } catch (Exception ex) {
                                 new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
@@ -114,7 +114,7 @@ public class MajorController {
                     }
 
                     try {
-                        masterService.saveOrUpdateMajor(major, AuthContext.getCurrentUsername());
+                        masterService.saveOrUpdateMajor(major, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
                     } catch (Exception ex) {
                         new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
                         return;

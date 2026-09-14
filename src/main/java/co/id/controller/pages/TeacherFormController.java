@@ -76,7 +76,7 @@ public class TeacherFormController {
 
         Alert alert;
         try {
-            masterService.saveOrUpdateTeacher(teacher, AuthContext.getCurrentUsername());
+            masterService.saveOrUpdateTeacher(teacher, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
             alert = new Alert(AlertType.INFORMATION,
                     selectedTeacher == null ? "Data guru berhasil disimpan" : "Data guru berhasil diperbarui");
         } catch (Exception ex) {

@@ -85,7 +85,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="18" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["SEMESTER " + $P{SEMESTER} +"-" + " TAHUN AKADEMIK " + $P{ACADEMIC_YEAR}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["SEMESTER " + $P{SEMESTER} +" - " + "TAHUN AKADEMIK " + $P{ACADEMIC_YEAR}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="24" y="80" width="90" height="20" uuid="2c61111d-423f-4ef9-ad83-0f63ba480ba2">

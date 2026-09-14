@@ -15,7 +15,7 @@
 
     <top>
         <VBox spacing="10" styleClass="form-report-vbox">
-            <Label text="Laporan Hasil Ujian" styleClass="form-report-label"/>
+            <Label text="Laporan Hasil Ujian" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <LookupBox fx:id="lookupBoxExamSchedule" promptText="Pilih Jadwal Ujian" />
                 <Button fx:id="btnViewReport" text="Lihat Laporan" styleClass="form-report-button">

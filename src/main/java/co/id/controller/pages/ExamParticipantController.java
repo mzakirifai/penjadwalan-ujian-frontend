@@ -95,7 +95,7 @@ public class ExamParticipantController {
                 es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubject().getName() : "-")
                         + " - " + (es.getClassroom() != null ? es.getClassroom().getName() : "-")
         );
-        lookupBoxExamSchedule.setFieldWidth(350);
+        lookupBoxExamSchedule.setFieldWidth(300);
 
         lookupBoxExamSchedule.selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedExamSchedule = newVal;

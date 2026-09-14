@@ -15,7 +15,7 @@
 
     <top>
         <VBox spacing="10" styleClass="form-report-vbox">
-            <Label text="Kartu Peserta Ujian" styleClass="form-report-label"/>
+            <Label text="Kartu Peserta Ujian" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <LookupBox fx:id="lookupBoxStudent" promptText="Cari Siswa" />
                 <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>

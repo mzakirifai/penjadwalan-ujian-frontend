@@ -97,7 +97,7 @@ public class StudentFormController {
 
         Alert alert;
         try {
-            masterService.saveOrUpdateStudent(student, AuthContext.getCurrentUsername());
+            masterService.saveOrUpdateStudent(student, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
             alert = new Alert(AlertType.INFORMATION,
                     selectedStudent == null ? "Data siswa berhasil disimpan" : "Data siswa berhasil diperbarui");
         } catch (Exception ex) {

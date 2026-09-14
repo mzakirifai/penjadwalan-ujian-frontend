@@ -61,8 +61,10 @@ public class ReportAttendanceListController {
         lookupBoxExamSchedule.configure(
             () -> examScheduleService.getAllExamSchedulesDetailed(),
             List.of(colSubject, colClassroom, colDate),
-            ExamSchedule::getCode
+            es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubject().getName() : "-")
+                    + " - " + (es.getClassroom() != null ? es.getClassroom().getName() : "-")
         );
+        lookupBoxExamSchedule.setFieldWidth(300);
         
         comboExamType.setItems(FXCollections.observableArrayList("UTS", "UAS", "UKK", "PRAKTIK"));
         comboSemester.setItems(FXCollections.observableArrayList("Ganjil", "Genap"));

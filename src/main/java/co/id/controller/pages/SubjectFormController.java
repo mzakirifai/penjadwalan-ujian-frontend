@@ -130,7 +130,7 @@ public class SubjectFormController {
 
         Alert alert;
         try {
-            masterService.saveOrUpdateSubject(subject, AuthContext.getCurrentUsername());
+            masterService.saveOrUpdateSubject(subject, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
             alert = new Alert(AlertType.INFORMATION,
                     selectedSubject == null ? "Data mapel berhasil disimpan" : "Data mapel berhasil diperbarui");
         } catch (Exception ex) {

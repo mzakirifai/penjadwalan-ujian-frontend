@@ -15,7 +15,7 @@
 
     <top>
         <VBox spacing="10" styleClass="form-report-vbox">
-            <Label text="Jadwal Mengawas Guru" styleClass="form-report-label"/>
+            <Label text="Jadwal Mengawas Guru" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <LookupBox fx:id="lookupBoxTeacher" promptText="Cari Guru" />
                 <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>

@@ -14,7 +14,7 @@
 
     <top>
         <VBox spacing="10" styleClass="form-report-vbox">
-            <Label text="Laporan Jadwal Ujian" styleClass="form-report-label"/>
+            <Label text="Laporan Jadwal Ujian" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>
                 <ComboBox fx:id="comboSemester" promptText="Semester"/>

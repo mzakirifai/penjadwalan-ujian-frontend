@@ -15,6 +15,7 @@
 
     <top>
         <VBox spacing="10" styleClass="form-report-vbox">
+            <Label text="Daftar Hadir Peserta" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <LookupBox fx:id="lookupBoxExamSchedule" promptText="Pilih Jadwal Ujian" />
                 <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>

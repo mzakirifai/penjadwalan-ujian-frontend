@@ -72,7 +72,7 @@ public class ExamScoreController {
                 List.of(colScheduleLabel),
                 this::scheduleLabel
         );
-        lookupBoxExamSchedule.setFieldWidth(350);
+        lookupBoxExamSchedule.setFieldWidth(300);
 
         lookupBoxExamSchedule.selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedExamSchedule = newVal;

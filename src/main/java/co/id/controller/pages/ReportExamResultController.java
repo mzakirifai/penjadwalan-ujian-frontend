@@ -55,8 +55,10 @@ public class ReportExamResultController {
         lookupBoxExamSchedule.configure(
             () -> examScheduleService.getAllExamSchedulesDetailed(),
             List.of(colSubject, colClassroom, colDate),
-            ExamSchedule::getCode
+            es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubject().getName() : "-")
+                    + " - " + (es.getClassroom() != null ? es.getClassroom().getName() : "-")
         );
+        lookupBoxExamSchedule.setFieldWidth(300);
 
         btnViewReport.setOnAction(e -> onViewReport());
     }

@@ -102,7 +102,7 @@ public class SubjectController {
                     confirm.showAndWait().ifPresent(action -> {
                         if (action == ButtonType.YES) {
                             try {
-                                masterService.deleteSubject(subject.getId());
+                                masterService.deleteSubject(subject.getId(), AuthContext.getCurrentRole());
                                 refreshTable();
                             } catch (Exception ex) {
                                 new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();

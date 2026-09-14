@@ -208,6 +208,22 @@
 .list-menu-center-vbox{
     -fx-padding:10 0 10 0;
 }
+
+.form-report{
+    -fx-background-color: #F7FAFF;
+    -fx-padding: 40;
+}
+.form-report-vbox{
+    -fx-padding: 0 0 10 0;
+}
+.form-report-label{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.form-report-button{
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
 .list-menu-bottom-vbox{
     -fx-padding:10 0 0 0;
 }

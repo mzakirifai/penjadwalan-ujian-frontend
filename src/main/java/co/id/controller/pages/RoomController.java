@@ -108,7 +108,7 @@ public class RoomController {
                     confirm.showAndWait().ifPresent(response -> {
                         if (response == ButtonType.YES) {
                             try {
-                                masterService.deleteRoom(room.getId());
+                                masterService.deleteRoom(room.getId(), AuthContext.getCurrentRole());
                                 refreshTable();
                             } catch (Exception ex) {
                                 new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
@@ -130,7 +130,7 @@ public class RoomController {
                     }
 
                     try {
-                        masterService.saveOrUpdateRoom(room, AuthContext.getCurrentUsername());
+                        masterService.saveOrUpdateRoom(room, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
                     } catch (Exception ex) {
                         new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
                         return;
