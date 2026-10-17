@@ -304,7 +304,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="30" splitType="Stretch">
+		<band height="50" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="30" height="30" uuid="74abe4a1-ab94-47a1-b531-37b47c10d997">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -385,22 +385,19 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{student.name}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="460" y="0" width="95" height="30" uuid="a31239c6-e09a-433d-bb47-1ac7cfd56b33">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26e43855-0347-4a41-bbf1-63effba1116c"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
+			<staticText>
+				<reportElement x="460" y="0" width="95" height="30" uuid="45b6d02a-b702-4d56-8a71-5fe26ea39b89"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-			</textField>
+				<text><![CDATA[]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

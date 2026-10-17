@@ -70,6 +70,9 @@
                         <Button text="Ruangan" onAction="#handleRoomClick" styleClass="menu-child">
                             <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/room.png"/></image></ImageView></graphic>
                         </Button>
+                        <Button text="Pengampu" onAction="#handleTeachingAssignmentClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/subject.png"/></image></ImageView></graphic>
+                        </Button>
                     </VBox>
 
                     <!-- Transaksi -->

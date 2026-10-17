@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="co.id.controller.pages.TeachingAssignmentFormController"
+      spacing="12" styleClass="form-background">
+
+    <Label text="Form Pengampu" styleClass="form-label"/>
+
+    <ComboBox fx:id="comboTeacher" promptText="Pilih Guru" maxWidth="Infinity"/>
+    <ComboBox fx:id="comboClassroom" promptText="Pilih Kelas" maxWidth="Infinity"/>
+    <ComboBox fx:id="comboSubject" promptText="Pilih Mapel" maxWidth="Infinity"/>
+
+    <VBox styleClass="form-vbox"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Simpan" fx:id="saveBtn" onAction="#saveEntity" styleClass="form-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16">
+                    <image><Image url="@/icons/save.png"/></image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>

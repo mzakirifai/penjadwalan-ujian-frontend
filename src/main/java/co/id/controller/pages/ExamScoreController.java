@@ -7,12 +7,15 @@ import co.id.model.ExamParticipant;
 import co.id.model.ExamSchedule;
 import co.id.model.ExamScore;
 import co.id.model.Student;
+import co.id.model.TeachingAssignment;
 import co.id.service.ExamParticipantService;
 import co.id.service.ExamScheduleService;
 import co.id.service.ExamScoreService;
 import co.id.service.impl.ExamParticipantServiceImpl;
 import co.id.service.impl.ExamScheduleServiceImpl;
 import co.id.service.impl.ExamScoreServiceImpl;
+import co.id.service.TeachingAssignmentService;
+import co.id.service.impl.TeachingAssignmentServiceImpl;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -44,6 +47,7 @@ public class ExamScoreController {
     private ExamScoreService examScoreService;
     private ExamParticipantService examParticipantService;
     private ExamScheduleService examScheduleService;
+    private TeachingAssignmentService teachingAssignmentService;
     private ObservableList<ExamScore> observableList;
 
     private ExamSchedule selectedExamSchedule;
@@ -61,6 +65,7 @@ public class ExamScoreController {
         examScoreService = new ExamScoreServiceImpl();
         examParticipantService = new ExamParticipantServiceImpl();
         examScheduleService = new ExamScheduleServiceImpl();
+        teachingAssignmentService = new TeachingAssignmentServiceImpl();
         observableList = FXCollections.observableArrayList();
 
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -68,7 +73,7 @@ public class ExamScoreController {
         TableColumn<ExamSchedule, String> colScheduleLabel = new TableColumn<>("Jadwal Ujian");
         colScheduleLabel.setCellValueFactory(e -> new SimpleStringProperty(scheduleLabel(e.getValue())));
         lookupBoxExamSchedule.configure(
-                () -> examScheduleService.getAllExamSchedulesDetailed(),
+                this::getSelectableSchedules,
                 List.of(colScheduleLabel),
                 this::scheduleLabel
         );
@@ -121,7 +126,7 @@ public class ExamScoreController {
 
                 btnEdit.setOnAction(e -> {
                     if (!canEditCurrentSchedule()) {
-                        new Alert(AlertType.WARNING, "Anda hanya bisa menginput nilai untuk ujian yang Anda awasi sendiri.").showAndWait();
+                        new Alert(AlertType.WARNING, "Anda hanya bisa menginput nilai untuk mata pelajaran dan kelas yang Anda ajar.").showAndWait();
                         return;
                     }
                     editingRowIndex = getIndex();
@@ -218,10 +223,36 @@ public class ExamScoreController {
         if (AuthContext.isAdmin()) {
             return true;
         }
-        if (AuthContext.getCurrentUser().getTeacher() == null || selectedExamSchedule.getTeacher() == null) {
+        return isTaughtByCurrentTeacher(selectedExamSchedule);
+    }
+
+    // Guru hanya melihat jadwal ujian untuk mapel & kelas yang diampunya, admin melihat semua
+    private List<ExamSchedule> getSelectableSchedules() {
+        List<ExamSchedule> schedules = examScheduleService.getAllExamSchedulesDetailed();
+        if (AuthContext.isAdmin()) {
+            return schedules;
+        }
+        if (AuthContext.getCurrentUser().getTeacher() == null) {
+            return List.of();
+        }
+        // Ambil data pengampu guru sekali saja, lalu cocokkan mapel & kelas tiap jadwal
+        List<TeachingAssignment> assignments =
+                teachingAssignmentService.getByTeacher(AuthContext.getCurrentUser().getTeacher().getId());
+        return schedules.stream()
+                .filter(es -> es.getSubject() != null && es.getClassroom() != null)
+                .filter(es -> assignments.stream().anyMatch(ta ->
+                        ta.getSubject().getId() == es.getSubject().getId()
+                                && ta.getClassroom().getId() == es.getClassroom().getId()))
+                .toList();
+    }
+
+    private boolean isTaughtByCurrentTeacher(ExamSchedule schedule) {
+        if (AuthContext.getCurrentUser().getTeacher() == null
+                || schedule.getSubject() == null || schedule.getClassroom() == null) {
             return false;
         }
-        return AuthContext.getCurrentUser().getTeacher().getId() == selectedExamSchedule.getTeacher().getId();
+        return teachingAssignmentService.isAssigned(AuthContext.getCurrentUser().getTeacher().getId(),
+                schedule.getSubject().getId(), schedule.getClassroom().getId());
     }
 
     private void refreshTable() {
