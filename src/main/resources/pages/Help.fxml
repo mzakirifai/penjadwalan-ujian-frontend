@@ -22,6 +22,7 @@
     <Label text="Siswa — Mengelola data siswa."/>
     <Label text="Mata Pelajaran — Mengelola data mata pelajaran."/>
     <Label text="Ruangan — Mengelola data ruangan."/>
+    <Label text="Pengampu — Mengelola data pengampu."/>
 
     <Separator/>
     
