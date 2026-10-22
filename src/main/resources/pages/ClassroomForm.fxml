@@ -31,8 +31,8 @@
     <ComboBox fx:id="comboRombel" promptText="Rombel">
         <items>
             <FXCollections fx:factory="observableArrayList">
-                <String fx:value="A"/>
-                <String fx:value="B"/>
+                <String fx:value="1"/>
+                <String fx:value="2"/>
             </FXCollections>
         </items>
     </ComboBox>
