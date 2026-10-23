@@ -58,7 +58,7 @@
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image>
 				<reportElement x="40" y="10" width="115" height="90" uuid="c485f456-3151-4eb0-9f8e-abab3ec85399"/>
-				<imageExpression><![CDATA["D:/Belajar Visual/Latihan NetBeans/aplikasiPenjadwalan/src/gambar/logo smk adi luhur.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/logo_smk_adiluhur.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="316" y="10" width="169" height="30" uuid="70457955-01b7-4698-acd5-e9f1ad0d8f02"/>

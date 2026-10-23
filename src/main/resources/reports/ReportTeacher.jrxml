@@ -18,7 +18,7 @@
 		<band height="145" splitType="Stretch">
 			<image>
 				<reportElement x="40" y="9" width="103" height="80" uuid="d26368fe-730b-44a5-9350-dbceb36adf19"/>
-				<imageExpression><![CDATA["D:/Belajar Visual/Latihan NetBeans/aplikasiPenjadwalan/src/gambar/logo smk adi luhur.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/logo_smk_adiluhur.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="236" y="2" width="169" height="30" uuid="09e15963-f919-44cd-acdc-9731c84591cf"/>
