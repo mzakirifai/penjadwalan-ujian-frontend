@@ -22,51 +22,54 @@
 		<band height="115" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image>
-				<reportElement x="40" y="10" width="115" height="90" uuid="10a85d6b-b0d6-4dc2-a1d2-df4e1437c6f1"/>
-				<imageExpression><![CDATA["images/logo_smk_adiluhur.png"]]></imageExpression>
+				<reportElement x="52" y="10" width="115" height="90" uuid="06947bfe-82c5-49ab-b2a6-d09bd06cc5d1"/>
+				<imageExpression><![CDATA["D:/Belajar Visual/Latihan NetBeans/aplikasiPenjadwalan/src/gambar/logo smk adi luhur.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="316" y="10" width="169" height="30" uuid="5bb38d50-e718-4301-9e46-e56ff109cf3e"/>
+				<reportElement x="269" y="0" width="267" height="30" uuid="b653daa0-8fd2-49d0-92cb-85f48079c3d5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SMK ADILUHUR]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="254" y="40" width="294" height="20" uuid="763a4a53-a072-4796-879f-b6371928a2a3">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Jalan Raya Condet No. 4, Jakarta Timur]]></text>
+				<text><![CDATA[YAYASAN PENDIDIKAN ADI LUHUR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="60" width="294" height="20" uuid="2bf01a43-3fd3-47f9-94af-0828588c955e">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="14" isBold="true"/>
+				<reportElement x="244" y="20" width="316" height="30" uuid="2d69a655-723d-41dd-bda7-8eaefd0a8b89"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Telp. (021) 8400 108]]></text>
+				<text><![CDATA[SMK ADI LUHUR JAKARTA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="80" width="294" height="20" uuid="07c9c787-0c46-4dc4-8533-1a5eeb4bb29f">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="14" isBold="true"/>
+				<reportElement x="255" y="47" width="294" height="20" uuid="062ead84-a151-4246-8931-890f7b0c07eb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Email: smkadiluhurjakarta@gmail.com]]></text>
+				<text><![CDATA[Jl. Raya Condet No.4, RT.5/RW.3, Balekambang,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="254" y="62" width="294" height="20" uuid="16ace146-8530-4a87-aac1-c0055364e5fe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Kecamatan Kramat Jati, Kota Jakarta Timur, DKI Jakarta 13530]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="100" width="800" height="1" uuid="3122d762-5d71-4fd6-a8a0-a8600dd74597">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
+				<reportElement x="0" y="110" width="800" height="1" uuid="2e58d225-9c83-4c2f-a734-fc63891e6244"/>
 			</line>
+			<staticText>
+				<reportElement x="255" y="77" width="294" height="20" uuid="1111ea18-0c31-4f1e-bf32-a0c309c4c066"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Telp: (021) 8400108 | Email: smkadiluhurjakarta@gmail.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="255" y="90" width="294" height="20" uuid="7bc0ad97-910b-43f1-a963-098198a0ff58"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Website: www.smkadiluhur.sch.id]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
