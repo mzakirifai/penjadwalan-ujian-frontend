@@ -52,7 +52,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[YAYASAN PENDIDIKAN ADI LUHUR]]></text>
+				<text><![CDATA[YAYASAN PENDIDIKAN ISLAM ADI LUHUR]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="173" y="16" width="294" height="20" uuid="1fe773bd-7aeb-42a9-883a-c3453ea5c275">

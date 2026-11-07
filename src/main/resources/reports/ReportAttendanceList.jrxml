@@ -34,7 +34,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[YAYASAN PENDIDIKAN ADI LUHUR]]></text>
+				<text><![CDATA[YAYASAN PENDIDIKAN ISLAM ADI LUHUR]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="173" y="16" width="294" height="20" uuid="8ed94089-9caf-46ee-bcb4-c17eaee5e812">
@@ -322,7 +322,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="50" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="30" height="30" uuid="74abe4a1-ab94-47a1-b531-37b47c10d997">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>

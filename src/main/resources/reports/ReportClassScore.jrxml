@@ -61,11 +61,11 @@
 				<imageExpression><![CDATA["D:/Belajar Visual/Latihan NetBeans/aplikasiPenjadwalan/src/gambar/logo smk adi luhur.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="269" y="0" width="267" height="30" uuid="70457955-01b7-4698-acd5-e9f1ad0d8f02"/>
+				<reportElement x="242" y="0" width="321" height="30" uuid="70457955-01b7-4698-acd5-e9f1ad0d8f02"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[YAYASAN PENDIDIKAN ADI LUHUR]]></text>
+				<text><![CDATA[YAYASAN PENDIDIKAN ISLAM ADI LUHUR]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="244" y="20" width="316" height="30" uuid="c1a07bca-b0e2-4e6d-8a7e-a2c7576be226"/>
@@ -204,7 +204,7 @@
 		<band height="250" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<crosstab>
-				<reportElement x="13" y="14" width="778" height="93" uuid="df418363-e2f0-4484-a00d-cb86354ce242"/>
+				<reportElement x="13" y="14" width="778" height="76" uuid="df418363-e2f0-4484-a00d-cb86354ce242"/>
 				<crosstabHeaderCell>
 					<cellContents mode="Opaque" style="Crosstab_CH">
 						<staticText>
@@ -354,14 +354,14 @@
 				</crosstabCell>
 			</crosstab>
 			<staticText>
-				<reportElement x="600" y="139" width="100" height="30" uuid="519496bc-c742-4dbb-9137-9ca4748789d6"/>
+				<reportElement x="600" y="144" width="100" height="30" uuid="519496bc-c742-4dbb-9137-9ca4748789d6"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Kepala Sekolah]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="600" y="115" width="190" height="30" uuid="90813475-632e-415c-b16f-fa1dd17e672a"/>
+				<reportElement x="600" y="120" width="190" height="30" uuid="90813475-632e-415c-b16f-fa1dd17e672a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>

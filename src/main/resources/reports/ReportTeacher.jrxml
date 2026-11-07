@@ -32,7 +32,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[YAYASAN PENDIDIKAN ADI LUHUR]]></text>
+				<text><![CDATA[YAYASAN PENDIDIKAN ISLAM ADI LUHUR]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="173" y="16" width="294" height="20" uuid="dd740bc0-d893-40ea-93bb-3cf8f6abe94d">
@@ -97,7 +97,7 @@
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="24" y="0" width="91" height="30" backcolor="#E6E6E6" uuid="25918f9d-0b67-418a-a627-9f93c34f5473"/>
+				<reportElement x="24" y="0" width="97" height="30" backcolor="#E6E6E6" uuid="25918f9d-0b67-418a-a627-9f93c34f5473"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -110,7 +110,7 @@
 				<text><![CDATA[NIP]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="236" y="0" width="69" height="30" backcolor="#E6E6E6" uuid="caf8c735-59fe-457e-a70c-7151e5eb74b2"/>
+				<reportElement x="246" y="0" width="54" height="30" backcolor="#E6E6E6" uuid="caf8c735-59fe-457e-a70c-7151e5eb74b2"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -123,7 +123,7 @@
 				<text><![CDATA[JK]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="305" y="0" width="90" height="30" backcolor="#E6E6E6" uuid="a355dce1-72b3-49ac-8d21-1efc6c2dbe23"/>
+				<reportElement x="300" y="0" width="74" height="30" backcolor="#E6E6E6" uuid="a355dce1-72b3-49ac-8d21-1efc6c2dbe23"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -151,7 +151,7 @@
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="115" y="0" width="121" height="30" backcolor="#E6E6E6" uuid="7fecbe38-a558-44a7-a96e-67c39bbcf88c"/>
+				<reportElement x="121" y="0" width="125" height="30" backcolor="#E6E6E6" uuid="7fecbe38-a558-44a7-a96e-67c39bbcf88c"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -164,7 +164,7 @@
 				<text><![CDATA[Nama Guru]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="395" y="0" width="76" height="30" backcolor="#E6E6E6" uuid="4b53a969-e6ff-40a3-beee-49ed622b3b04"/>
+				<reportElement x="374" y="0" width="96" height="30" backcolor="#E6E6E6" uuid="4b53a969-e6ff-40a3-beee-49ed622b3b04"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -209,7 +209,7 @@
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="24" y="0" width="91" height="30" uuid="af50ee89-f73e-46db-9c7d-308999ed6d3b">
+				<reportElement x="24" y="0" width="97" height="30" uuid="af50ee89-f73e-46db-9c7d-308999ed6d3b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3276bb7-5420-4e36-9c42-009a3282ffe2"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -225,7 +225,7 @@
 				<textFieldExpression><![CDATA[$F{nip}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="115" y="0" width="121" height="30" uuid="4c0810db-026b-41bb-b708-2b4cc11c3382">
+				<reportElement x="121" y="0" width="125" height="30" uuid="4c0810db-026b-41bb-b708-2b4cc11c3382">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3276bb7-5420-4e36-9c42-009a3282ffe2"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -241,7 +241,7 @@
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="236" y="0" width="69" height="30" uuid="7492648b-8508-422d-a88f-2a2b5014f513">
+				<reportElement x="246" y="0" width="54" height="30" uuid="7492648b-8508-422d-a88f-2a2b5014f513">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6540b779-15a1-4959-829f-60c1d7fb7cd5"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -257,7 +257,7 @@
 				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="305" y="0" width="90" height="30" uuid="0bb0d648-000d-4da9-a7af-258c7ac19438">
+				<reportElement x="300" y="0" width="74" height="30" uuid="0bb0d648-000d-4da9-a7af-258c7ac19438">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26e43855-0347-4a41-bbf1-63effba1116c"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -274,7 +274,7 @@
 				<textFieldExpression><![CDATA[$F{phoneNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="395" y="0" width="76" height="30" uuid="c6684b4c-b170-44da-b09a-31053fa6f3ff">
+				<reportElement x="374" y="0" width="96" height="30" uuid="c6684b4c-b170-44da-b09a-31053fa6f3ff">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26e43855-0347-4a41-bbf1-63effba1116c"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>

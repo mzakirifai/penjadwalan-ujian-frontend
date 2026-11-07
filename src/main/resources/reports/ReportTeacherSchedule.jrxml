@@ -27,11 +27,11 @@
 				<imageExpression><![CDATA["D:/Belajar Visual/Latihan NetBeans/aplikasiPenjadwalan/src/gambar/logo smk adi luhur.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="269" y="0" width="267" height="30" uuid="3bb920a3-1956-441c-8b65-12f7412fcbec"/>
+				<reportElement x="240" y="0" width="311" height="30" uuid="3bb920a3-1956-441c-8b65-12f7412fcbec"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[YAYASAN PENDIDIKAN ADI LUHUR]]></text>
+				<text><![CDATA[YAYASAN PENDIDIKAN ISLAM ADI LUHUR]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="244" y="20" width="316" height="30" uuid="f8bbf034-7af9-4c68-b9b0-faa48c9447db"/>
