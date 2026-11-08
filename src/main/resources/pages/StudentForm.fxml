@@ -15,6 +15,7 @@
     <Label text="Form Siswa" styleClass="form-label"/>
 
     <TextField fx:id="textFieldNis" promptText="NIS"/>
+    <TextField fx:id="textFieldNisn" promptText="NISN (10 digit angka)"/>
     <TextField fx:id="textFieldName" promptText="Nama Siswa"/>
 
     <LookupBox fx:id="lookupBoxClassroom" promptText="Pilih Kelas"/>
@@ -24,9 +25,6 @@
         <RadioButton fx:id="radioMale" text="Laki-laki"/>
         <RadioButton fx:id="radioFemale" text="Perempuan"/>
     </HBox>
-
-    <TextField fx:id="textFieldPhone" promptText="No. HP"/>
-    <TextArea fx:id="textAreaAddress" promptText="Alamat" prefRowCount="3"/>
 
     <VBox styleClass="form-vbox"/>
 

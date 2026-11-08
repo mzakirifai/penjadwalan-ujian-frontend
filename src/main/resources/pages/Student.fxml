@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import co.id.component.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -31,6 +32,9 @@
                         </ImageView>
                     </graphic>
                 </Button>
+                <Label text="Kelas:"/>
+                <LookupBox fx:id="lookupBoxClassroom" promptText="Semua Kelas"/>
+                <Button fx:id="allClassBtn" text="Semua"/>
                 <HBox HBox.hgrow="ALWAYS"/>
                 <Button fx:id="addBtn" text="Tambah" styleClass="list-menu-top-button">
                     <graphic>
@@ -49,11 +53,10 @@
                 <columns>
                     <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
                     <TableColumn fx:id="tableColumnNis" text="NIS" prefWidth="110"/>
+                    <TableColumn fx:id="tableColumnNisn" text="NISN" prefWidth="120"/>
                     <TableColumn fx:id="tableColumnName" text="Nama" prefWidth="180"/>
                     <TableColumn fx:id="tableColumnClassroom" text="Kelas" prefWidth="120"/>
                     <TableColumn fx:id="tableColumnGender" text="Jenis Kelamin" prefWidth="110"/>
-                    <TableColumn fx:id="tableColumnPhone" text="No. HP" prefWidth="120"/>
-                    <TableColumn fx:id="tableColumnAddress" text="Alamat" prefWidth="180"/>
                 </columns>
             </TableView>
         </VBox>

@@ -1,10 +1,14 @@
 package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
+import co.id.component.LookupBox;
+import co.id.model.Classroom;
 import co.id.model.Student;
 import co.id.service.MasterService;
 import co.id.service.impl.MasterServiceImpl;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,17 +38,25 @@ public class StudentController {
     @FXML private TextField searchField;
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
+    @FXML private Button allClassBtn;
+    @FXML private LookupBox<Classroom> lookupBoxClassroom;
     @FXML private Button addBtn;
     @FXML private TableView<Student> tableView;
     
-    @FXML private TableColumn<Student, String> tableColumnNis, tableColumnName, tableColumnClassroom,
-            tableColumnGender, tableColumnPhone, tableColumnAddress;
+    @FXML private TableColumn<Student, String> tableColumnNis, tableColumnNisn, tableColumnName, tableColumnClassroom,
+            tableColumnGender;
     @FXML private TableColumn<Student, Void> tableColumnAction;
 
     @FXML private Pagination pagination;
     
+    private static final int ROWS_PER_PAGE = 10;
+
     private MasterService masterService;
     private ObservableList<Student> observableList;
+
+    // Filter kelas: null berarti semua kelas (default)
+    private Classroom filterClassroom;
+    private List<Student> classStudents = List.of();
     
     private ImageView createIcon(String path) {
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(path)));
@@ -61,12 +73,11 @@ public class StudentController {
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tableColumnNis.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getNis()));
+        tableColumnNisn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getNisn()));
         tableColumnName.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
         tableColumnClassroom.setCellValueFactory(s ->
                 new SimpleStringProperty(s.getValue().getClassroom() != null ? s.getValue().getClassroom().getName() : "-"));
         tableColumnGender.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getGender()));
-        tableColumnPhone.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getPhoneNumber()));
-        tableColumnAddress.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getAddress()));
 
         tableColumnAction.setCellFactory(clbck -> new TableCell<>() {
             private final Button buttonEdit = new Button("Edit");
@@ -118,13 +129,20 @@ public class StudentController {
             }
         });
 
-        int totalRows = masterService.countStudents();
-        int rowsPerPage = 10;
-        int pageCount = (int) Math.ceil((double) totalRows / rowsPerPage);
+        TableColumn<Classroom, String> colClassName = new TableColumn<>("Kelas");
+        colClassName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
+        lookupBoxClassroom.configure(
+                () -> masterService.getAllClassrooms(), List.of(colClassName), Classroom::getName
+        );
+        lookupBoxClassroom.setFieldWidth(150);
+        lookupBoxClassroom.selectedItemProperty().addListener((obs, oldVal, newVal) -> applyClassFilter(newVal));
+        allClassBtn.setOnAction(eh -> lookupBoxClassroom.setSelectedItem(null));
+
+        int pageCount = (int) Math.ceil((double) totalRows() / ROWS_PER_PAGE);
 
         pagination.setPageCount(Math.max(pageCount, 1));
         pagination.setPageFactory(clbck -> {
-            loadPage(clbck, rowsPerPage);
+            loadPage(clbck, ROWS_PER_PAGE);
             return new VBox(tableView);
         });
 
@@ -136,12 +154,38 @@ public class StudentController {
     private void filterItems() {
         String keyword = searchField.getText();
 
-        if (keyword == null || keyword.isEmpty()) {
+        if (keyword == null || keyword.isBlank()) {
             refreshTable();
         } else {
-            observableList.setAll(masterService.getStudentBy(keyword));
+            List<Student> result = masterService.getStudentBy(keyword.trim());
+
+            if (filterClassroom != null) {
+                result = result.stream()
+                        .filter(s -> s.getClassroom() != null && s.getClassroom().getId() == filterClassroom.getId())
+                        .collect(Collectors.toList());
+            }
+
+            observableList.setAll(result);
             tableView.setItems(observableList);
         }
+    }
+
+    // Dipanggil saat kelas dipilih di filter (null = tampilkan semua kelas)
+    private void applyClassFilter(Classroom classroom) {
+        filterClassroom = classroom;
+        classStudents = classroom == null ? List.of() : masterService.getStudentsByClassroom(classroom.getId());
+
+        pagination.setCurrentPageIndex(0);
+        refreshTable();
+
+        String keyword = searchField.getText();
+        if (keyword != null && !keyword.isBlank()) {
+            filterItems();
+        }
+    }
+
+    private int totalRows() {
+        return filterClassroom == null ? masterService.countStudents() : classStudents.size();
     }
      
     private void openForm(Student student) {
@@ -180,15 +224,23 @@ public class StudentController {
     }
     
     private void loadPage(int pageIndex, int rowsPerPage) {
-        observableList.setAll(masterService.getStudents(pageIndex + 1, rowsPerPage));
+        if (filterClassroom == null) {
+            observableList.setAll(masterService.getStudents(pageIndex + 1, rowsPerPage));
+        } else {
+            int from = Math.min(pageIndex * rowsPerPage, classStudents.size());
+            int to = Math.min(from + rowsPerPage, classStudents.size());
+            observableList.setAll(classStudents.subList(from, to));
+        }
         tableView.setItems(observableList);
     }
     
     private void refreshTable() {
-        int totalRows = masterService.countStudents();
-        int rowsPerPage = 10;
-        int pageCount = (int) Math.ceil((double) totalRows / rowsPerPage);
+        if (filterClassroom != null) {
+            classStudents = masterService.getStudentsByClassroom(filterClassroom.getId());
+        }
+
+        int pageCount = (int) Math.ceil((double) totalRows() / ROWS_PER_PAGE);
         pagination.setPageCount(Math.max(pageCount, 1));
-        loadPage(pagination.getCurrentPageIndex(), rowsPerPage);
+        loadPage(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
     }
 }

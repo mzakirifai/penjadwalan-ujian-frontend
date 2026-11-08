@@ -14,13 +14,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class StudentFormController {
-    @FXML private TextField textFieldNis, textFieldName, textFieldPhone;
-    @FXML private TextArea textAreaAddress;
+    @FXML private TextField textFieldNis, textFieldNisn, textFieldName;
     @FXML private LookupBox<Classroom> lookupBoxClassroom;
     @FXML private RadioButton radioMale, radioFemale;
     @FXML private Button saveBtn;
@@ -46,9 +44,8 @@ public class StudentFormController {
 
         if (student != null) {
             textFieldNis.setText(student.getNis());
+            textFieldNisn.setText(student.getNisn());
             textFieldName.setText(student.getName());
-            textFieldPhone.setText(student.getPhoneNumber());
-            textAreaAddress.setText(student.getAddress());
 
             if (student.getClassroom() != null) {
                 lookupBoxClassroom.setSelectedItem(student.getClassroom());
@@ -65,9 +62,8 @@ public class StudentFormController {
     @FXML
     private void saveEntity() {
         String nis = textFieldNis.getText();
+        String nisn = textFieldNisn.getText();
         String name = textFieldName.getText();
-        String phone = textFieldPhone.getText();
-        String address = textAreaAddress.getText();
         Classroom classroom = lookupBoxClassroom.getSelectedItem();
 
         String gender = null;
@@ -89,9 +85,8 @@ public class StudentFormController {
 
         Student student = (selectedStudent != null) ? selectedStudent : new Student();
         student.setNis(nis);
+        student.setNisn(nisn);
         student.setName(name);
-        student.setPhoneNumber(phone);
-        student.setAddress(address);
         student.setGender(gender);
         student.setClassroom(classroom);
 
