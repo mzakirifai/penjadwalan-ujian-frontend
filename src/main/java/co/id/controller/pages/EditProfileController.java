@@ -8,10 +8,12 @@ import co.id.service.UserService;
 import co.id.service.impl.UserServiceImpl;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import javax.imageio.ImageIO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -34,7 +36,7 @@ public class EditProfileController {
     
     private UserService userService;
     private User currentUser;
-    private File selectedPhotoFile;
+    private byte[] selectedPhotoData;
     private boolean nameLockedToTeacher; 
     
     @FXML
@@ -66,14 +68,11 @@ public class EditProfileController {
     }
     
     private void loadCurrentPhoto(){
-        String photoPath = currentUser.getPhotoPath();
-        
-        if (photoPath != null && !photoPath.isBlank()) {
-            File photoFile = new File(photoPath);
-            if (photoFile.exists()) {
-                profileImageView.setImage(new Image(photoFile.toURI().toString()));
-                return;
-            }
+        byte[] photoData = currentUser.getPhotoData();
+
+        if (photoData != null && photoData.length > 0) {
+            profileImageView.setImage(new Image(new ByteArrayInputStream(photoData)));
+            return;
         }
         
         // Foto default kalau belum ada
@@ -95,8 +94,13 @@ public class EditProfileController {
         File file = fileChooser.showOpenDialog(btnChoosePhoto.getScene().getWindow());
         
         if (file != null) {
-            selectedPhotoFile = file;
-            profileImageView.setImage(new Image(file.toURI().toString()));
+            try {
+                selectedPhotoData = resizeToJpeg(file);
+                profileImageView.setImage(new Image(new ByteArrayInputStream(selectedPhotoData)));
+            } catch (Exception e) {
+                e.printStackTrace();
+                new Alert(AlertType.ERROR, "Gagal memproses foto. Pastikan file berupa gambar PNG atau JPG.").showAndWait();
+            }
         }
     }
     
@@ -114,11 +118,8 @@ public class EditProfileController {
         currentUser.setFullName(fullName);
     }
         
-        if (selectedPhotoFile != null) {
-            String savedPath = savePhotoToFolder(selectedPhotoFile);
-            if (savedPath != null) {
-                currentUser.setPhotoPath(savedPath);
-            }
+        if (selectedPhotoData != null) {
+            currentUser.setPhotoData(selectedPhotoData);
         }
         
         userService.updateProfile(currentUser, currentUser.getUsername());
@@ -133,28 +134,30 @@ public class EditProfileController {
         alert.showAndWait();
     }
     
-    private String savePhotoToFolder(File sourceFile){
-        try {
-            Path photosDir = Paths.get(System.getProperty("user.dir"), "photos");
-            
-            if (!Files.exists(photosDir)) {
-                Files.createDirectories(photosDir);
-            }
-            
-            String extension = sourceFile.getName().substring(sourceFile.getName().lastIndexOf('.'));
-            String fileName = "user_" + currentUser.getId() + extension;
-            
-            Path targetPath = photosDir.resolve(fileName);
-            
-            Files.copy(sourceFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-            
-            return targetPath.toString();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert error = new Alert(AlertType.ERROR, "Gagal menyimpan foto");
-            error.showAndWait();
-            return null;
+    // Perkecil foto jadi 256x256 (dipotong persegi di tengah), simpan sebagai JPEG
+    private byte[] resizeToJpeg(File sourceFile) throws IOException {
+        BufferedImage source = ImageIO.read(sourceFile);
+        if (source == null) {
+            throw new IOException("File bukan gambar yang didukung");
         }
+
+        int size = Math.min(source.getWidth(), source.getHeight());
+        int x = (source.getWidth() - size) / 2;
+        int y = (source.getHeight() - size) / 2;
+        BufferedImage square = source.getSubimage(x, y, size, size);
+
+        int target = 256;
+        java.awt.Image scaled = square.getScaledInstance(target, target, java.awt.Image.SCALE_SMOOTH);
+
+        BufferedImage result = new BufferedImage(target, target, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = result.createGraphics();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, target, target);
+        graphics.drawImage(scaled, 0, 0, null);
+        graphics.dispose();
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ImageIO.write(result, "jpg", output);
+        return output.toByteArray();
     }
 }

@@ -2,7 +2,7 @@ package co.id.controller.layout;
 
 import co.id.auth.AuthContext;
 import co.id.model.User;
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -92,14 +92,11 @@ public class NavbarController {
     }
     
     private void loadProfilePhoto(User user){
-        String photoPath = user.getPhotoPath();
+        byte[] photoData = user.getPhotoData();
 
-        if (photoPath != null && !photoPath.isBlank()) {
-            File photoFile = new File(photoPath);
-            if (photoFile.exists()) {
-                profileImage.setImage(new Image(photoFile.toURI().toString()));
-                return;
-            }
+        if (photoData != null && photoData.length > 0) {
+            profileImage.setImage(new Image(new ByteArrayInputStream(photoData)));
+            return;
         }
 
         try {
