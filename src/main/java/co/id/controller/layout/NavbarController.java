@@ -77,7 +77,7 @@ public class NavbarController {
                     Parent root = loader.load();
 
                     Stage stage = (Stage) toggleSidebarBtn.getScene().getWindow();
-                    Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                    Scene scene = new Scene(root, stage.getScene().getWidth(), stage.getScene().getHeight());
                     scene.getStylesheets().add(getClass().getResource("/css/material.css").toExternalForm());
 
                     stage.setScene(scene);

@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -141,10 +142,7 @@ public class StudentController {
         int pageCount = (int) Math.ceil((double) totalRows() / ROWS_PER_PAGE);
 
         pagination.setPageCount(Math.max(pageCount, 1));
-        pagination.setPageFactory(clbck -> {
-            loadPage(clbck, ROWS_PER_PAGE);
-            return new VBox(tableView);
-        });
+        pagination.setPageFactory(this::createPage);
 
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
@@ -175,8 +173,8 @@ public class StudentController {
         filterClassroom = classroom;
         classStudents = classroom == null ? List.of() : masterService.getStudentsByClassroom(classroom.getId());
 
-        pagination.setCurrentPageIndex(0);
-        refreshTable();
+        // Kembali ke halaman 1 dengan jumlah halaman yang baru
+        resetPagination(Math.max((int) Math.ceil((double) totalRows() / ROWS_PER_PAGE), 1), 0);
 
         String keyword = searchField.getText();
         if (keyword != null && !keyword.isBlank()) {
@@ -239,8 +237,30 @@ public class StudentController {
             classStudents = masterService.getStudentsByClassroom(filterClassroom.getId());
         }
 
-        int pageCount = (int) Math.ceil((double) totalRows() / ROWS_PER_PAGE);
-        pagination.setPageCount(Math.max(pageCount, 1));
-        loadPage(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
+        int pageCount = Math.max((int) Math.ceil((double) totalRows() / ROWS_PER_PAGE), 1);
+        int pageIndex = Math.min(pagination.getCurrentPageIndex(), pageCount - 1);
+
+        if (pageCount != pagination.getPageCount() || pageIndex != pagination.getCurrentPageIndex()) {
+            resetPagination(pageCount, pageIndex);
+        } else {
+            loadPage(pageIndex, ROWS_PER_PAGE);
+        }
+    }
+
+    // Isi tabel untuk satu halaman. Dipanggil oleh Pagination.
+    private Node createPage(int pageIndex) {
+        loadPage(pageIndex, ROWS_PER_PAGE);
+        return new VBox(tableView);
+    }
+
+    // Mengubah jumlah halaman dan halaman aktif dengan aman.
+    // Pagination hanya boleh membuat halaman SATU kali per perubahan. Kalau jumlah halaman dan
+    // halaman aktif diubah satu per satu saat page factory masih terpasang, halaman dibuat dua kali
+    // dan tabel "dicuri" dari halaman yang sedang tampil, sehingga layar kosong.
+    private void resetPagination(int pageCount, int pageIndex) {
+        pagination.setPageFactory(null);
+        pagination.setPageCount(pageCount);
+        pagination.setCurrentPageIndex(pageIndex);
+        pagination.setPageFactory(this::createPage);
     }
 }

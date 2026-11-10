@@ -23,56 +23,10 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="278" splitType="Stretch">
+		<band height="313" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<image>
-				<reportElement x="40" y="9" width="103" height="80" uuid="41ba37ad-f874-496b-b8e9-5f026123383f"/>
-				<imageExpression><![CDATA["D:/Belajar Visual/Latihan NetBeans/aplikasiPenjadwalan/src/gambar/logo smk adi luhur.png"]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement x="152" y="2" width="337" height="18" uuid="2dfa53b4-f713-432a-bf99-9fb83075c714"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[YAYASAN PENDIDIKAN ISLAM ADI LUHUR]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="173" y="16" width="294" height="20" uuid="8ed94089-9caf-46ee-bcb4-c17eaee5e812">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SMK ADI LUHUR JAKARTA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="173" y="32" width="294" height="20" uuid="fb8dd933-098a-4148-aa58-6028d9e2dc9f">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Jl. Raya Condet No.4, RT.5/RW.3, Balekambang,]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="173" y="45" width="294" height="20" uuid="e1e8b2b0-933c-47df-8470-5ee4d7bb7c00">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Kecamatan Kramat Jati, Kota Jakarta Timur, DKI Jakarta 13530]]></text>
-			</staticText>
-			<line>
-				<reportElement x="0" y="92" width="550" height="1" uuid="fc7a5cb9-bd61-43ce-bf96-fbf741fcf849">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-			</line>
-			<staticText>
-				<reportElement x="0" y="218" width="90" height="20" uuid="4564cb80-1e77-4e5e-8628-4126595e9c19">
+				<reportElement x="0" y="253" width="90" height="20" uuid="4564cb80-1e77-4e5e-8628-4126595e9c19">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -82,7 +36,7 @@
 				<text><![CDATA[Mata Pelajaran	:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="89" y="218" width="171" height="20" uuid="2c19577a-6056-4a37-be17-b29b602af877">
+				<reportElement x="89" y="253" width="171" height="20" uuid="2c19577a-6056-4a37-be17-b29b602af877">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -92,7 +46,7 @@
 				<textFieldExpression><![CDATA[$P{SUBJECT_NAME}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="238" width="89" height="20" uuid="be5ee9dd-c4b0-4d07-930d-5f54754dd149">
+				<reportElement x="0" y="273" width="89" height="20" uuid="be5ee9dd-c4b0-4d07-930d-5f54754dd149">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -102,7 +56,7 @@
 				<text><![CDATA[Kelas		:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="90" y="238" width="170" height="20" uuid="0c429b9e-d0e5-49f1-b210-680e15ce4fa2">
+				<reportElement x="90" y="273" width="170" height="20" uuid="0c429b9e-d0e5-49f1-b210-680e15ce4fa2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -112,21 +66,21 @@
 				<textFieldExpression><![CDATA[$P{CLASSROOM_NAME}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="45" y="104" width="464" height="30" uuid="663cd566-9636-4240-a322-87f2f8388c5e"/>
+				<reportElement x="45" y="139" width="464" height="30" uuid="663cd566-9636-4240-a322-87f2f8388c5e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["DAFTAR HADIR PESERTA"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="45" y="135" width="464" height="30" uuid="f73d89cc-9190-48b4-a8e8-71ec61ebfe99"/>
+				<reportElement x="45" y="170" width="464" height="30" uuid="f73d89cc-9190-48b4-a8e8-71ec61ebfe99"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{EXAM_TYPE_LABEL}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="258" width="89" height="20" uuid="905218f9-dbe2-43b0-ac60-6524ac9eeb2b">
+				<reportElement x="0" y="293" width="89" height="20" uuid="905218f9-dbe2-43b0-ac60-6524ac9eeb2b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -136,7 +90,7 @@
 				<text><![CDATA[Ruangan	:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="90" y="258" width="170" height="20" uuid="55ce4c94-ab40-4b0a-8184-99ce06b4efde">
+				<reportElement x="90" y="293" width="170" height="20" uuid="55ce4c94-ab40-4b0a-8184-99ce06b4efde">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -146,14 +100,14 @@
 				<textFieldExpression><![CDATA[$P{ROOM_NAME}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="45" y="166" width="464" height="30" uuid="d86abd10-b435-4b53-b58f-2d0722e68183"/>
+				<reportElement x="45" y="201" width="464" height="30" uuid="d86abd10-b435-4b53-b58f-2d0722e68183"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["SEMESTER " + $P{SEMESTER} +" TAHUN AKADEMIK " + $P{ACADEMIC_YEAR}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="299" y="218" width="90" height="20" uuid="734a61f6-a4ad-4608-97db-e2ac7947b038">
+				<reportElement x="299" y="253" width="90" height="20" uuid="734a61f6-a4ad-4608-97db-e2ac7947b038">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -163,7 +117,7 @@
 				<text><![CDATA[Pengawas	:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="388" y="218" width="167" height="20" uuid="634ca151-5236-492a-b8fa-3e89346f97c6">
+				<reportElement x="388" y="253" width="167" height="20" uuid="634ca151-5236-492a-b8fa-3e89346f97c6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -173,7 +127,7 @@
 				<textFieldExpression><![CDATA[$P{TEACHER_NAME}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="299" y="238" width="89" height="20" uuid="887d2cf7-8223-48b8-821f-e604450f3007">
+				<reportElement x="299" y="273" width="89" height="20" uuid="887d2cf7-8223-48b8-821f-e604450f3007">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -183,7 +137,7 @@
 				<text><![CDATA[Tanggal		:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="389" y="238" width="166" height="20" uuid="05619a4c-e14a-4c49-b0dc-f9bcdae39496">
+				<reportElement x="389" y="273" width="166" height="20" uuid="05619a4c-e14a-4c49-b0dc-f9bcdae39496">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -193,7 +147,7 @@
 				<textFieldExpression><![CDATA[$P{EXAM_DATE}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="299" y="258" width="89" height="20" uuid="d078c885-c386-43d5-9b3b-216c73e1f942">
+				<reportElement x="299" y="293" width="89" height="20" uuid="d078c885-c386-43d5-9b3b-216c73e1f942">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -203,7 +157,7 @@
 				<text><![CDATA[Waktu	:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="389" y="258" width="166" height="20" uuid="83932906-6fcc-44fc-9460-5402b710ae23">
+				<reportElement x="389" y="293" width="166" height="20" uuid="83932906-6fcc-44fc-9460-5402b710ae23">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e16322c-5f79-4696-a073-bcd0d1f1014e"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -212,24 +166,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{EXAM_TIME}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="173" y="57" width="294" height="20" uuid="95f2ef51-49c7-4071-a9db-abde222b850b">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Telp: (021) 8400108 | Email: smkadiluhurjakarta@gmail.com]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="173" y="69" width="294" height="20" uuid="8588a77e-5b59-48f6-a045-643ed459aab9">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Website: www.smkadiluhur.sch.id]]></text>
-			</staticText>
+			<image>
+				<reportElement x="-20" y="-20" width="595" height="159" uuid="546c7feb-9bf6-4d7c-a45f-051710c606ba"/>
+				<imageExpression><![CDATA["images/kop_adi_luhur.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

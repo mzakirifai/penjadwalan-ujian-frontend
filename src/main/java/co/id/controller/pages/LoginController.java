@@ -7,11 +7,13 @@ import co.id.service.UserService;
 import co.id.service.impl.UserServiceImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class LoginController {
@@ -63,11 +65,20 @@ public class LoginController {
             Parent root = loader.load();
 
             Stage stage = (Stage) btnLogin.getScene().getWindow();
-            Scene scene = new Scene(root, 1280, 800);
+
+            // Ukuran ideal 1280 x 800, tapi tidak boleh melebihi area layar yang tersedia.
+            // Di laptop dengan layar kecil (misalnya 1366 x 768 atau skala tampilan 125% / 150%),
+            // jendela 1280 x 800 lebih tinggi dari layar sehingga tombol minimize dan close terpotong.
+            Rectangle2D area = Screen.getPrimary().getVisualBounds();
+            double width = Math.min(1280, area.getWidth() - 40);
+            double height = Math.min(800, area.getHeight() - 80); // sisakan ruang untuk title bar dan tepi jendela
+
+            Scene scene = new Scene(root, width, height);
             scene.getStylesheets().add(getClass().getResource("/css/material.css").toExternalForm());
 
             stage.setScene(scene);
             stage.setTitle("Sistem Penjadwalan Ujian");
+            stage.sizeToScene();
             stage.centerOnScreen();
 
         } catch (Exception exception) {

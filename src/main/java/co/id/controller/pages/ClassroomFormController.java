@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class ClassroomFormController {
+    // Pilihan rombel untuk kelas yang tidak memakai rombel (nama kelas hanya Tingkat + Jurusan, misalnya "XI PH")
+    private static final String NO_ROMBEL = "Tanpa rombel";
+
     @FXML private ComboBox<String> comboGrade;
     @FXML private ComboBox<Major> comboMajor;
     @FXML private ComboBox<String> comboRombel;
@@ -30,6 +33,10 @@ public class ClassroomFormController {
     @FXML
     public void initialize() {
         masterService = new MasterServiceImpl();
+
+        if (!comboRombel.getItems().contains(NO_ROMBEL)) {
+            comboRombel.getItems().add(NO_ROMBEL);
+        }
 
         List<Major> majors = masterService.getAllMajors();
         comboMajor.setItems(FXCollections.observableArrayList(majors));
@@ -67,12 +74,23 @@ public class ClassroomFormController {
                         .ifPresent(m -> comboMajor.setValue(m));
             }
 
-            // Coba ambil rombel dari huruf terakhir nama kelas yang sudah ada (best-effort)
+            // Coba ambil rombel dari nama kelas yang sudah ada (best-effort)
             if (classroom.getName() != null && !classroom.getName().isBlank()) {
-                String[] parts = classroom.getName().trim().split(" ");
-                String lastPart = parts[parts.length - 1];
-                if (lastPart.length() == 1) {
-                    comboRombel.setValue(lastPart.toUpperCase());
+                String name = classroom.getName().trim();
+                Major major = comboMajor.getValue();
+                String withoutRombel = (classroom.getGrade() != null && major != null)
+                        ? classroom.getGrade() + " " + majorLabel(major)
+                        : null;
+
+                if (withoutRombel != null && name.equalsIgnoreCase(withoutRombel)) {
+                    // Nama kelas hanya Tingkat + Jurusan, berarti kelas ini tidak memakai rombel
+                    comboRombel.setValue(NO_ROMBEL);
+                } else {
+                    String[] parts = name.split(" ");
+                    String lastPart = parts[parts.length - 1];
+                    if (lastPart.length() == 1) {
+                        comboRombel.setValue(lastPart.toUpperCase());
+                    }
                 }
             }
 
@@ -94,8 +112,12 @@ public class ClassroomFormController {
             return null;
         }
 
-        String abbreviation = major.getAbbreviation() != null ? major.getAbbreviation() : major.getName();
-        return grade + " " + abbreviation + " " + rombel;
+        String base = grade + " " + majorLabel(major);
+        return NO_ROMBEL.equals(rombel) ? base : base + " " + rombel;
+    }
+
+    private String majorLabel(Major major) {
+        return major.getAbbreviation() != null ? major.getAbbreviation() : major.getName();
     }
 
     @FXML
@@ -113,7 +135,7 @@ public class ClassroomFormController {
             return;
         }
         if (rombel == null) {
-            new Alert(AlertType.WARNING, "Rombel wajib dipilih").showAndWait();
+            new Alert(AlertType.WARNING, "Rombel wajib dipilih. Kalau kelas ini tidak memakai rombel, pilih \"Tanpa rombel\".").showAndWait();
             return;
         }
 
