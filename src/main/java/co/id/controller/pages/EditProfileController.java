@@ -122,7 +122,13 @@ public class EditProfileController {
             currentUser.setPhotoData(selectedPhotoData);
         }
         
-        userService.updateProfile(currentUser, currentUser.getUsername());
+        try {
+            userService.updateProfile(currentUser, currentUser.getUsername());
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+            return;
+        }
+        
         AuthContext.setCurrentUser(currentUser);
         
         NavbarController navbar = ControllerRegistry.getNavbarController();
