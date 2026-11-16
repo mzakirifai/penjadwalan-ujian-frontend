@@ -36,6 +36,13 @@
                 <LookupBox fx:id="lookupBoxClassroom" promptText="Semua Kelas"/>
                 <Button fx:id="allClassBtn" text="Semua"/>
                 <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="importBtn" text="Import Excel" styleClass="list-menu-top-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/report.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
                 <Button fx:id="addBtn" text="Tambah" styleClass="list-menu-top-button">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">

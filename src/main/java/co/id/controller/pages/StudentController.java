@@ -34,6 +34,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import co.id.component.StudentImportDialog;
+import co.id.importer.StudentExcelReader;
+import java.io.File;
+import javafx.stage.FileChooser;
 
 public class StudentController {
     @FXML private TextField searchField;
@@ -41,6 +45,7 @@ public class StudentController {
     @FXML private Button refreshBtn;
     @FXML private Button allClassBtn;
     @FXML private LookupBox<Classroom> lookupBoxClassroom;
+    @FXML private Button importBtn;
     @FXML private Button addBtn;
     @FXML private TableView<Student> tableView;
     
@@ -146,7 +151,42 @@ public class StudentController {
 
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
+        importBtn.setOnAction(eh -> importFromExcel());
+
+        // Import Excel hanya untuk admin (sama seperti hak akses menyimpan data master)
+        if (!AuthContext.isAdmin()) {
+            importBtn.setVisible(false);
+            importBtn.setManaged(false);
+        }
         refreshBtn.setOnAction(e -> refreshTable());
+    }
+    
+    private void importFromExcel() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Pilih file Excel data siswa");
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("File Excel (*.xlsx, *.xls)", "*.xlsx", "*.xls"));
+
+        File file = chooser.showOpenDialog(importBtn.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+
+        try {
+            StudentExcelReader.Result result = StudentExcelReader.read(file);
+
+            if (result.getRows().isEmpty()) {
+                new Alert(Alert.AlertType.WARNING,
+                        "Tidak ada data siswa yang terbaca.\n"
+                        + "Pastikan file punya baris judul kolom yang memuat \"NIS\" dan \"Nama\".").showAndWait();
+                return;
+            }
+
+            Region mainRoot = (Region) importBtn.getScene().getRoot();
+            StudentImportDialog.show(mainRoot, file, result, this::refreshTable);
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Gagal membaca file Excel: " + ex.getMessage()).showAndWait();
+        }
     }
     
     private void filterItems() {
