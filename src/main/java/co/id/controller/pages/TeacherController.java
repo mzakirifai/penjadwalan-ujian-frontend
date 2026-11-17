@@ -29,11 +29,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import co.id.component.ExcelImportActions;
 
 public class TeacherController {
     @FXML private TextField searchField;
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
+    @FXML private Button importBtn;
+    @FXML private Button templateBtn;
     @FXML private Button addBtn;
     @FXML private TableView<Teacher> tableView;
 
@@ -130,6 +133,17 @@ public class TeacherController {
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
         refreshBtn.setOnAction(e -> refreshTable());
+        
+        // Import Excel hanya untuk admin (sama seperti hak akses menyimpan data master)
+        if (!AuthContext.isAdmin()) {
+            importBtn.setVisible(false);
+            importBtn.setManaged(false);
+            templateBtn.setVisible(false);
+            templateBtn.setManaged(false);
+        }
+        importBtn.setOnAction(eh -> ExcelImportActions.importTeachers(
+                (Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::refreshTable));
+        templateBtn.setOnAction(eh -> ExcelImportActions.saveTeacherTemplate(templateBtn.getScene().getWindow()));
     }
 
     private void filterItems() {
