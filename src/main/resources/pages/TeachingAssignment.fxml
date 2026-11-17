@@ -45,15 +45,15 @@
 
     <center>
         <VBox spacing="10" styleClass="list-menu-center-vbox">
-            <TableView fx:id="tableView" prefHeight="400">
+            <TreeTableView fx:id="tableView" prefHeight="420" showRoot="false">
                 <columns>
-                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
-                    <TableColumn fx:id="tableColumnNip" text="NIP" prefWidth="160"/>
-                    <TableColumn fx:id="tableColumnTeacher" text="Nama Guru" prefWidth="200"/>
-                    <TableColumn fx:id="tableColumnSubject" text="Mata Pelajaran" prefWidth="200"/>
-                    <TableColumn fx:id="tableColumnClassroom" text="Kelas" prefWidth="120"/>
+                    <TreeTableColumn fx:id="tableColumnTeacher" text="Nama Guru" prefWidth="260"/>
+                    <TreeTableColumn fx:id="tableColumnNip" text="NIP" prefWidth="170"/>
+                    <TreeTableColumn fx:id="tableColumnSubject" text="Mata Pelajaran" prefWidth="230"/>
+                    <TreeTableColumn fx:id="tableColumnClassroom" text="Kelas" prefWidth="140"/>
+                    <TreeTableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="170"/>
                 </columns>
-            </TableView>
+            </TreeTableView>
         </VBox>
     </center>
 

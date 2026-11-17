@@ -270,3 +270,49 @@
 .table-view .table-row-cell:selected{
     -fx-background-color: #D6E4FF;
 }
+
+/* ===== Pengampu: TreeTableView (baris guru bisa dibuka) ===== */
+.tree-table-view{
+    -fx-background-color: transparent;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+.tree-table-view .column-header-background{
+    -fx-background-color: #E8EDF5;
+    -fx-background-radius: 6 6 0 0;
+}
+.tree-table-view .column-header{
+    -fx-background-color: transparent;
+}
+.tree-table-view .column-header .label{
+    -fx-text-fill: #1A3D6D;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+.tree-table-view .tree-table-row-cell{
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F0F0F0 transparent;
+}
+.tree-table-view .tree-table-row-cell:selected{
+    -fx-background-color: #D6E4FF;
+}
+.tree-table-view .tree-table-row-cell.teacher-group-row{
+    -fx-background-color: #F7FAFF;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.tree-table-view .tree-table-row-cell.teacher-group-row:selected{
+    -fx-background-color: #D6E4FF;
+}
+.tree-table-view .tree-table-row-cell.teacher-detail-row{
+    -fx-background-color: white;
+}
+
+/* Baris terpilih di daftar Pengampu: teks gelap agar terbaca */
+.tree-table-view .tree-table-row-cell:selected .tree-table-cell{
+    -fx-text-fill: #1A3D6D;
+}
+.tree-table-view .tree-table-row-cell:selected .tree-disclosure-node .arrow{
+    -fx-background-color: #1A3D6D;
+}

@@ -14,8 +14,35 @@
     <Label text="Form Pengampu" styleClass="form-label"/>
 
     <ComboBox fx:id="comboTeacher" promptText="Pilih Guru" maxWidth="Infinity"/>
-    <ComboBox fx:id="comboClassroom" promptText="Pilih Kelas" maxWidth="Infinity"/>
-    <ComboBox fx:id="comboSubject" promptText="Pilih Mapel" maxWidth="Infinity"/>
+
+    <TextField fx:id="textFieldCode" promptText="Kode guru di mapel (opsional), contoh: 1"/>
+    <Label text="Isi bila satu mapel diajar beberapa guru, mis. DDPK TKJ (1), (2), (3). Kosongkan bila mapel hanya punya satu guru."
+           wrapText="true"/>
+
+    <!-- Mode EDIT: satu data pengampu (satu kelas + satu mapel) -->
+    <VBox fx:id="boxSingle" spacing="12" visible="false" managed="false">
+        <ComboBox fx:id="comboClassroom" promptText="Pilih Kelas" maxWidth="Infinity"/>
+        <ComboBox fx:id="comboSubject" promptText="Pilih Mapel" maxWidth="Infinity"/>
+    </VBox>
+
+    <!-- Mode TAMBAH: satu guru boleh langsung dipilihkan beberapa kelas dan beberapa mapel -->
+    <VBox fx:id="boxMulti" spacing="8">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Kelas (boleh lebih dari satu)"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <CheckBox fx:id="chkAllClassroom" text="Pilih semua" onAction="#toggleAllClassrooms"/>
+        </HBox>
+        <ListView fx:id="listClassroom" prefHeight="120"/>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Mapel (boleh lebih dari satu)"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <CheckBox fx:id="chkAllSubject" text="Pilih semua" onAction="#toggleAllSubjects"/>
+        </HBox>
+        <ListView fx:id="listSubject" prefHeight="140"/>
+
+        <Label fx:id="labelSummary" wrapText="true"/>
+    </VBox>
 
     <VBox styleClass="form-vbox"/>
 
