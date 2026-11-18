@@ -132,7 +132,7 @@ public class DashboardController {
         colTodayJenis.setCellValueFactory(a ->
                 new SimpleStringProperty(a.getValue().getExamType()));
         colTodayMapel.setCellValueFactory(a ->
-                new SimpleStringProperty(a.getValue().getSubject() != null ? a.getValue().getSubject().getName() : ""));
+                new SimpleStringProperty(a.getValue().getSubject() != null ? a.getValue().getSubjectLabel() : ""));
         colTodayKelas.setCellValueFactory(a ->
                 new SimpleStringProperty(a.getValue().getClassroom() != null ? a.getValue().getClassroom().getName() : ""));
         colTodayRuangan.setCellValueFactory(a ->

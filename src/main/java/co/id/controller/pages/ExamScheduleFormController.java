@@ -7,10 +7,13 @@ import co.id.model.ExamSchedule;
 import co.id.model.Room;
 import co.id.model.Subject;
 import co.id.model.Teacher;
+import co.id.model.TeachingAssignment;
 import co.id.service.ExamScheduleService;
 import co.id.service.MasterService;
 import co.id.service.impl.ExamScheduleServiceImpl;
+import co.id.service.TeachingAssignmentService;
 import co.id.service.impl.MasterServiceImpl;
+import co.id.service.impl.TeachingAssignmentServiceImpl;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +44,7 @@ public class ExamScheduleFormController {
     @FXML private TextField textFieldEndTime;
     @FXML private LookupBox<Classroom> lookupBoxClassroom;
     @FXML private ComboBox<Subject> comboSubject;
+    @FXML private ComboBox<TeachingAssignment> comboCode;
     @FXML private LookupBox<Room> lookupBoxRoom;
     @FXML private LookupBox<Teacher> lookupBoxTeacher;
     @FXML private TextArea textAreaNotes;
@@ -48,7 +52,9 @@ public class ExamScheduleFormController {
 
     private ExamScheduleService examScheduleService;
     private MasterService masterService;
+    private TeachingAssignmentService teachingAssignmentService;
     private ExamSchedule selectedExamSchedule;
+    private Integer pendingCode; // kode yang dipilihkan otomatis saat mode edit
     private Runnable onSaveCallback;
 
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
@@ -57,6 +63,7 @@ public class ExamScheduleFormController {
     public void initialize() {
         examScheduleService = new ExamScheduleServiceImpl();
         masterService = new MasterServiceImpl();
+        teachingAssignmentService = new TeachingAssignmentServiceImpl();
 
         TableColumn<Classroom, String> colClassroomName = new TableColumn<>("Kelas");
         colClassroomName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
@@ -87,6 +94,21 @@ public class ExamScheduleFormController {
                 return null;
             }
         });
+
+        // Kode guru: "1 - Nama Guru", diambil dari data Pengampu untuk mapel + kelas yang dipilih
+        comboCode.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(TeachingAssignment ta) {
+                return ta == null ? "" : ta.getTeacherCode() + " - " + ta.getTeacher().getName();
+            }
+
+            @Override
+            public TeachingAssignment fromString(String string) {
+                return null;
+            }
+        });
+        comboCode.setDisable(true);
+        comboSubject.valueProperty().addListener((obs, oldVal, newVal) -> updateCodeOptions());
 
         // Setiap kali kelas berubah, refresh daftar mapel yang relevan
         lookupBoxClassroom.selectedItemProperty().addListener((obs, oldVal, newVal) -> updateSubjectOptions(newVal));
@@ -121,6 +143,47 @@ public class ExamScheduleFormController {
                     .findFirst()
                     .ifPresent(s -> comboSubject.setValue(s));
             pendingSubjectAfterDuplicate = null;
+        }
+    }
+
+    // Kode guru yang tersedia = pengampu berkode untuk mapel + kelas ini. Jika tidak ada, mapel diujikan tanpa kode.
+    private void updateCodeOptions() {
+        comboCode.getItems().clear();
+        comboCode.setValue(null);
+
+        Classroom classroom = lookupBoxClassroom.getSelectedItem();
+        Subject subject = comboSubject.getValue();
+
+        if (classroom == null || subject == null) {
+            comboCode.setDisable(true);
+            comboCode.setPromptText("Kode guru (pilih mapel terlebih dahulu)");
+            return;
+        }
+
+        // satu entri per kode (kode yang sama di mapel + kelas yang sama hanya milik satu guru)
+        java.util.Map<Integer, TeachingAssignment> byCode = new java.util.LinkedHashMap<>();
+        for (TeachingAssignment ta : teachingAssignmentService.getCodedByClassroomAndSubject(classroom.getId(), subject.getId())) {
+            byCode.putIfAbsent(ta.getTeacherCode(), ta);
+        }
+
+        if (byCode.isEmpty()) {
+            comboCode.setDisable(true);
+            comboCode.setPromptText("Mapel ini tanpa kode guru");
+            pendingCode = null;
+            return;
+        }
+
+        comboCode.setItems(FXCollections.observableArrayList(byCode.values()));
+        comboCode.setDisable(false);
+        comboCode.setPromptText("Pilih kode guru");
+
+        if (pendingCode != null) {
+            comboCode.getItems().stream()
+                    .filter(ta -> ta.getTeacherCode().equals(pendingCode))
+                    .findFirst().ifPresent(comboCode::setValue);
+            pendingCode = null;
+        } else if (comboCode.getItems().size() == 1) {
+            comboCode.setValue(comboCode.getItems().get(0));
         }
     }
 
@@ -166,6 +229,7 @@ public class ExamScheduleFormController {
             // karena field ini wajib beda per kelas.
 
             if (examSchedule.getClassroom() != null && !isDuplicate) {
+                pendingCode = examSchedule.getTeacherCode();
                 lookupBoxClassroom.setSelectedItem(examSchedule.getClassroom());
                 updateSubjectOptions(examSchedule.getClassroom());
 
@@ -203,6 +267,14 @@ public class ExamScheduleFormController {
             return;
         }
 
+        // Jika mapel punya kode guru di data Pengampu, kodenya wajib dipilih (tiap kode = ujian tersendiri)
+        if (!comboCode.isDisabled() && comboCode.getValue() == null) {
+            new Alert(AlertType.WARNING, "Pilih kode guru untuk mapel ini").showAndWait();
+            return;
+        }
+        Integer teacherCode = comboCode.getValue() != null ? comboCode.getValue().getTeacherCode() : null;
+        String subjectLabel = teacherCode == null ? subject.getName() : subject.getName() + " (" + teacherCode + ")";
+
         LocalTime startTime;
         LocalTime endTime;
         try {
@@ -220,11 +292,11 @@ public class ExamScheduleFormController {
 
         int excludeId = (selectedExamSchedule != null) ? selectedExamSchedule.getId() : 0;
         boolean isDuplicateSubject = examScheduleService.hasSameSubjectForClassroom(
-                classroom.getId(), subject.getId(), examType, semester, academicYear, excludeId);
+                classroom.getId(), subject.getId(), teacherCode, examType, semester, academicYear, excludeId);
 
         if (isDuplicateSubject) {
             Alert confirm = new Alert(AlertType.CONFIRMATION,
-                    "Kelas \"" + classroom.getName() + "\" sudah memiliki jadwal ujian \"" + subject.getName()
+                    "Kelas \"" + classroom.getName() + "\" sudah memiliki jadwal ujian \"" + subjectLabel
                             + "\" untuk " + examType + " semester " + semester + " " + academicYear + ".\n\n"
                             + "Lanjutkan menyimpan sebagai sesi ujian tambahan/susulan?",
                     ButtonType.YES, ButtonType.NO);
@@ -249,6 +321,7 @@ public class ExamScheduleFormController {
         examSchedule.setEndTime(endTime);
         examSchedule.setClassroom(classroom);
         examSchedule.setSubject(subject);
+        examSchedule.setTeacherCode(teacherCode);
         examSchedule.setRoom(room);
         examSchedule.setTeacher(teacher);
         examSchedule.setNotes(notes);

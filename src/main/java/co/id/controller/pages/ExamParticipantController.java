@@ -86,13 +86,13 @@ public class ExamParticipantController {
         TableColumn<ExamSchedule, String> colScheduleLabel = new TableColumn<>("Jadwal Ujian");
         colScheduleLabel.setCellValueFactory(e -> new SimpleStringProperty(
                 e.getValue().getCode() + " - "
-                        + (e.getValue().getSubject() != null ? e.getValue().getSubject().getName() : "-")
+                        + (e.getValue().getSubject() != null ? e.getValue().getSubjectLabel() : "-")
                         + " - " + (e.getValue().getClassroom() != null ? e.getValue().getClassroom().getName() : "-")
         ));
         lookupBoxExamSchedule.configure(
                 () -> examScheduleService.getAllExamSchedulesDetailed(),
                 List.of(colScheduleLabel),
-                es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubject().getName() : "-")
+                es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubjectLabel() : "-")
                         + " - " + (es.getClassroom() != null ? es.getClassroom().getName() : "-")
         );
         lookupBoxExamSchedule.setFieldWidth(300);

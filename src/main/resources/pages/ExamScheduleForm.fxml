@@ -51,6 +51,8 @@
 
             <ComboBox fx:id="comboSubject" promptText="Pilih Kelas terlebih dahulu"/>
 
+            <ComboBox fx:id="comboCode" promptText="Kode guru (pilih mapel terlebih dahulu)"/>
+
             <LookupBox fx:id="lookupBoxRoom" promptText="Pilih Ruangan"/>
 
             <LookupBox fx:id="lookupBoxTeacher" promptText="Pilih Pengawas"/>

@@ -212,7 +212,7 @@ public class ExamScoreController {
 
     private String scheduleLabel(ExamSchedule es) {
         return es.getCode() + " - "
-                + (es.getSubject() != null ? es.getSubject().getName() : "-")
+                + (es.getSubject() != null ? es.getSubjectLabel() : "-")
                 + " - " + (es.getClassroom() != null ? es.getClassroom().getName() : "-");
     }
 

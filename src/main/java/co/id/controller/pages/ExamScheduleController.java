@@ -76,7 +76,7 @@ public class ExamScheduleController {
         tableColumnEndTime.setCellValueFactory(e ->
                 new SimpleStringProperty(e.getValue().getEndTime() != null ? e.getValue().getEndTime().toString() : "-"));
         tableColumnSubject.setCellValueFactory(e ->
-                new SimpleStringProperty(e.getValue().getSubject() != null ? e.getValue().getSubject().getName() : "-"));
+                new SimpleStringProperty(e.getValue().getSubject() != null ? e.getValue().getSubjectLabel() : "-"));
         tableColumnClassroom.setCellValueFactory(e ->
                 new SimpleStringProperty(e.getValue().getClassroom() != null ? e.getValue().getClassroom().getName() : "-"));
         tableColumnRoom.setCellValueFactory(e ->

@@ -48,7 +48,7 @@ public class ReportAttendanceListController {
 
         TableColumn<ExamSchedule, String> colSubject = new TableColumn<>("Mapel");
         colSubject.setCellValueFactory(d -> new SimpleStringProperty(
-            d.getValue().getSubject() != null ? d.getValue().getSubject().getName() : ""));
+            d.getValue().getSubject() != null ? d.getValue().getSubjectLabel() : ""));
 
         TableColumn<ExamSchedule, String> colClassroom = new TableColumn<>("Kelas");
         colClassroom.setCellValueFactory(d -> new SimpleStringProperty(
@@ -61,7 +61,7 @@ public class ReportAttendanceListController {
         lookupBoxExamSchedule.configure(
             () -> examScheduleService.getAllExamSchedulesDetailed(),
             List.of(colSubject, colClassroom, colDate),
-            es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubject().getName() : "-")
+            es -> es.getCode() + " - " + (es.getSubject() != null ? es.getSubjectLabel() : "-")
                     + " - " + (es.getClassroom() != null ? es.getClassroom().getName() : "-")
         );
         lookupBoxExamSchedule.setFieldWidth(300);
@@ -91,7 +91,7 @@ public class ReportAttendanceListController {
             List<ExamParticipant> data = reportService.getAttendanceListReport(selectedSchedule.getId());
 
             Map<String, Object> parameters = new HashMap<>();
-            parameters.put("SUBJECT_NAME", selectedSchedule.getSubject() != null ? selectedSchedule.getSubject().getName() : "-");
+            parameters.put("SUBJECT_NAME", selectedSchedule.getSubject() != null ? selectedSchedule.getSubjectLabel() : "-");
             parameters.put("CLASSROOM_NAME", selectedSchedule.getClassroom() != null ? selectedSchedule.getClassroom().getName() : "-");
             parameters.put("ROOM_NAME", selectedSchedule.getRoom() != null ? selectedSchedule.getRoom().getName() : "-");
             parameters.put("TEACHER_NAME", selectedSchedule.getTeacher() != null ? selectedSchedule.getTeacher().getName() : "-");
