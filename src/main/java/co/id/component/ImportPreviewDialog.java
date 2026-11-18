@@ -96,7 +96,7 @@ public class ImportPreviewDialog<T> {
             tableView.getColumns().add(column(columns.get(c), 100, i -> index < i.getCells().size() ? i.getCells().get(index) : ""));
         }
 
-        TableColumn<ImportItem<T>, String> statusCol = column("Status", 220, i -> i.isValid() ? READY : i.getError());
+        TableColumn<ImportItem<T>, String> statusCol = column("Status", 260, i -> i.isValid() ? (i.getWarning() == null ? READY : READY + " (" + i.getWarning() + ")") : i.getError());
         statusCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -105,7 +105,8 @@ public class ImportPreviewDialog<T> {
                 if (empty || item == null) {
                     setStyle("");
                 } else {
-                    setStyle(READY.equals(item) ? "-fx-text-fill: #2e7d32;" : "-fx-text-fill: #c62828;");
+                    setStyle(READY.equals(item) ? "-fx-text-fill: #2e7d32;"
+                            : item.startsWith(READY) ? "-fx-text-fill: #e65100;" : "-fx-text-fill: #c62828;");
                 }
             }
         });

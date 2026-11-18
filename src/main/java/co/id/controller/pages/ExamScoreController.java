@@ -2,6 +2,7 @@ package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
 import co.id.component.EditableCell;
+import co.id.component.ExcelImportActions;
 import co.id.component.LookupBox;
 import co.id.model.ExamParticipant;
 import co.id.model.ExamSchedule;
@@ -33,12 +34,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 public class ExamScoreController {
     @FXML private LookupBox<ExamSchedule> lookupBoxExamSchedule;
     @FXML private Label lblInfo;
     @FXML private TextField searchField;
     @FXML private Button filterBtn;
+    @FXML private Button importBtn;
+    @FXML private Button templateBtn;
     @FXML private TableView<ExamScore> tableView;
 
     @FXML private TableColumn<ExamScore, String> tableColumnNis, tableColumnName, tableColumnScore, tableColumnStatus;
@@ -208,6 +212,34 @@ public class ExamScoreController {
         });
 
         filterBtn.setOnAction(e -> filterScores());
+
+        importBtn.setOnAction(e -> {
+            if (!canImportCurrentSchedule()) {
+                return;
+            }
+            ExcelImportActions.importScores((Region) importBtn.getScene().getRoot(),
+                    importBtn.getScene().getWindow(), selectedExamSchedule, this::refreshTable);
+        });
+        templateBtn.setOnAction(e -> {
+            if (selectedExamSchedule == null) {
+                new Alert(AlertType.INFORMATION, "Pilih jadwal ujian terlebih dahulu.").showAndWait();
+                return;
+            }
+            ExcelImportActions.saveScoreTemplate(templateBtn.getScene().getWindow(), selectedExamSchedule);
+        });
+    }
+
+    // Import butuh jadwal ujian yang dipilih dan hak input nilai untuk jadwal itu (sama seperti input manual)
+    private boolean canImportCurrentSchedule() {
+        if (selectedExamSchedule == null) {
+            new Alert(AlertType.INFORMATION, "Pilih jadwal ujian terlebih dahulu.").showAndWait();
+            return false;
+        }
+        if (!canEditCurrentSchedule()) {
+            new Alert(AlertType.WARNING, "Anda hanya bisa menginput nilai untuk mata pelajaran, kelas, dan kode guru yang Anda ajar.").showAndWait();
+            return false;
+        }
+        return true;
     }
 
     private String scheduleLabel(ExamSchedule es) {
@@ -242,7 +274,8 @@ public class ExamScoreController {
                 .filter(es -> es.getSubject() != null && es.getClassroom() != null)
                 .filter(es -> assignments.stream().anyMatch(ta ->
                         ta.getSubject().getId() == es.getSubject().getId()
-                                && ta.getClassroom().getId() == es.getClassroom().getId()))
+                                && ta.getClassroom().getId() == es.getClassroom().getId()
+                                && (es.getTeacherCode() == null || es.getTeacherCode().equals(ta.getTeacherCode()))))
                 .toList();
     }
 
@@ -251,8 +284,8 @@ public class ExamScoreController {
                 || schedule.getSubject() == null || schedule.getClassroom() == null) {
             return false;
         }
-        return teachingAssignmentService.isAssigned(AuthContext.getCurrentUser().getTeacher().getId(),
-                schedule.getSubject().getId(), schedule.getClassroom().getId());
+        return teachingAssignmentService.isAssignedForExam(AuthContext.getCurrentUser().getTeacher().getId(),
+                schedule.getSubject().getId(), schedule.getClassroom().getId(), schedule.getTeacherCode());
     }
 
     private void refreshTable() {

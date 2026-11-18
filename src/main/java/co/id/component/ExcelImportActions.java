@@ -5,9 +5,17 @@ import co.id.importer.ExcelGridReader;
 import co.id.importer.ExcelTemplateWriter;
 import co.id.importer.ImportItem;
 import co.id.importer.TableParser;
+import co.id.importer.ScoreImportParser;
 import co.id.importer.TeacherImportParser;
+import co.id.model.ExamParticipant;
+import co.id.model.ExamSchedule;
+import co.id.model.ExamScore;
 import co.id.model.Teacher;
+import co.id.service.ExamParticipantService;
+import co.id.service.ExamScoreService;
 import co.id.service.MasterService;
+import co.id.service.impl.ExamParticipantServiceImpl;
+import co.id.service.impl.ExamScoreServiceImpl;
 import co.id.service.impl.MasterServiceImpl;
 import java.io.File;
 import java.util.ArrayList;
@@ -66,6 +74,82 @@ public class ExcelImportActions {
         saveTemplate(owner, "template-import-guru.xlsx", "Guru", TeacherImportParser.COLUMNS, notes);
     }
 
+    // ------------------------------------------------------------------ Nilai ujian
+
+    public static void importScores(Region mainRoot, Window owner, ExamSchedule schedule, Runnable onImported) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Pilih file nilai (Excel atau CSV)");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+                "Excel / CSV (*.xlsx, *.xls, *.csv)", "*.xlsx", "*.xls", "*.csv", "*.txt"));
+        File file = chooser.showOpenDialog(owner);
+        if (file == null) {
+            return;
+        }
+
+        try {
+            List<TableParser.Row> rows = readRows(file, ScoreImportParser.ALIASES, ScoreImportParser.REQUIRED, Set.of());
+            if (rows.isEmpty()) {
+                noData("Nilai");
+                return;
+            }
+
+            ExamParticipantService participantService = new ExamParticipantServiceImpl();
+            ExamScoreService scoreService = new ExamScoreServiceImpl();
+            List<ExamParticipant> participants = participantService.getByExamSchedule(schedule.getId());
+            List<ExamScore> existing = scoreService.getByExamSchedule(schedule.getId());
+
+            List<ImportItem<ExamScore>> items = ScoreImportParser.parse(rows, schedule, participants, existing);
+
+            Integer teacherId = AuthContext.getCurrentUser().getTeacher() != null
+                    ? AuthContext.getCurrentUser().getTeacher().getId() : null;
+
+            ImportPreviewDialog.show(mainRoot, "Import Nilai: " + scheduleTitle(schedule), file.getName(),
+                    ScoreImportParser.COLUMNS, items,
+                    list -> scoreService.importScores(list, AuthContext.getCurrentUsername(),
+                            AuthContext.getCurrentRole(), teacherId),
+                    onImported);
+        } catch (Exception ex) {
+            readError(ex);
+        }
+    }
+
+    /** Template berisi daftar peserta ujian (NIS + Nama) dan nilai yang sudah ada, tinggal mengisi kolom Nilai. */
+    public static void saveScoreTemplate(Window owner, ExamSchedule schedule) {
+        List<ExamParticipant> participants = new ExamParticipantServiceImpl().getByExamSchedule(schedule.getId());
+        Map<Integer, Integer> existing = new java.util.HashMap<>();
+        for (ExamScore es : new ExamScoreServiceImpl().getByExamSchedule(schedule.getId())) {
+            if (es.getStudent() != null) {
+                existing.put(es.getStudent().getId(), es.getScore());
+            }
+        }
+
+        List<List<String>> rows = new ArrayList<>();
+        participants.stream()
+                .sorted(java.util.Comparator.comparing(p -> p.getStudent().getName() == null ? "" : p.getStudent().getName()))
+                .forEach(p -> rows.add(List.of(
+                        p.getStudent().getNis() == null ? "" : p.getStudent().getNis(),
+                        p.getStudent().getName() == null ? "" : p.getStudent().getName(),
+                        existing.containsKey(p.getStudent().getId()) ? String.valueOf(existing.get(p.getStudent().getId())) : "")));
+
+        List<String> notes = List.of(
+                "PETUNJUK PENGISIAN TEMPLATE NILAI",
+                "Template ini khusus untuk ujian: " + scheduleTitle(schedule),
+                "Isi kolom Nilai di sheet pertama. Jangan mengubah judul kolom di baris 1.",
+                "Siswa dikenali dari kolom NIS. Kolom Nama hanya pembanding, boleh dihapus.",
+                "File hasil scanner (CSV atau Excel) juga bisa langsung diimpor selama ada kolom NIS (atau NISN / No. Peserta) dan Nilai.",
+                "Nilai berupa angka 0 sampai 100. Nilai desimal (85,5) dibulatkan ke bilangan bulat.",
+                "Siswa yang bukan peserta ujian ini tidak akan diimpor. Nilai yang sudah ada akan ditimpa nilai baru.",
+                "Kolom sudah berformat Teks supaya NIS tidak berubah bentuk.");
+
+        saveTemplate(owner, "template-nilai-" + (schedule.getCode() == null ? "ujian" : schedule.getCode()) + ".xlsx",
+                "Nilai", List.of("NIS", "Nama", "Nilai"), notes, rows);
+    }
+
+    private static String scheduleTitle(ExamSchedule schedule) {
+        return schedule.getCode() + " - " + schedule.getSubjectLabel()
+                + (schedule.getClassroom() != null ? " - " + schedule.getClassroom().getName() : "");
+    }
+
     // ------------------------------------------------------------------ helper
 
     private static File chooseExcel(Window owner, String title) {
@@ -88,6 +172,11 @@ public class ExcelImportActions {
 
     private static void saveTemplate(Window owner, String defaultName, String sheetName,
                                      List<String> headers, List<String> notes) {
+        saveTemplate(owner, defaultName, sheetName, headers, notes, List.of());
+    }
+
+    private static void saveTemplate(Window owner, String defaultName, String sheetName,
+                                     List<String> headers, List<String> notes, List<List<String>> rows) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Simpan template Excel");
         chooser.setInitialFileName(defaultName);
@@ -99,7 +188,7 @@ public class ExcelImportActions {
         }
 
         try {
-            ExcelTemplateWriter.write(file, sheetName, headers, notes);
+            ExcelTemplateWriter.write(file, sheetName, headers, notes, rows);
             new Alert(Alert.AlertType.INFORMATION, "Template tersimpan di:\n" + file.getAbsolutePath()).showAndWait();
         } catch (Exception ex) {
             new Alert(Alert.AlertType.ERROR, "Gagal menyimpan template: " + ex.getMessage()
