@@ -5,12 +5,15 @@ import co.id.component.LookupBox;
 import co.id.model.Classroom;
 import co.id.model.ExamSchedule;
 import co.id.model.Room;
+import co.id.model.RoomSuggestion;
+import co.id.model.ScheduleConflict;
 import co.id.model.Subject;
 import co.id.model.Teacher;
 import co.id.model.TeachingAssignment;
 import co.id.service.ExamScheduleService;
 import co.id.service.MasterService;
 import co.id.service.impl.ExamScheduleServiceImpl;
+import co.id.service.ScheduleConflictException;
 import co.id.service.TeachingAssignmentService;
 import co.id.service.impl.MasterServiceImpl;
 import co.id.service.impl.TeachingAssignmentServiceImpl;
@@ -24,6 +27,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -49,6 +54,8 @@ public class ExamScheduleFormController {
     @FXML private LookupBox<Teacher> lookupBoxTeacher;
     @FXML private TextArea textAreaNotes;
     @FXML private Button saveBtn;
+    @FXML private Button btnFindRoom;
+    @FXML private Label labelRoomStatus;
 
     private ExamScheduleService examScheduleService;
     private MasterService masterService;
@@ -76,6 +83,12 @@ public class ExamScheduleFormController {
         lookupBoxRoom.configure(
                 () -> masterService.getAllRooms(), List.of(colRoomName), Room::getName
         );
+
+        // Status ruangan langsung terlihat (kosong / terpakai oleh siapa) saat ruangan, tanggal, atau jam berubah
+        lookupBoxRoom.selectedItemProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
+        datePickerDate.valueProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
+        textFieldStartTime.textProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
+        textFieldEndTime.textProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
 
         TableColumn<Teacher, String> colTeacherName = new TableColumn<>("Guru");
         colTeacherName.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getName()));
@@ -187,6 +200,103 @@ public class ExamScheduleFormController {
         }
     }
 
+    // ================= Bentrok & ruangan kosong =================
+
+    private LocalTime[] parseTimeRange() {
+        try {
+            LocalTime start = LocalTime.parse(textFieldStartTime.getText().trim(), TIME_FORMAT);
+            LocalTime end = LocalTime.parse(textFieldEndTime.getText().trim(), TIME_FORMAT);
+            return end.isAfter(start) ? new LocalTime[]{start, end} : null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    private int currentExcludeId() {
+        return selectedExamSchedule != null ? selectedExamSchedule.getId() : 0;
+    }
+
+    private void refreshRoomStatus() {
+        labelRoomStatus.setText("");
+        Room room = lookupBoxRoom.getSelectedItem();
+        LocalDate date = datePickerDate.getValue();
+        LocalTime[] range = parseTimeRange();
+        if (room == null || date == null || range == null) {
+            return;
+        }
+
+        try {
+            // kelas & pengawas = 0 supaya hanya pemakaian ruangan yang diperiksa
+            List<ScheduleConflict> usage = examScheduleService.findConflicts(
+                    date, range[0], range[1], room.getId(), 0, 0, currentExcludeId());
+            if (usage.isEmpty()) {
+                labelRoomStatus.setStyle("-fx-text-fill: #2e7d32;");
+                labelRoomStatus.setText("Ruangan " + room.getName() + " kosong pada waktu ini.");
+            } else {
+                labelRoomStatus.setStyle("-fx-text-fill: #c62828;");
+                labelRoomStatus.setText(usage.get(0).describe() + ". Klik \"Cari Ruangan Kosong\".");
+            }
+        } catch (Exception ex) {
+            labelRoomStatus.setText("");
+        }
+    }
+
+    @FXML
+    private void findFreeRoom() {
+        LocalDate date = datePickerDate.getValue();
+        LocalTime[] range = parseTimeRange();
+        if (date == null || range == null) {
+            new Alert(AlertType.WARNING, "Isi tanggal ujian serta jam mulai dan selesai terlebih dahulu (format HH:mm).").showAndWait();
+            return;
+        }
+
+        Classroom classroom = lookupBoxClassroom.getSelectedItem();
+        List<RoomSuggestion> suggestions;
+        try {
+            suggestions = examScheduleService.suggestRooms(date, range[0], range[1], currentExcludeId(),
+                    classroom != null ? classroom.getId() : null);
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+            return;
+        }
+
+        chooseRoom("Ruangan kosong pada " + date.format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                + ", " + range[0].format(TIME_FORMAT) + " - " + range[1].format(TIME_FORMAT)
+                + (classroom != null ? "\nUntuk kelas " + classroom.getName() : ""), suggestions);
+    }
+
+    // Menampilkan pilihan ruangan kosong (yang paling pas sudah terpilih); true jika ruangan diganti
+    private boolean chooseRoom(String header, List<RoomSuggestion> suggestions) {
+        if (suggestions.isEmpty()) {
+            new Alert(AlertType.INFORMATION, "Tidak ada ruangan kosong pada waktu ini. Semua ruangan sudah terpakai.").showAndWait();
+            return false;
+        }
+
+        ChoiceDialog<RoomSuggestion> dialog = new ChoiceDialog<>(suggestions.get(0), suggestions);
+        dialog.setTitle("Pilih Ruangan Kosong");
+        dialog.setHeaderText(header);
+        dialog.setContentText("Ruangan:");
+
+        java.util.Optional<RoomSuggestion> chosen = dialog.showAndWait();
+        chosen.ifPresent(suggestion -> lookupBoxRoom.setSelectedItem(suggestion.getRoom()));
+        return chosen.isPresent();
+    }
+
+    private void handleConflict(ScheduleConflictException ex) {
+        if (ex.isRoomOnly() && !ex.getSuggestions().isEmpty()) {
+            // Hanya ruangan yang bentrok: tawarkan ruangan kosong, lalu simpan ulang dengan ruangan baru
+            if (chooseRoom(ex.getMessage() + "\n\nPilih ruangan kosong sebagai pengganti:", ex.getSuggestions())) {
+                doSave(true);
+            }
+            return;
+        }
+
+        String hint = ex.isRoomOnly()
+                ? "\n\nTidak ada ruangan kosong lain pada waktu ini. Ubah tanggal atau jam."
+                : "\n\nUbah tanggal/jam, atau ganti kelas/pengawas yang bentrok.";
+        new Alert(AlertType.ERROR, ex.getMessage() + hint).showAndWait();
+    }
+
     private boolean isSubjectApplicable(Subject subject, Classroom classroom) {
         boolean typeMatch;
         if ("Umum".equalsIgnoreCase(subject.getType())) {
@@ -251,6 +361,10 @@ public class ExamScheduleFormController {
 
     @FXML
     private void saveEntity() {
+        doSave(false);
+    }
+
+    private void doSave(boolean skipDuplicatePrompt) {
         String examType = comboExamType.getValue();
         String semester = comboSemester.getValue();
         String academicYear = textFieldAcademicYear.getText();
@@ -262,8 +376,9 @@ public class ExamScheduleFormController {
         String notes = textAreaNotes.getText();
 
         if (examType == null || semester == null || academicYear == null || academicYear.isBlank()
-                || date == null || classroom == null || subject == null || room == null || teacher == null) {
-            new Alert(AlertType.WARNING, "Semua field wajib diisi (kecuali Keterangan)").showAndWait();
+                || date == null || classroom == null || subject == null) {
+            // Ruangan dan pengawas boleh kosong: pada ruangan campur keduanya diatur lewat menu Penempatan Ruangan
+            new Alert(AlertType.WARNING, "Semua field wajib diisi (kecuali Ruangan, Pengawas, dan Keterangan)").showAndWait();
             return;
         }
 
@@ -294,7 +409,7 @@ public class ExamScheduleFormController {
         boolean isDuplicateSubject = examScheduleService.hasSameSubjectForClassroom(
                 classroom.getId(), subject.getId(), teacherCode, examType, semester, academicYear, excludeId);
 
-        if (isDuplicateSubject) {
+        if (isDuplicateSubject && !skipDuplicatePrompt) {
             Alert confirm = new Alert(AlertType.CONFIRMATION,
                     "Kelas \"" + classroom.getName() + "\" sudah memiliki jadwal ujian \"" + subjectLabel
                             + "\" untuk " + examType + " semester " + semester + " " + academicYear + ".\n\n"
@@ -331,6 +446,9 @@ public class ExamScheduleFormController {
             examScheduleService.save(examSchedule, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
             alert = new Alert(AlertType.INFORMATION,
                     selectedExamSchedule == null ? "Jadwal ujian berhasil disimpan" : "Jadwal ujian berhasil diperbarui");
+        } catch (ScheduleConflictException ex) {
+            handleConflict(ex);
+            return;
         } catch (Exception ex) {
             new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
             return;

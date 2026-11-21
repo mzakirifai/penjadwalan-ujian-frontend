@@ -46,6 +46,7 @@
                     <TableColumn fx:id="tableColumnNis" text="NIS" prefWidth="100"/>
                     <TableColumn fx:id="tableColumnName" text="Nama Siswa" prefWidth="200"/>
                     <TableColumn fx:id="tableColumnParticipantNumber" text="No. Peserta" prefWidth="110"/>
+                    <TableColumn fx:id="tableColumnRoom" text="Ruangan" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnSeatNumber" text="No. Kursi" prefWidth="100"/>
                 </columns>
             </TableView>

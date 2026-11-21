@@ -49,7 +49,7 @@ public class ExamParticipantController {
     @FXML private Button filterBtn;
 
     @FXML private TableColumn<ExamParticipant, String> tableColumnCode, tableColumnNis, tableColumnName,
-            tableColumnParticipantNumber, tableColumnSeatNumber;
+            tableColumnParticipantNumber, tableColumnSeatNumber, tableColumnRoom;
     @FXML private TableColumn<ExamParticipant, Void> tableColumnAction;
 
     private ExamParticipantService examParticipantService;
@@ -108,6 +108,16 @@ public class ExamParticipantController {
                 new SimpleStringProperty(p.getValue().getStudent() != null ? p.getValue().getStudent().getNis() : "-"));
         tableColumnName.setCellValueFactory(p ->
                 new SimpleStringProperty(p.getValue().getStudent() != null ? p.getValue().getStudent().getName() : "-"));
+
+        // Ruangan peserta (ruangan campur); jika belum ditempatkan, ikut ruangan pada jadwalnya
+        tableColumnRoom.setCellValueFactory(p -> {
+            ExamParticipant participant = p.getValue();
+            String name = participant.getRoom() != null ? participant.getRoom().getName() : null;
+            if (name == null && selectedExamSchedule != null && selectedExamSchedule.getRoom() != null) {
+                name = selectedExamSchedule.getRoom().getName();
+            }
+            return new SimpleStringProperty(name != null ? name : "-");
+        });
 
         tableColumnParticipantNumber.setCellFactory(tc ->
                 new EditableCell<ExamParticipant>(ExamParticipant::getParticipantNumber,

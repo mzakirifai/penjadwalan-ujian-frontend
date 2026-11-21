@@ -91,6 +91,9 @@
                         <Button text="Peserta Ujian" onAction="#handleExamParticipantClick" styleClass="menu-child">
                             <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/exam_participant.png"/></image></ImageView></graphic>
                         </Button>
+                        <Button fx:id="roomAllocationBtn" text="Penempatan Ruangan" onAction="#handleRoomAllocationClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/room.png"/></image></ImageView></graphic>
+                        </Button>
                         <Button text="Nilai Ujian" onAction="#handleExamScoreClick" styleClass="menu-child">
                             <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/exam_score.png"/></image></ImageView></graphic>
                         </Button>

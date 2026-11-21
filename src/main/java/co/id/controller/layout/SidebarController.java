@@ -24,6 +24,7 @@ public class SidebarController {
     @FXML private VBox reportMenuBox;
     
     @FXML private Button userManagementBtn;
+    @FXML private Button roomAllocationBtn;
     @FXML private Button settingsBtn;
     @FXML private Button helpBtn;
     @FXML private Button aboutBtn;
@@ -149,11 +150,12 @@ public class SidebarController {
     private void toggleTransactionMenu() {
         if (collapsed) {
             showFlyoutMenu(transactionMenu,
-                    new String[]{"Jadwal Ujian", "Peserta Ujian", "Nilai Ujian"},
-                    new Runnable[]{
-                            this::handleExamScheduleClick,
-                            this::handleExamParticipantClick,
-                            this::handleExamScoreClick
+                    AuthContext.isAdmin()
+                            ? new String[]{"Jadwal Ujian", "Peserta Ujian", "Penempatan Ruangan", "Nilai Ujian"}
+                            : new String[]{"Jadwal Ujian", "Peserta Ujian", "Nilai Ujian"},
+                    AuthContext.isAdmin()
+                            ? new Runnable[]{this::handleExamScheduleClick, this::handleExamParticipantClick, this::handleRoomAllocationClick, this::handleExamScoreClick}
+                            : new Runnable[]{this::handleExamScheduleClick, this::handleExamParticipantClick, this::handleExamScoreClick
                     });
             return;
         }
@@ -204,6 +206,7 @@ public class SidebarController {
     
     @FXML private void handleExamScheduleClick() { loadPage("/pages/ExamSchedule.fxml"); }
     @FXML private void handleExamParticipantClick() { loadPage("/pages/ExamParticipant.fxml"); }
+    @FXML private void handleRoomAllocationClick() { loadPage("/pages/RoomAllocation.fxml"); }
     @FXML private void handleExamScoreClick() { loadPage("/pages/ExamScore.fxml"); }
 
     @FXML private void handleReportMajorClick() { loadPage("/pages/ReportMajor.fxml"); }
@@ -255,6 +258,7 @@ public class SidebarController {
         hideNode(masterMenu);
         hideNode(masterMenuBox);
         hideNode(userManagementBtn);
+        hideNode(roomAllocationBtn);   // penempatan ruangan hanya untuk admin
     }
     
     private void hideNode(javafx.scene.Node node) {
