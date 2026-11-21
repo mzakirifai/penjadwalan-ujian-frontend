@@ -109,15 +109,9 @@ public class ExamParticipantController {
         tableColumnName.setCellValueFactory(p ->
                 new SimpleStringProperty(p.getValue().getStudent() != null ? p.getValue().getStudent().getName() : "-"));
 
-        // Ruangan peserta (ruangan campur); jika belum ditempatkan, ikut ruangan pada jadwalnya
-        tableColumnRoom.setCellValueFactory(p -> {
-            ExamParticipant participant = p.getValue();
-            String name = participant.getRoom() != null ? participant.getRoom().getName() : null;
-            if (name == null && selectedExamSchedule != null && selectedExamSchedule.getRoom() != null) {
-                name = selectedExamSchedule.getRoom().getName();
-            }
-            return new SimpleStringProperty(name != null ? name : "-");
-        });
+        // Ruangan peserta hasil Penempatan Ruangan; "-" bila belum ditempatkan
+        tableColumnRoom.setCellValueFactory(p -> new SimpleStringProperty(
+                p.getValue().getRoom() != null ? p.getValue().getRoom().getName() : "-"));
 
         tableColumnParticipantNumber.setCellFactory(tc ->
                 new EditableCell<ExamParticipant>(ExamParticipant::getParticipantNumber,
@@ -259,9 +253,18 @@ public class ExamParticipantController {
         observableList.setAll(examParticipantService.getByExamSchedule(selectedExamSchedule.getId()));
         tableView.setItems(observableList);
 
+        // Ruangan tidak lagi melekat pada jadwal: tampilkan jumlah peserta + ruangan hasil Penempatan Ruangan
         int registered = examParticipantService.countByExamSchedule(selectedExamSchedule.getId());
-        int capacity = selectedExamSchedule.getRoom() != null ? selectedExamSchedule.getRoom().getCapacity() : 0;
-        lblCapacityInfo.setText("Terdaftar: " + registered + " / " + capacity + " kursi");
+        String rooms;
+        try {
+            co.id.model.PlacementSummary summary = examScheduleService
+                    .getPlacementSummaries(java.util.List.of(selectedExamSchedule.getId()))
+                    .get(selectedExamSchedule.getId());
+            rooms = summary != null ? summary.getRoomsLabel() : "-";
+        } catch (Exception ex) {
+            rooms = "-";
+        }
+        lblCapacityInfo.setText("Terdaftar: " + registered + " peserta  |  Ruangan: " + rooms);
     }
 
     private void openAddForm() {

@@ -319,9 +319,6 @@ public class ExamScheduleFormController {
         if (selectedExamSchedule != null) {
             examSchedule.setId(selectedExamSchedule.getId());
             examSchedule.setCode(selectedExamSchedule.getCode());
-            // data lama: ruangan/pengawas yang tercatat di jadwal dipertahankan sampai dipindah ke Penempatan Ruangan
-            examSchedule.setRoom(selectedExamSchedule.getRoom());
-            examSchedule.setTeacher(selectedExamSchedule.getTeacher());
         }
         examSchedule.setExamType(examType);
         examSchedule.setSemester(semester);
