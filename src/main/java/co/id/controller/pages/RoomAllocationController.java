@@ -6,6 +6,7 @@ import co.id.model.ExamSchedule;
 import co.id.model.ExamSession;
 import co.id.model.Room;
 import co.id.model.RoomAssignment;
+import co.id.model.RoomAvailability;
 import co.id.model.RoomPlan;
 import co.id.model.SeatAssignment;
 import co.id.model.Teacher;
@@ -31,15 +32,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
@@ -51,8 +55,8 @@ public class RoomAllocationController {
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<ExamSession> comboSession;
     @FXML private Label lblSessionInfo, lblRoomHint, lblStatus, lblSeatsTitle;
-    @FXML private Button btnSelectAll, btnGenerate, btnAutoSupervisor, btnSave, btnExport;
-    @FXML private ListView<Room> listRooms;
+    @FXML private Button btnSelectAll, btnAutoRooms, btnGenerate, btnAutoSupervisor, btnSave, btnExport;
+    @FXML private ListView<RoomAvailability> listRooms;
 
     @FXML private TableView<RoomAssignment> tableRooms;
     @FXML private TableColumn<RoomAssignment, String> colRoom, colCapacity, colFilled, colClasses;
@@ -143,7 +147,10 @@ public class RoomAllocationController {
         comboSession.valueProperty().addListener((obs, oldVal, session) -> openSession(session));
         datePicker.valueProperty().addListener((obs, oldVal, date) -> loadSessions(date));
 
+        listRooms.setCellFactory(list -> new RoomCell());
+
         btnSelectAll.setOnAction(e -> toggleAllRooms());
+        btnAutoRooms.setOnAction(e -> autoSelectRooms());
         btnGenerate.setOnAction(e -> generate());
         btnAutoSupervisor.setOnAction(e -> autoSupervisors());
         btnSave.setOnAction(e -> save());
@@ -195,23 +202,20 @@ public class RoomAllocationController {
                 .collect(Collectors.joining("  |  ")));
 
         try {
-            List<Room> usable = service.getUsableRooms(session);
+            // Semua ruangan ditampilkan; yang dipakai sesi lain (jam bertumpuk) abu-abu dan tidak bisa dicentang
+            List<RoomAvailability> rooms = service.getRoomAvailability(session);
             roomChecked.clear();
-            for (Room room : usable) {
-                BooleanProperty checked = new SimpleBooleanProperty(false);
-                checked.addListener((o, a, b) -> updateRoomHint());
-                roomChecked.put(room.getId(), checked);
+            for (RoomAvailability availability : rooms) {
+                if (availability.isAvailable()) {
+                    BooleanProperty checked = new SimpleBooleanProperty(false);
+                    checked.addListener((o, a, b) -> updateRoomHint());
+                    roomChecked.put(availability.getRoom().getId(), checked);
+                }
             }
-            listRooms.setItems(FXCollections.observableArrayList(usable));
-            listRooms.setCellFactory(CheckBoxListCell.forListView(
-                    room -> roomChecked.get(room.getId()),
-                    new StringConverter<>() {
-                        @Override public String toString(Room r) { return r == null ? "" : r.getName() + "  (kapasitas " + r.getCapacity() + ")"; }
-                        @Override public Room fromString(String s) { return null; }
-                    }));
+            listRooms.setItems(FXCollections.observableArrayList(rooms));
 
-            int hidden = masterService.getAllRooms().size() - usable.size();
-            lblRoomHint.setText(hidden > 0 ? hidden + " ruangan tidak ditampilkan karena dipakai sesi lain yang waktunya bertumpuk." : "");
+            long busy = rooms.stream().filter(r -> !r.isAvailable()).count();
+            lblRoomHint.setText(busy > 0 ? busy + " ruangan (abu-abu) sedang dipakai sesi lain yang waktunya bertumpuk." : "");
 
             RoomPlan savedPlan = service.loadSaved(session);
             if (savedPlan != null) {
@@ -239,8 +243,91 @@ public class RoomAllocationController {
 
     private List<Room> selectedRooms() {
         return listRooms.getItems().stream()
+                .map(RoomAvailability::getRoom)
                 .filter(r -> roomChecked.get(r.getId()) != null && roomChecked.get(r.getId()).get())
                 .collect(Collectors.toList());
+    }
+
+    // Centang otomatis ruangan kosong secukupnya untuk semua siswa di sesi ini
+    private void autoSelectRooms() {
+        if (currentSession == null) {
+            return;
+        }
+        try {
+            int needed = service.countSeatsNeeded(currentSession);
+            List<Room> suggested = service.suggestRooms(currentSession);
+            if (suggested.isEmpty()) {
+                new Alert(AlertType.WARNING, needed == 0
+                        ? "Tidak ada siswa pada sesi ini."
+                        : "Tidak ada ruangan kosong pada sesi ini.").showAndWait();
+                return;
+            }
+            roomChecked.values().forEach(p -> p.set(false));
+            suggested.forEach(r -> roomChecked.get(r.getId()).set(true));
+
+            int capacity = suggested.stream().mapToInt(Room::getCapacity).sum();
+            String text = "Dipilih otomatis " + suggested.size() + " ruangan (kapasitas " + capacity + ") untuk "
+                    + needed + " siswa. Klik \"Buat Penempatan Otomatis\" untuk membagi siswa.";
+            if (capacity < needed) {
+                text = "Semua ruangan kosong dipilih, tetapi kapasitasnya (" + capacity + ") kurang dari jumlah siswa ("
+                        + needed + "). Tambah kapasitas ruangan atau pindahkan sebagian jadwal ke sesi lain.";
+                new Alert(AlertType.WARNING, text).showAndWait();
+            }
+            if (currentPlan == null) {
+                lblStatus.setText(text);
+            }
+        } catch (Exception ex) {
+            error(ex);
+        }
+    }
+
+    // Baris daftar ruangan: ruangan kosong = checkbox; ruangan terpakai = abu-abu + keterangan pemakainya
+    private class RoomCell extends ListCell<RoomAvailability> {
+        private final CheckBox checkBox = new CheckBox();
+        private final Label usedBy = new Label();
+        private final VBox box = new VBox(2, checkBox, usedBy);
+        private BooleanProperty bound;
+
+        RoomCell() {
+            usedBy.setWrapText(true);
+            usedBy.setStyle("-fx-text-fill: #9e9e9e; -fx-font-size: 11px; -fx-padding: 0 0 0 22;");
+        }
+
+        @Override
+        protected void updateItem(RoomAvailability item, boolean empty) {
+            super.updateItem(item, empty);
+            if (bound != null) {
+                checkBox.selectedProperty().unbindBidirectional(bound);
+                bound = null;
+            }
+            if (empty || item == null) {
+                setGraphic(null);
+                setText(null);
+                setTooltip(null);
+                return;
+            }
+            Room room = item.getRoom();
+            checkBox.setText(room.getName() + "  (kapasitas " + room.getCapacity() + ")");
+            if (item.isAvailable()) {
+                checkBox.setDisable(false);
+                checkBox.setStyle("");
+                bound = roomChecked.get(room.getId());
+                checkBox.selectedProperty().bindBidirectional(bound);
+                usedBy.setVisible(false);
+                usedBy.setManaged(false);
+                setTooltip(null);
+            } else {
+                checkBox.setSelected(false);
+                checkBox.setDisable(true);
+                checkBox.setStyle("-fx-opacity: 0.6;");
+                usedBy.setText("Dipakai: " + item.getUsedBy());
+                usedBy.setVisible(true);
+                usedBy.setManaged(true);
+                setTooltip(new Tooltip("Ruangan ini dipakai sesi lain yang waktunya bertumpuk:\n" + item.getUsedBy()));
+            }
+            setText(null);
+            setGraphic(box);
+        }
     }
 
     private void updateRoomHint() {
@@ -401,6 +488,7 @@ public class RoomAllocationController {
         btnExport.setDisable(!hasPlan);
         btnSave.setDisable(!hasPlan || !AuthContext.isAdmin());
         btnGenerate.setDisable(currentSession == null || !AuthContext.isAdmin());
+        btnAutoRooms.setDisable(currentSession == null || !AuthContext.isAdmin());
     }
 
     private Teacher teacherFor(Teacher supervisor) {

@@ -43,13 +43,14 @@
 
     <center>
         <HBox spacing="12" styleClass="list-menu-center-vbox">
-            <VBox spacing="8" prefWidth="270" minWidth="240">
+            <VBox spacing="8" prefWidth="300" minWidth="260">
                 <Label text="Ruangan yang dipakai" styleClass="form-field-label"/>
                 <Label fx:id="lblRoomHint" wrapText="true"/>
                 <ListView fx:id="listRooms" VBox.vgrow="ALWAYS"/>
                 <HBox spacing="8">
                     <Button fx:id="btnSelectAll" text="Pilih / Kosongkan Semua"/>
                 </HBox>
+                <Button fx:id="btnAutoRooms" text="Pilih Ruangan Otomatis" maxWidth="Infinity"/>
                 <Button fx:id="btnGenerate" text="Buat Penempatan Otomatis" maxWidth="Infinity" styleClass="list-menu-top-button"/>
             </VBox>
 
