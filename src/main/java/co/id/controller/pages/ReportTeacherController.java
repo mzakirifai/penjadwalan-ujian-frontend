@@ -37,6 +37,12 @@ public class ReportTeacherController {
             );
 
             List<Teacher> data = reportService.getTeacherReport();
+            // NIP opsional: yang kosong dicetak "-" (objek ini hanya dipakai untuk laporan)
+            data.forEach(t -> {
+                if (t.getNip() == null || t.getNip().isBlank()) {
+                    t.setNip("-");
+                }
+            });
 
             JRDataSource dataSource = new JRBeanCollectionDataSource(data);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), dataSource);

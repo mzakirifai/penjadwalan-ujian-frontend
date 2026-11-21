@@ -63,7 +63,7 @@ public class TeacherController {
 
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        tableColumnNip.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getNip()));
+        tableColumnNip.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getNip() != null ? t.getValue().getNip() : "-"));
         tableColumnName.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getName()));
         tableColumnGender.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getGender()));
         tableColumnPhone.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getPhoneNumber()));

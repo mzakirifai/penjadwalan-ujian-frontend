@@ -73,7 +73,7 @@ public class TeachingAssignmentFormController {
         allSubjects = masterService.getAllSubjects();
 
         comboTeacher.setItems(FXCollections.observableArrayList(masterService.getAllTeachers()));
-        comboTeacher.setConverter(converter(t -> t.getName() + " (" + t.getNip() + ")"));
+        comboTeacher.setConverter(converter(t -> t.getNip() != null ? t.getName() + " (" + t.getNip() + ")" : t.getName()));
 
         List<Classroom> classrooms = masterService.getAllClassrooms();
 

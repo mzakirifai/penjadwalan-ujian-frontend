@@ -44,7 +44,7 @@ public class ExcelImportActions {
         try {
             List<TableParser.Row> rows = readRows(file, TeacherImportParser.ALIASES, TeacherImportParser.REQUIRED, Set.of());
             if (rows.isEmpty()) {
-                noData("NIP dan Nama");
+                noData("Nama dan Jenis Kelamin");
                 return;
             }
 
@@ -64,9 +64,9 @@ public class ExcelImportActions {
         List<String> notes = List.of(
                 "PETUNJUK PENGISIAN TEMPLATE GURU",
                 "Isi data di sheet pertama, mulai dari baris 2. Jangan mengubah judul kolom di baris 1.",
-                "Kolom wajib: NIP, Nama, Jenis Kelamin. Kolom lain boleh kosong.",
+                "Kolom wajib: Nama, Jenis Kelamin. Kolom lain (termasuk NIP) boleh kosong.",
                 "Jenis Kelamin diisi L atau P (boleh juga Laki-laki / Perempuan).",
-                "NIP tidak boleh sama dengan NIP guru yang sudah ada di aplikasi.",
+                "NIP boleh dikosongkan bagi guru yang belum punya NIP; jika diisi, tidak boleh sama dengan NIP guru lain.",
                 "Kolom sudah berformat Teks supaya NIP yang panjang dan nol di depan No. HP tidak berubah.",
                 "Jika menyalin data dari file lain, tempel sebagai teks (Paste Special > Values), jangan sebagai angka.",
                 "Contoh baris: 199001012020011001 | Nama Guru Contoh, S.Pd. | P | 081234567890 | contoh@email.com | Jl. Contoh No. 1");

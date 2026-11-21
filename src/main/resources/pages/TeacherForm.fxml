@@ -13,7 +13,7 @@
 
     <Label text="Form Guru" styleClass="form-label"/>
 
-    <TextField fx:id="textFieldNip" promptText="NIP"/>
+    <TextField fx:id="textFieldNip" promptText="NIP (opsional)"/>
     <TextField fx:id="textFieldName" promptText="Nama Guru"/>
 
     <HBox spacing="10">

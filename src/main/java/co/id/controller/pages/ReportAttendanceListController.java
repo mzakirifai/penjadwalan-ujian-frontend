@@ -95,7 +95,8 @@ public class ReportAttendanceListController {
             parameters.put("CLASSROOM_NAME", selectedSchedule.getClassroom() != null ? selectedSchedule.getClassroom().getName() : "-");
             parameters.put("ROOM_NAME", selectedSchedule.getRoom() != null ? selectedSchedule.getRoom().getName() : "-");
             parameters.put("TEACHER_NAME", selectedSchedule.getTeacher() != null ? selectedSchedule.getTeacher().getName() : "-");
-            parameters.put("TEACHER_NIP", selectedSchedule.getTeacher() != null ? selectedSchedule.getTeacher().getNip() : "-");
+            parameters.put("TEACHER_NIP", selectedSchedule.getTeacher() != null && selectedSchedule.getTeacher().getNip() != null
+                    ? selectedSchedule.getTeacher().getNip() : "-");
             parameters.put("EXAM_DATE", selectedSchedule.getDate() != null
                 ? selectedSchedule.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) : "-");
             parameters.put("EXAM_TIME", (selectedSchedule.getStartTime() != null ? selectedSchedule.getStartTime().toString() : "-")

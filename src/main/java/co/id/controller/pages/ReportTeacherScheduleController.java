@@ -46,7 +46,7 @@ public class ReportTeacherScheduleController {
         reportService = new ReportServiceImpl();
 
         TableColumn<Teacher, String> colNip = new TableColumn<>("NIP");
-        colNip.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNip()));
+        colNip.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNip() != null ? d.getValue().getNip() : "-"));
 
         TableColumn<Teacher, String> colName = new TableColumn<>("Nama");
         colName.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getName()));
@@ -88,7 +88,7 @@ public class ReportTeacherScheduleController {
 
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("TEACHER_NAME", selectedTeacher.getName());
-            parameters.put("TEACHER_NIP", selectedTeacher.getNip());
+            parameters.put("TEACHER_NIP", selectedTeacher.getNip() != null ? selectedTeacher.getNip() : "-");
             parameters.put("EXAM_TYPE_LABEL", toExamTypeLabel(examType));
             parameters.put("SEMESTER", semester.toUpperCase());
             parameters.put("ACADEMIC_YEAR", academicYear);

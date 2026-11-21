@@ -61,8 +61,9 @@ public class TeacherFormController {
             gender = "Perempuan";
         }
 
-        if (nip == null || nip.isBlank() || name == null || name.isBlank()) {
-            new Alert(AlertType.WARNING, "NIP dan Nama wajib diisi").showAndWait();
+        // NIP opsional (guru honorer belum tentu punya NIP), tetapi jika diisi harus unik (dicek di service)
+        if (name == null || name.isBlank() || gender == null) {
+            new Alert(AlertType.WARNING, "Nama dan Jenis Kelamin wajib diisi (NIP boleh kosong)").showAndWait();
             return;
         }
 

@@ -141,7 +141,7 @@ public class TeachingAssignmentController {
         });
         tableColumnNip.setCellValueFactory(c -> {
             RowData row = c.getValue().getValue();
-            return new ReadOnlyStringWrapper(row.isGroup() ? row.group.teacher.getNip() : "");
+            return new ReadOnlyStringWrapper(row.isGroup() ? (row.group.teacher.getNip() != null ? row.group.teacher.getNip() : "-") : "");
         });
 
         // Baris guru: tampilkan ringkasan hanya saat tertutup; saat terbuka rinciannya sudah tampil di bawah
