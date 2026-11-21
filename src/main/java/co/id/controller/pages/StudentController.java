@@ -8,18 +8,24 @@ import co.id.service.MasterService;
 import co.id.service.impl.MasterServiceImpl;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -38,6 +44,7 @@ import co.id.component.StudentImportDialog;
 import co.id.importer.StudentExcelReader;
 import java.io.File;
 import javafx.stage.FileChooser;
+import javafx.util.StringConverter;
 
 public class StudentController {
     @FXML private TextField searchField;
@@ -46,6 +53,7 @@ public class StudentController {
     @FXML private Button allClassBtn;
     @FXML private LookupBox<Classroom> lookupBoxClassroom;
     @FXML private Button importBtn;
+    @FXML private Button deleteGroupBtn;
     @FXML private Button addBtn;
     @FXML private TableView<Student> tableView;
     
@@ -158,7 +166,124 @@ public class StudentController {
             importBtn.setVisible(false);
             importBtn.setManaged(false);
         }
+
+        // Hapus kelompok (satu kelas sekaligus) hanya untuk admin, sama seperti tombol Hapus per siswa
+        if (!AuthContext.isAdmin()) {
+            deleteGroupBtn.setVisible(false);
+            deleteGroupBtn.setManaged(false);
+        }
+        deleteGroupBtn.setOnAction(eh -> deleteGroup());
         refreshBtn.setOnAction(e -> refreshTable());
+    }
+
+    // Hapus seluruh siswa dalam satu kelas sekaligus (mis. siswa yang sudah lulus), tanpa menghapus satu per satu.
+    private void deleteGroup() {
+        List<Classroom> classrooms = masterService.getAllClassrooms();
+        if (classrooms.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Belum ada data kelas.").showAndWait();
+            return;
+        }
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Hapus Kelompok Siswa");
+        dialog.setHeaderText("Pilih kelas yang seluruh siswanya akan dihapus");
+        dialog.initOwner(deleteGroupBtn.getScene().getWindow());
+
+        ButtonType deleteType = new ButtonType("Hapus", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(deleteType, ButtonType.CANCEL);
+
+        ComboBox<Classroom> classCombo = new ComboBox<>(FXCollections.observableArrayList(classrooms));
+        classCombo.setPromptText("Pilih kelas");
+        classCombo.setMaxWidth(Double.MAX_VALUE);
+        classCombo.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Classroom classroom) {
+                return classroom == null ? "" : classroom.getName();
+            }
+
+            @Override
+            public Classroom fromString(String string) {
+                return null;
+            }
+        });
+
+        Label countLabel = new Label("Pilih kelas untuk melihat jumlah siswanya.");
+        countLabel.setWrapText(true);
+        Label warningLabel = new Label("Peringatan: data peserta ujian dan nilai milik siswa di kelas ini "
+                + "juga akan ikut terhapus. Tindakan ini tidak dapat dibatalkan.");
+        warningLabel.setWrapText(true);
+        warningLabel.setStyle("-fx-text-fill: #C62828;");
+
+        VBox content = new VBox(10, classCombo, countLabel, warningLabel);
+        content.setPadding(new Insets(10, 10, 0, 10));
+        content.setPrefWidth(380);
+        dialog.getDialogPane().setContent(content);
+
+        Node deleteNode = dialog.getDialogPane().lookupButton(deleteType);
+        deleteNode.setDisable(true);
+        deleteNode.setStyle("-fx-background-color: #F44336; -fx-text-fill: white;");
+
+        // [0] siswa, [1] nilai, [2] kursi peserta ujian yang akan ikut terhapus
+        int[] counts = {0, 0, 0};
+        classCombo.valueProperty().addListener((obs, oldValue, chosen) -> {
+            if (chosen == null) {
+                counts[0] = 0;
+                deleteNode.setDisable(true);
+                return;
+            }
+            try {
+                counts[0] = masterService.getStudentsByClassroom(chosen.getId()).size();
+                int[] examData = masterService.countStudentExamData(chosen.getId());
+                counts[1] = examData[0];
+                counts[2] = examData[1];
+            } catch (Exception ex) {
+                countLabel.setText("Gagal membaca jumlah data: " + ex.getMessage());
+                deleteNode.setDisable(true);
+                return;
+            }
+            countLabel.setText("Kelas " + chosen.getName() + ": " + counts[0] + " siswa"
+                    + (counts[1] + counts[2] > 0
+                        ? "\nIkut terhapus: " + counts[1] + " data nilai dan " + counts[2] + " kursi peserta ujian."
+                        : "\nSiswa di kelas ini belum punya data nilai atau peserta ujian."));
+            countLabel.setStyle(counts[1] > 0 ? "-fx-font-weight: bold;" : "");
+            deleteNode.setDisable(counts[0] == 0);
+        });
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        Classroom selected = classCombo.getValue();
+        if (result.isEmpty() || result.get() != deleteType || selected == null) {
+            return;
+        }
+
+        String lostData = counts[1] + counts[2] > 0
+                ? "\nIkut terhapus: " + counts[1] + " data nilai dan " + counts[2] + " kursi peserta ujian."
+                : "";
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Yakin ingin menghapus SEMUA " + counts[0] + " siswa di kelas \""
+                + selected.getName() + "\"?" + lostData + "\nTindakan ini tidak dapat dibatalkan.",
+                ButtonType.YES, ButtonType.NO);
+        confirm.setTitle("Konfirmasi Hapus Kelompok");
+        confirm.setHeaderText(null);
+
+        confirm.showAndWait().ifPresent(action -> {
+            if (action == ButtonType.YES) {
+                try {
+                    int deleted = masterService.deleteStudentsByClassroom(selected.getId(), AuthContext.getCurrentRole());
+                    pagination.setCurrentPageIndex(0);
+                    // filter kelas yang sedang aktif adalah kelas yang baru dikosongkan: kembalikan ke Semua Kelas
+                    Classroom filtered = lookupBoxClassroom.getSelectedItem();
+                    if (filtered != null && filtered.getId() == selected.getId()) {
+                        lookupBoxClassroom.setSelectedItem(null);
+                    } else {
+                        refreshTable();
+                    }
+                    new Alert(Alert.AlertType.INFORMATION,
+                            deleted + " siswa di kelas \"" + selected.getName() + "\" berhasil dihapus.").showAndWait();
+                } catch (Exception ex) {
+                    new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+                }
+            }
+        });
     }
     
     private void importFromExcel() {
