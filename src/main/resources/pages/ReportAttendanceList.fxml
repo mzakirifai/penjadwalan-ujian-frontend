@@ -17,7 +17,11 @@
         <VBox spacing="10" styleClass="form-report-vbox">
             <Label text="Daftar Hadir Peserta" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <LookupBox fx:id="lookupBoxExamSchedule" promptText="Pilih Jadwal Ujian" />
+                <DatePicker fx:id="datePicker" promptText="Tanggal ujian" prefWidth="140"/>
+                <ComboBox fx:id="comboSession" promptText="Sesi" prefWidth="260"/>
+                <ComboBox fx:id="comboRoom" promptText="Ruangan" prefWidth="200"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
                 <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>
                 <ComboBox fx:id="comboSemester" promptText="Semester"/>
                 <TextField fx:id="textFieldAcademicYear" promptText="Tahun Akademik (contoh: 2026/2027)" prefWidth="220"/>
@@ -31,6 +35,7 @@
                     </graphic>
                 </Button>
             </HBox>
+            <Label fx:id="lblInfo"/>
         </VBox>
     </top>
 
