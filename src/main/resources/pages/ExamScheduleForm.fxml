@@ -53,15 +53,10 @@
 
             <ComboBox fx:id="comboCode" promptText="Kode guru (pilih mapel terlebih dahulu)"/>
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <LookupBox fx:id="lookupBoxRoom" promptText="Ruangan (kosongkan jika memakai Penempatan Ruangan)" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnFindRoom" text="Cari Ruangan Kosong" onAction="#findFreeRoom"/>
-            </HBox>
-            <Label fx:id="labelRoomStatus" wrapText="true"/>
-
-            <LookupBox fx:id="lookupBoxTeacher" promptText="Pengawas (kosongkan jika memakai Penempatan Ruangan)"/>
-
             <TextArea fx:id="textAreaNotes" promptText="Keterangan (opsional)" prefRowCount="2"/>
+
+            <Label fx:id="labelPlacementInfo" wrapText="true" style="-fx-text-fill: #1565c0;"
+                   text="Ruangan dan pengawas diatur lewat menu Transaksi &gt; Penempatan Ruangan setelah jadwal disimpan."/>
 
             <VBox styleClass="form-vbox"/>
 

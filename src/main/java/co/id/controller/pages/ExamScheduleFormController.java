@@ -4,11 +4,8 @@ import co.id.auth.AuthContext;
 import co.id.component.LookupBox;
 import co.id.model.Classroom;
 import co.id.model.ExamSchedule;
-import co.id.model.Room;
-import co.id.model.RoomSuggestion;
-import co.id.model.ScheduleConflict;
+import co.id.model.SessionSlot;
 import co.id.model.Subject;
-import co.id.model.Teacher;
 import co.id.model.TeachingAssignment;
 import co.id.service.ExamScheduleService;
 import co.id.service.MasterService;
@@ -27,7 +24,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -50,12 +46,9 @@ public class ExamScheduleFormController {
     @FXML private LookupBox<Classroom> lookupBoxClassroom;
     @FXML private ComboBox<Subject> comboSubject;
     @FXML private ComboBox<TeachingAssignment> comboCode;
-    @FXML private LookupBox<Room> lookupBoxRoom;
-    @FXML private LookupBox<Teacher> lookupBoxTeacher;
     @FXML private TextArea textAreaNotes;
     @FXML private Button saveBtn;
-    @FXML private Button btnFindRoom;
-    @FXML private Label labelRoomStatus;
+    @FXML private Label labelPlacementInfo;
 
     private ExamScheduleService examScheduleService;
     private MasterService masterService;
@@ -76,24 +69,6 @@ public class ExamScheduleFormController {
         colClassroomName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
         lookupBoxClassroom.configure(
                 () -> masterService.getAllClassrooms(), List.of(colClassroomName), Classroom::getName
-        );
-
-        TableColumn<Room, String> colRoomName = new TableColumn<>("Ruangan");
-        colRoomName.setCellValueFactory(r -> new SimpleStringProperty(r.getValue().getName()));
-        lookupBoxRoom.configure(
-                () -> masterService.getAllRooms(), List.of(colRoomName), Room::getName
-        );
-
-        // Status ruangan langsung terlihat (kosong / terpakai oleh siapa) saat ruangan, tanggal, atau jam berubah
-        lookupBoxRoom.selectedItemProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
-        datePickerDate.valueProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
-        textFieldStartTime.textProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
-        textFieldEndTime.textProperty().addListener((obs, oldVal, newVal) -> refreshRoomStatus());
-
-        TableColumn<Teacher, String> colTeacherName = new TableColumn<>("Guru");
-        colTeacherName.setCellValueFactory(t -> new SimpleStringProperty(t.getValue().getName()));
-        lookupBoxTeacher.configure(
-                () -> masterService.getAllTeachers(), List.of(colTeacherName), Teacher::getName
         );
 
         comboSubject.setConverter(new StringConverter<>() {
@@ -200,101 +175,9 @@ public class ExamScheduleFormController {
         }
     }
 
-    // ================= Bentrok & ruangan kosong =================
-
-    private LocalTime[] parseTimeRange() {
-        try {
-            LocalTime start = LocalTime.parse(textFieldStartTime.getText().trim(), TIME_FORMAT);
-            LocalTime end = LocalTime.parse(textFieldEndTime.getText().trim(), TIME_FORMAT);
-            return end.isAfter(start) ? new LocalTime[]{start, end} : null;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    private int currentExcludeId() {
-        return selectedExamSchedule != null ? selectedExamSchedule.getId() : 0;
-    }
-
-    private void refreshRoomStatus() {
-        labelRoomStatus.setText("");
-        Room room = lookupBoxRoom.getSelectedItem();
-        LocalDate date = datePickerDate.getValue();
-        LocalTime[] range = parseTimeRange();
-        if (room == null || date == null || range == null) {
-            return;
-        }
-
-        try {
-            // kelas & pengawas = 0 supaya hanya pemakaian ruangan yang diperiksa
-            List<ScheduleConflict> usage = examScheduleService.findConflicts(
-                    date, range[0], range[1], room.getId(), 0, 0, currentExcludeId());
-            if (usage.isEmpty()) {
-                labelRoomStatus.setStyle("-fx-text-fill: #2e7d32;");
-                labelRoomStatus.setText("Ruangan " + room.getName() + " kosong pada waktu ini.");
-            } else {
-                labelRoomStatus.setStyle("-fx-text-fill: #c62828;");
-                labelRoomStatus.setText(usage.get(0).describe() + ". Klik \"Cari Ruangan Kosong\".");
-            }
-        } catch (Exception ex) {
-            labelRoomStatus.setText("");
-        }
-    }
-
-    @FXML
-    private void findFreeRoom() {
-        LocalDate date = datePickerDate.getValue();
-        LocalTime[] range = parseTimeRange();
-        if (date == null || range == null) {
-            new Alert(AlertType.WARNING, "Isi tanggal ujian serta jam mulai dan selesai terlebih dahulu (format HH:mm).").showAndWait();
-            return;
-        }
-
-        Classroom classroom = lookupBoxClassroom.getSelectedItem();
-        List<RoomSuggestion> suggestions;
-        try {
-            suggestions = examScheduleService.suggestRooms(date, range[0], range[1], currentExcludeId(),
-                    classroom != null ? classroom.getId() : null);
-        } catch (Exception ex) {
-            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
-            return;
-        }
-
-        chooseRoom("Ruangan kosong pada " + date.format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-                + ", " + range[0].format(TIME_FORMAT) + " - " + range[1].format(TIME_FORMAT)
-                + (classroom != null ? "\nUntuk kelas " + classroom.getName() : ""), suggestions);
-    }
-
-    // Menampilkan pilihan ruangan kosong (yang paling pas sudah terpilih); true jika ruangan diganti
-    private boolean chooseRoom(String header, List<RoomSuggestion> suggestions) {
-        if (suggestions.isEmpty()) {
-            new Alert(AlertType.INFORMATION, "Tidak ada ruangan kosong pada waktu ini. Semua ruangan sudah terpakai.").showAndWait();
-            return false;
-        }
-
-        ChoiceDialog<RoomSuggestion> dialog = new ChoiceDialog<>(suggestions.get(0), suggestions);
-        dialog.setTitle("Pilih Ruangan Kosong");
-        dialog.setHeaderText(header);
-        dialog.setContentText("Ruangan:");
-
-        java.util.Optional<RoomSuggestion> chosen = dialog.showAndWait();
-        chosen.ifPresent(suggestion -> lookupBoxRoom.setSelectedItem(suggestion.getRoom()));
-        return chosen.isPresent();
-    }
-
+    // Bentrok yang diperiksa di form ini hanya bentrok kelas (ruangan & pengawas ada di Penempatan Ruangan)
     private void handleConflict(ScheduleConflictException ex) {
-        if (ex.isRoomOnly() && !ex.getSuggestions().isEmpty()) {
-            // Hanya ruangan yang bentrok: tawarkan ruangan kosong, lalu simpan ulang dengan ruangan baru
-            if (chooseRoom(ex.getMessage() + "\n\nPilih ruangan kosong sebagai pengganti:", ex.getSuggestions())) {
-                doSave(true);
-            }
-            return;
-        }
-
-        String hint = ex.isRoomOnly()
-                ? "\n\nTidak ada ruangan kosong lain pada waktu ini. Ubah tanggal atau jam."
-                : "\n\nUbah tanggal/jam, atau ganti kelas/pengawas yang bentrok.";
-        new Alert(AlertType.ERROR, ex.getMessage() + hint).showAndWait();
+        new Alert(AlertType.ERROR, ex.getMessage() + "\n\nUbah tanggal atau jam ujian untuk kelas ini.").showAndWait();
     }
 
     private boolean isSubjectApplicable(Subject subject, Classroom classroom) {
@@ -324,19 +207,16 @@ public class ExamScheduleFormController {
             textAreaNotes.setText(examSchedule.getNotes());
 
             if (!isDuplicate) {
-                // Mode Edit: salin juga jam, kelas, ruangan, pengawas
+                // Mode Edit: salin juga jam dan kelas
                 textFieldStartTime.setText(examSchedule.getStartTime() != null ? examSchedule.getStartTime().format(TIME_FORMAT) : "");
                 textFieldEndTime.setText(examSchedule.getEndTime() != null ? examSchedule.getEndTime().format(TIME_FORMAT) : "");
 
-                if (examSchedule.getRoom() != null) {
-                    lookupBoxRoom.setSelectedItem(examSchedule.getRoom());
-                }
-                if (examSchedule.getTeacher() != null) {
-                    lookupBoxTeacher.setSelectedItem(examSchedule.getTeacher());
+                if (examScheduleService.hasPlacement(examSchedule.getId())) {
+                    labelPlacementInfo.setText("Jadwal ini sudah ditempatkan di ruangan. Jika tanggal, jam, atau kelas diubah, "
+                            + "penempatan ruangan & kursinya dikosongkan dan perlu diatur ulang di menu Penempatan Ruangan.");
                 }
             }
-            // Mode Duplikat: jam, ruangan, pengawas SENGAJA dikosongkan,
-            // karena field ini wajib beda per kelas.
+            // Mode Duplikat: jam dan kelas SENGAJA dikosongkan, karena wajib beda per kelas.
 
             if (examSchedule.getClassroom() != null && !isDuplicate) {
                 pendingCode = examSchedule.getTeacherCode();
@@ -361,24 +241,21 @@ public class ExamScheduleFormController {
 
     @FXML
     private void saveEntity() {
-        doSave(false);
+        doSave();
     }
 
-    private void doSave(boolean skipDuplicatePrompt) {
+    private void doSave() {
         String examType = comboExamType.getValue();
         String semester = comboSemester.getValue();
         String academicYear = textFieldAcademicYear.getText();
         LocalDate date = datePickerDate.getValue();
         Classroom classroom = lookupBoxClassroom.getSelectedItem();
         Subject subject = comboSubject.getValue();
-        Room room = lookupBoxRoom.getSelectedItem();
-        Teacher teacher = lookupBoxTeacher.getSelectedItem();
         String notes = textAreaNotes.getText();
 
         if (examType == null || semester == null || academicYear == null || academicYear.isBlank()
                 || date == null || classroom == null || subject == null) {
-            // Ruangan dan pengawas boleh kosong: pada ruangan campur keduanya diatur lewat menu Penempatan Ruangan
-            new Alert(AlertType.WARNING, "Semua field wajib diisi (kecuali Ruangan, Pengawas, dan Keterangan)").showAndWait();
+            new Alert(AlertType.WARNING, "Semua field wajib diisi (kecuali Keterangan)").showAndWait();
             return;
         }
 
@@ -406,10 +283,20 @@ public class ExamScheduleFormController {
         }
 
         int excludeId = (selectedExamSchedule != null) ? selectedExamSchedule.getId() : 0;
+
+        // Sesi ujian dikelompokkan berdasarkan jam yang sama persis. Jika jam ini bertumpuk dengan sesi lain
+        // tapi tidak sama (mis. 07:30 vs 08:00), kelas ini tidak ikut dicampur di Penempatan Ruangan.
+        LocalTime[] alignedTime = askAlignSession(date, startTime, endTime, excludeId);
+        if (alignedTime == null) {
+            return;
+        }
+        startTime = alignedTime[0];
+        endTime = alignedTime[1];
+
         boolean isDuplicateSubject = examScheduleService.hasSameSubjectForClassroom(
                 classroom.getId(), subject.getId(), teacherCode, examType, semester, academicYear, excludeId);
 
-        if (isDuplicateSubject && !skipDuplicatePrompt) {
+        if (isDuplicateSubject) {
             Alert confirm = new Alert(AlertType.CONFIRMATION,
                     "Kelas \"" + classroom.getName() + "\" sudah memiliki jadwal ujian \"" + subjectLabel
                             + "\" untuk " + examType + " semester " + semester + " " + academicYear + ".\n\n"
@@ -427,7 +314,15 @@ public class ExamScheduleFormController {
             }
         }
 
-        ExamSchedule examSchedule = (selectedExamSchedule != null) ? selectedExamSchedule : new ExamSchedule();
+        // Objek baru (bukan baris tabel) supaya data di tabel tidak ikut berubah bila penyimpanan dibatalkan
+        ExamSchedule examSchedule = new ExamSchedule();
+        if (selectedExamSchedule != null) {
+            examSchedule.setId(selectedExamSchedule.getId());
+            examSchedule.setCode(selectedExamSchedule.getCode());
+            // data lama: ruangan/pengawas yang tercatat di jadwal dipertahankan sampai dipindah ke Penempatan Ruangan
+            examSchedule.setRoom(selectedExamSchedule.getRoom());
+            examSchedule.setTeacher(selectedExamSchedule.getTeacher());
+        }
         examSchedule.setExamType(examType);
         examSchedule.setSemester(semester);
         examSchedule.setAcademicYear(academicYear);
@@ -437,9 +332,27 @@ public class ExamScheduleFormController {
         examSchedule.setClassroom(classroom);
         examSchedule.setSubject(subject);
         examSchedule.setTeacherCode(teacherCode);
-        examSchedule.setRoom(room);
-        examSchedule.setTeacher(teacher);
         examSchedule.setNotes(notes);
+
+        // Tanggal/jam/kelas berubah pada jadwal yang sudah ditempatkan: minta konfirmasi dulu
+        try {
+            if (examScheduleService.willResetPlacement(examSchedule)) {
+                Alert confirm = new Alert(AlertType.CONFIRMATION,
+                        "Jadwal ini sudah ditempatkan di ruangan. Karena tanggal, jam, atau kelasnya diubah, "
+                                + "penempatan ruangan, nomor kursi, dan pengawasnya akan dikosongkan.\n\n"
+                                + "Setelah disimpan, atur ulang lewat menu Penempatan Ruangan. Lanjutkan?",
+                        ButtonType.YES, ButtonType.NO);
+                confirm.setTitle("Penempatan Ruangan Akan Dikosongkan");
+                confirm.setHeaderText(null);
+                boolean proceed = confirm.showAndWait().map(r -> r == ButtonType.YES).orElse(false);
+                if (!proceed) {
+                    return;
+                }
+            }
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+            return;
+        }
 
         Alert alert;
         try {
@@ -462,6 +375,54 @@ public class ExamScheduleFormController {
 
         Stage stage = (Stage) saveBtn.getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Menawarkan penyamaan jam dengan sesi lain yang bertumpuk. Mengembalikan jam yang dipakai
+     * (jam sesi yang dipilih, atau jam semula bila "Tetap Simpan"), atau null bila dibatalkan.
+     */
+    private LocalTime[] askAlignSession(LocalDate date, LocalTime startTime, LocalTime endTime, int excludeId) {
+        List<SessionSlot> slots;
+        try {
+            slots = examScheduleService.findMisalignedSessions(date, startTime, endTime, excludeId);
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+            return null;
+        }
+        if (slots.isEmpty()) {
+            return new LocalTime[]{startTime, endTime};
+        }
+
+        StringBuilder message = new StringBuilder("Pada tanggal ini sudah ada sesi ujian yang jamnya bertumpuk, tetapi tidak sama persis:\n");
+        for (SessionSlot slot : slots) {
+            message.append("\n- ").append(slot.getLabel()).append(" (").append(slot.getScheduleCount()).append(" jadwal)");
+        }
+        message.append("\n\nJadwal hanya bisa dicampur dalam satu ruangan jika jamnya sama persis. ")
+                .append("Samakan jam dengan salah satu sesi di atas?");
+
+        Alert alert = new Alert(AlertType.CONFIRMATION, message.toString());
+        alert.setTitle("Jam Sesi Tidak Sama");
+        alert.setHeaderText("Jam " + startTime.format(TIME_FORMAT) + " - " + endTime.format(TIME_FORMAT) + " bertumpuk dengan sesi lain");
+        alert.getButtonTypes().clear();
+
+        java.util.Map<ButtonType, SessionSlot> choices = new java.util.LinkedHashMap<>();
+        for (SessionSlot slot : slots.subList(0, Math.min(3, slots.size()))) {
+            ButtonType button = new ButtonType("Pakai " + slot.getLabel());
+            choices.put(button, slot);
+            alert.getButtonTypes().add(button);
+        }
+        ButtonType keep = new ButtonType("Tetap Simpan");
+        ButtonType cancel = new ButtonType("Batal", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().addAll(keep, cancel);
+
+        ButtonType result = alert.showAndWait().orElse(cancel);
+        if (choices.containsKey(result)) {
+            SessionSlot chosen = choices.get(result);
+            textFieldStartTime.setText(chosen.getStartTime().format(TIME_FORMAT));
+            textFieldEndTime.setText(chosen.getEndTime().format(TIME_FORMAT));
+            return new LocalTime[]{chosen.getStartTime(), chosen.getEndTime()};
+        }
+        return result == keep ? new LocalTime[]{startTime, endTime} : null;
     }
 
     public void setOnSaveCallback(Runnable callback) {

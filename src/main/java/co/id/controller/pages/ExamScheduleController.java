@@ -2,6 +2,7 @@ package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
 import co.id.model.ExamSchedule;
+import co.id.model.PlacementSummary;
 import co.id.service.ExamScheduleService;
 import co.id.service.impl.ExamScheduleServiceImpl;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,8 +41,11 @@ public class ExamScheduleController {
 
     @FXML private TableColumn<ExamSchedule, String> tableColumnCode, tableColumnType, tableColumnAcademicYear,
             tableColumnDate, tableColumnStartTime, tableColumnEndTime, tableColumnSubject, tableColumnClassroom,
-            tableColumnRoom, tableColumnTeacher;
+            tableColumnRoom, tableColumnTeacher, tableColumnStatus;
     @FXML private TableColumn<ExamSchedule, Void> tableColumnAction;
+
+    // Ringkasan penempatan (ruangan, pengawas, status) untuk baris yang sedang tampil, per id jadwal
+    private java.util.Map<Integer, PlacementSummary> summaries = new java.util.HashMap<>();
 
     @FXML private Pagination pagination;
 
@@ -79,10 +84,41 @@ public class ExamScheduleController {
                 new SimpleStringProperty(e.getValue().getSubject() != null ? e.getValue().getSubjectLabel() : "-"));
         tableColumnClassroom.setCellValueFactory(e ->
                 new SimpleStringProperty(e.getValue().getClassroom() != null ? e.getValue().getClassroom().getName() : "-"));
-        tableColumnRoom.setCellValueFactory(e ->
-                new SimpleStringProperty(e.getValue().getRoom() != null ? e.getValue().getRoom().getName() : "-"));
-        tableColumnTeacher.setCellValueFactory(e ->
-                new SimpleStringProperty(e.getValue().getTeacher() != null ? e.getValue().getTeacher().getName() : "-"));
+        // Ruangan, pengawas, dan status diambil dari hasil menu Penempatan Ruangan (bukan dari form jadwal)
+        tableColumnRoom.setCellValueFactory(e -> new SimpleStringProperty(summaryOf(e.getValue()).getRoomsLabel()));
+        tableColumnRoom.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String text, boolean empty) {
+                super.updateItem(text, empty);
+                ExamSchedule row = empty || getTableRow() == null ? null : getTableRow().getItem();
+                if (row == null) {
+                    setText(null);
+                    setTooltip(null);
+                    setStyle("");
+                    return;
+                }
+                PlacementSummary summary = summaryOf(row);
+                setText(text);
+                setTooltip(new Tooltip(summary.getRoomsDetail()));
+                setStyle(summary.getRooms().isEmpty() ? "-fx-text-fill: #9e9e9e; -fx-font-style: italic;" : "");
+            }
+        });
+        tableColumnTeacher.setCellValueFactory(e -> new SimpleStringProperty(summaryOf(e.getValue()).getSupervisorsLabel()));
+        tableColumnStatus.setCellValueFactory(e -> new SimpleStringProperty(summaryOf(e.getValue()).getStatusLabel()));
+        tableColumnStatus.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String text, boolean empty) {
+                super.updateItem(text, empty);
+                ExamSchedule row = empty || getTableRow() == null ? null : getTableRow().getItem();
+                if (row == null) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+                setText(text);
+                setStyle("-fx-font-weight: bold; -fx-text-fill: " + statusColor(summaryOf(row).getStatus()) + ";");
+            }
+        });
 
         tableColumnAction.setCellFactory(clbck -> new TableCell<>() {
         private final Button buttonEdit = new Button("Edit");
@@ -168,8 +204,39 @@ public class ExamScheduleController {
         if (keyword == null || keyword.isEmpty()) {
             refreshTable();
         } else {
-            observableList.setAll(examScheduleService.getExamScheduleBy(keyword));
-            tableView.setItems(observableList);
+            showSchedules(examScheduleService.getExamScheduleBy(keyword));
+        }
+    }
+
+    // Ambil ringkasan penempatan untuk baris yang akan tampil, lalu tampilkan barisnya
+    private void showSchedules(java.util.List<ExamSchedule> schedules) {
+        try {
+            summaries = examScheduleService.getPlacementSummaries(
+                    schedules.stream().map(ExamSchedule::getId).collect(java.util.stream.Collectors.toList()));
+        } catch (Exception ex) {
+            summaries = new java.util.HashMap<>();
+            new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+        }
+        observableList.setAll(schedules);
+        tableView.setItems(observableList);
+        tableView.refresh();
+    }
+
+    private PlacementSummary summaryOf(ExamSchedule schedule) {
+        return summaries.getOrDefault(schedule.getId(), new PlacementSummary(schedule.getId()));
+    }
+
+    private static String statusColor(PlacementSummary.Status status) {
+        switch (status) {
+            case SIAP:
+                return "#2e7d32";   // hijau
+            case TANPA_PENGAWAS:
+            case SEBAGIAN:
+                return "#ef6c00";   // oranye
+            case TANPA_SISWA:
+                return "#757575";   // abu-abu
+            default:
+                return "#c62828";   // merah: belum ditempatkan
         }
     }
 
@@ -210,8 +277,7 @@ public class ExamScheduleController {
     }
 
     private void loadPage(int pageIndex, int rowsPerPage) {
-        observableList.setAll(examScheduleService.getExamSchedules(pageIndex + 1, rowsPerPage));
-        tableView.setItems(observableList);
+        showSchedules(examScheduleService.getExamSchedules(pageIndex + 1, rowsPerPage));
     }
 
     private void refreshTable() {
