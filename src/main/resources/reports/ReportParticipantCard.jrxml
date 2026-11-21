@@ -9,6 +9,8 @@
 	<parameter name="EXAM_TYPE_LABEL" class="java.lang.String"/>
 	<parameter name="SEMESTER" class="java.lang.String"/>
 	<parameter name="ACADEMIC_YEAR" class="java.lang.String"/>
+	<parameter name="PRINCIPAL_NAME" class="java.lang.String"/>
+	<parameter name="PRINCIPAL_NIP" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -375,20 +377,20 @@ new java.text.SimpleDateFormat(
     new java.util.Locale("id", "ID")
 ).format(new java.util.Date())]]></textFieldExpression>
 			</textField>
-			<staticText>
+			<textField textAdjust="ScaleFont">
 				<reportElement x="361" y="141" width="202" height="17" uuid="8feb3c43-4259-4d97-a3b9-c2026742a913"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[(Dedi Haryanto, S.Kom., M.Pd.)]]></text>
-			</staticText>
-			<staticText>
+				<textFieldExpression><![CDATA["(" + ($P{PRINCIPAL_NAME} != null ? $P{PRINCIPAL_NAME} : "") + ")"]]></textFieldExpression>
+			</textField>
+			<textField>
 				<reportElement x="361" y="161" width="202" height="15" uuid="a8b15f29-b687-42c5-925b-32f859d9665c"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[NIP. 199008172020041001]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["NIP. " + ($P{PRINCIPAL_NIP} != null && !$P{PRINCIPAL_NIP}.trim().isEmpty() ? $P{PRINCIPAL_NIP} : "-")]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

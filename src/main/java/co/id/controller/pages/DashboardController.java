@@ -127,6 +127,18 @@ public class DashboardController {
     private void setupTodayScheduleTable() {
         tableTodaySchedule.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        // Ruangan & pengawas hasil Penempatan Ruangan (bukan lagi kolom jadwal)
+        java.util.List<co.id.model.ExamSchedule> todaySchedules = examScheduleService.getTodayExamSchedules();
+        java.util.Map<Integer, co.id.model.PlacementSummary> placements;
+        try {
+            placements = examScheduleService.getPlacementSummaries(todaySchedules.stream()
+                    .map(co.id.model.ExamSchedule::getId).collect(java.util.stream.Collectors.toList()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            placements = new java.util.HashMap<>();
+        }
+        final java.util.Map<Integer, co.id.model.PlacementSummary> placementById = placements;
+
         colTodayKode.setCellValueFactory(a ->
                 new SimpleStringProperty(a.getValue().getCode()));
         colTodayJenis.setCellValueFactory(a ->
@@ -135,16 +147,16 @@ public class DashboardController {
                 new SimpleStringProperty(a.getValue().getSubject() != null ? a.getValue().getSubjectLabel() : ""));
         colTodayKelas.setCellValueFactory(a ->
                 new SimpleStringProperty(a.getValue().getClassroom() != null ? a.getValue().getClassroom().getName() : ""));
-        colTodayRuangan.setCellValueFactory(a ->
-                new SimpleStringProperty(a.getValue().getRoom() != null ? a.getValue().getRoom().getName() : ""));
+        colTodayRuangan.setCellValueFactory(a -> new SimpleStringProperty(placementById.containsKey(a.getValue().getId())
+                ? placementById.get(a.getValue().getId()).getRoomsLabel() : ""));
         colTodayJamMulai.setCellValueFactory(a ->
                 new SimpleStringProperty(a.getValue().getStartTime() != null ? a.getValue().getStartTime().toString() : ""));
         colTodayJamSelesai.setCellValueFactory(a ->
                 new SimpleStringProperty(a.getValue().getEndTime() != null ? a.getValue().getEndTime().toString() : ""));
-        colTodayPengawas.setCellValueFactory(a ->
-                new SimpleStringProperty(a.getValue().getTeacher() != null ? a.getValue().getTeacher().getName() : ""));
+        colTodayPengawas.setCellValueFactory(a -> new SimpleStringProperty(placementById.containsKey(a.getValue().getId())
+                ? placementById.get(a.getValue().getId()).getSupervisorsLabel() : ""));
 
-        tableTodaySchedule.getItems().setAll(examScheduleService.getTodayExamSchedules());
+        tableTodaySchedule.getItems().setAll(todaySchedules);
 
         tableTodaySchedule.setFixedCellSize(35);
         tableTodaySchedule.prefHeightProperty().bind(

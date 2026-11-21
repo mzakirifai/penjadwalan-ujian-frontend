@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.ReportParameters;
 import co.id.model.report.MajorReportItem;
 import co.id.service.ReportService;
 import co.id.service.impl.ReportServiceImpl;
@@ -39,7 +40,7 @@ public class ReportMajorController {
             List<MajorReportItem> data = reportService.getMajorReport();
 
             JRDataSource dataSource = new JRBeanCollectionDataSource(data);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), dataSource);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, ReportParameters.withSchool(new HashMap<>()), dataSource);
 
             JRViewerFX viewerFX = new JRViewerFX(jasperPrint);
             reportPane.getChildren().setAll(viewerFX);

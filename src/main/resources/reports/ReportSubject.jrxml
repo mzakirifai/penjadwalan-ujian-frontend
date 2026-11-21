@@ -3,6 +3,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportSubject" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="406a995c-1183-4623-ac6a-7cda04f4ffad">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="MAJOR_NAME" class="java.lang.String"/>
+	<parameter name="PRINCIPAL_NAME" class="java.lang.String"/>
+	<parameter name="PRINCIPAL_NIP" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -288,20 +290,20 @@ new java.text.SimpleDateFormat(
     new java.util.Locale("id", "ID")
 ).format(new java.util.Date())]]></textFieldExpression>
 			</textField>
-			<staticText>
+			<textField textAdjust="ScaleFont">
 				<reportElement x="342" y="134" width="202" height="17" uuid="15e57d37-e495-475a-ac49-74498cf93141"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[(Dedi Haryanto, S.Kom., M.Pd.)]]></text>
-			</staticText>
-			<staticText>
+				<textFieldExpression><![CDATA["(" + ($P{PRINCIPAL_NAME} != null ? $P{PRINCIPAL_NAME} : "") + ")"]]></textFieldExpression>
+			</textField>
+			<textField>
 				<reportElement x="342" y="154" width="202" height="15" uuid="10e0baa6-6ead-4003-8362-7b67434aa183"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[NIP. 199008172020041001]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["NIP. " + ($P{PRINCIPAL_NIP} != null && !$P{PRINCIPAL_NIP}.trim().isEmpty() ? $P{PRINCIPAL_NIP} : "-")]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

@@ -2,6 +2,8 @@
 <!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportTeacher" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3823b6a7-ea48-432d-b6d2-13869695f6bf">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="PRINCIPAL_NAME" class="java.lang.String"/>
+	<parameter name="PRINCIPAL_NIP" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -280,20 +282,20 @@ new java.text.SimpleDateFormat(
     new java.util.Locale("id", "ID")
 ).format(new java.util.Date())]]></textFieldExpression>
 			</textField>
-			<staticText>
+			<textField textAdjust="ScaleFont">
 				<reportElement x="342" y="141" width="202" height="17" uuid="158e0d9e-f316-4b30-804a-bbe7273c65d8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[(Dedi Haryanto, S.Kom., M.Pd.)]]></text>
-			</staticText>
-			<staticText>
+				<textFieldExpression><![CDATA["(" + ($P{PRINCIPAL_NAME} != null ? $P{PRINCIPAL_NAME} : "") + ")"]]></textFieldExpression>
+			</textField>
+			<textField>
 				<reportElement x="342" y="161" width="202" height="15" uuid="c35916f0-303b-49b2-8d69-b19d8c64ddb4"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[NIP. 199008172020041001]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["NIP. " + ($P{PRINCIPAL_NIP} != null && !$P{PRINCIPAL_NIP}.trim().isEmpty() ? $P{PRINCIPAL_NIP} : "-")]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="1" y="11" width="131" height="20" uuid="9e682281-37a8-4658-9d87-78c34db741d4">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>

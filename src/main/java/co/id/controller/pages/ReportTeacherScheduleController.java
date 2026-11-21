@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.ReportParameters;
 import co.id.component.LookupBox;
 import co.id.model.Teacher;
 import co.id.model.report.ExamScheduleReportItem;
@@ -94,7 +95,7 @@ public class ReportTeacherScheduleController {
             parameters.put("ACADEMIC_YEAR", academicYear);
 
             JRDataSource dataSource = new JRBeanCollectionDataSource(data);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, ReportParameters.withSchool(parameters), dataSource);
 
             JRViewerFX viewerFX = new JRViewerFX(jasperPrint);
             reportPane.getChildren().setAll(viewerFX);

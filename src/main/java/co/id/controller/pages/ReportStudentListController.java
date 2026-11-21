@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.ReportParameters;
 import co.id.component.LookupBox;
 import co.id.model.Classroom;
 import co.id.model.Student;
@@ -73,7 +74,7 @@ public class ReportStudentListController {
             parameters.put("MAJOR_NAME", classroomDetail.getMajor() != null ? classroomDetail.getMajor().getName() : "-");
 
             JRDataSource dataSource = new JRBeanCollectionDataSource(data);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, ReportParameters.withSchool(parameters), dataSource);
 
             JRViewerFX viewerFX = new JRViewerFX(jasperPrint);
             reportPane.getChildren().setAll(viewerFX);
