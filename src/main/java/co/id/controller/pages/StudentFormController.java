@@ -12,13 +12,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class StudentFormController {
-    @FXML private TextField textFieldNis, textFieldNisn, textFieldName;
+    @FXML private TextField textFieldNis, textFieldNisn, textFieldName, textFieldAdminNote;
+    @FXML private ComboBox<String> comboAdminStatus;
     @FXML private LookupBox<Classroom> lookupBoxClassroom;
     @FXML private RadioButton radioMale, radioFemale;
     @FXML private Button saveBtn;
@@ -37,6 +39,9 @@ public class StudentFormController {
         lookupBoxClassroom.configure(
                 () -> masterService.getAllClassrooms(), List.of(colName), Classroom::getName
         );
+
+        comboAdminStatus.getItems().setAll(Student.ADMIN_PAID, Student.ADMIN_UNPAID);
+        comboAdminStatus.setValue(Student.ADMIN_PAID);
     }
     
     public void setStudent(Student student) {
@@ -56,6 +61,9 @@ public class StudentFormController {
             } else if ("Perempuan".equals(student.getGender())) {
                 radioFemale.setSelected(true);
             }
+
+            comboAdminStatus.setValue(student.getAdminStatus() != null ? student.getAdminStatus() : Student.ADMIN_PAID);
+            textFieldAdminNote.setText(student.getAdminNote());
         }
     }
     
@@ -89,6 +97,8 @@ public class StudentFormController {
         student.setName(name);
         student.setGender(gender);
         student.setClassroom(classroom);
+        student.setAdminStatus(comboAdminStatus.getValue());
+        student.setAdminNote(textFieldAdminNote.getText());
 
         Alert alert;
         try {

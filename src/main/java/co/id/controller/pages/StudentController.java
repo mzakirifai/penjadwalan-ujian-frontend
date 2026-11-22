@@ -1,6 +1,7 @@
 package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
+import co.id.component.ExcelImportActions;
 import co.id.component.LookupBox;
 import co.id.model.Classroom;
 import co.id.model.Student;
@@ -26,6 +27,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -58,7 +61,9 @@ public class StudentController {
     @FXML private TableView<Student> tableView;
     
     @FXML private TableColumn<Student, String> tableColumnNis, tableColumnNisn, tableColumnName, tableColumnClassroom,
-            tableColumnGender;
+            tableColumnGender, tableColumnAdminStatus;
+    @FXML private MenuButton adminStatusBtn;
+    @FXML private MenuItem adminStatusImportItem, adminStatusTemplateItem;
     @FXML private TableColumn<Student, Void> tableColumnAction;
 
     @FXML private Pagination pagination;
@@ -92,6 +97,24 @@ public class StudentController {
         tableColumnClassroom.setCellValueFactory(s ->
                 new SimpleStringProperty(s.getValue().getClassroom() != null ? s.getValue().getClassroom().getName() : "-"));
         tableColumnGender.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getGender()));
+        // "Belum Lunas" (beserta keterangannya) ditulis merah supaya mudah terlihat
+        tableColumnAdminStatus.setCellValueFactory(s -> {
+            Student st = s.getValue();
+            String text = st.getAdminStatus() == null ? Student.ADMIN_PAID : st.getAdminStatus();
+            if (st.getAdminNote() != null && !st.getAdminNote().isBlank()) {
+                text += " (" + st.getAdminNote() + ")";
+            }
+            return new SimpleStringProperty(text);
+        });
+        tableColumnAdminStatus.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : item);
+                setStyle(!empty && item != null && item.startsWith(Student.ADMIN_UNPAID)
+                        ? "-fx-text-fill: #c62828; -fx-font-weight: bold;" : "");
+            }
+        });
 
         tableColumnAction.setCellFactory(clbck -> new TableCell<>() {
             private final Button buttonEdit = new Button("Edit");
@@ -165,7 +188,12 @@ public class StudentController {
         if (!AuthContext.isAdmin()) {
             importBtn.setVisible(false);
             importBtn.setManaged(false);
+            adminStatusBtn.setVisible(false);
+            adminStatusBtn.setManaged(false);
         }
+        adminStatusImportItem.setOnAction(eh -> ExcelImportActions.importAdminStatuses(
+                (Region) adminStatusBtn.getScene().getRoot(), adminStatusBtn.getScene().getWindow(), this::refreshTable));
+        adminStatusTemplateItem.setOnAction(eh -> ExcelImportActions.saveAdminStatusTemplate(adminStatusBtn.getScene().getWindow()));
 
         // Hapus kelompok (satu kelas sekaligus) hanya untuk admin, sama seperti tombol Hapus per siswa
         if (!AuthContext.isAdmin()) {

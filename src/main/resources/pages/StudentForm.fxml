@@ -26,6 +26,12 @@
         <RadioButton fx:id="radioFemale" text="Perempuan"/>
     </HBox>
 
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Administrasi :"/>
+        <ComboBox fx:id="comboAdminStatus" prefWidth="140"/>
+    </HBox>
+    <TextField fx:id="textFieldAdminNote" promptText="Keterangan administrasi (opsional, mis. dispensasi s.d. 30 Nov)"/>
+
     <VBox styleClass="form-vbox"/>
 
     <HBox alignment="CENTER_RIGHT">

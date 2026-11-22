@@ -5,6 +5,7 @@ import co.id.importer.ExcelGridReader;
 import co.id.importer.ExcelTemplateWriter;
 import co.id.importer.ImportItem;
 import co.id.importer.TableParser;
+import co.id.importer.AdminStatusImportParser;
 import co.id.importer.ScoreImportParser;
 import co.id.importer.SubjectImportParser;
 import co.id.importer.TeachingAssignmentImportParser;
@@ -12,6 +13,7 @@ import co.id.importer.TeacherImportParser;
 import co.id.model.ExamParticipant;
 import co.id.model.ExamSchedule;
 import co.id.model.ExamScore;
+import co.id.model.Student;
 import co.id.model.Subject;
 import co.id.model.Teacher;
 import co.id.model.TeachingAssignment;
@@ -171,6 +173,66 @@ public class ExcelImportActions {
                 "Contoh baris: Nama Guru, S.Kom | (kosong) | M10 | DDPK | 1 | X TKJ 1");
 
         saveTemplate(owner, "template-import-pengampu.xlsx", "Pengampu", TeachingAssignmentImportParser.COLUMNS, notes);
+    }
+
+    // ------------------------------------------------------------------ Status administrasi siswa
+
+    public static void importAdminStatuses(Region mainRoot, Window owner, Runnable onImported) {
+        File file = chooseExcel(owner, "Pilih file Excel status administrasi");
+        if (file == null) {
+            return;
+        }
+
+        try {
+            List<TableParser.Row> rows = readRows(file, AdminStatusImportParser.ALIASES, AdminStatusImportParser.REQUIRED, Set.of());
+            if (rows.isEmpty()) {
+                noData("NIS dan Status");
+                return;
+            }
+
+            MasterService service = new MasterServiceImpl();
+            // getStudentBy("") memuat kelas siswa (untuk ditampilkan di pratinjau)
+            List<ImportItem<Student>> items = AdminStatusImportParser.parse(rows, service.getStudentBy(""));
+            if (items.isEmpty()) {
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Semua status di file sama dengan data sekarang. Tidak ada yang perlu diubah.").showAndWait();
+                return;
+            }
+
+            ImportPreviewDialog.show(mainRoot, "Import Status Administrasi", file.getName(),
+                    AdminStatusImportParser.COLUMNS, items,
+                    list -> service.importAdminStatuses(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
+                    onImported);
+        } catch (Exception ex) {
+            readError(ex);
+        }
+    }
+
+    /** Template berisi semua siswa beserta status sekarang, supaya bagian keuangan cukup mengubah kolom Status. */
+    public static void saveAdminStatusTemplate(Window owner) {
+        List<String> notes = List.of(
+                "PETUNJUK PENGISIAN STATUS ADMINISTRASI",
+                "Sheet pertama sudah berisi semua siswa beserta statusnya saat ini. Cukup ubah kolom Status (dan Keterangan bila perlu).",
+                "Status diisi Lunas atau Belum Lunas.",
+                "Siswa Belum Lunas otomatis tidak dicentang saat memilih peserta ujian. Admin tetap bisa mencentangnya (dispensasi).",
+                "Kolom wajib: NIS dan Status. Nama Siswa dan Kelas hanya petunjuk, tidak mengubah data siswa.",
+                "Baris boleh dihapus; siswa yang tidak ada di file tidak berubah statusnya.",
+                "Jangan mengubah judul kolom di baris 1.");
+
+        MasterService service = new MasterServiceImpl();
+        List<List<String>> rows = service.getStudentBy("").stream()
+                .sorted(java.util.Comparator
+                        .comparing((Student s) -> s.getClassroom() != null ? s.getClassroom().getName() : "")
+                        .thenComparing(s -> s.getName() == null ? "" : s.getName()))
+                .map(s -> List.of(
+                        s.getNis() == null ? "" : s.getNis(),
+                        s.getName() == null ? "" : s.getName(),
+                        s.getClassroom() != null ? s.getClassroom().getName() : "",
+                        s.getAdminStatus() == null ? Student.ADMIN_PAID : s.getAdminStatus(),
+                        s.getAdminNote() == null ? "" : s.getAdminNote()))
+                .toList();
+
+        saveTemplate(owner, "status-administrasi-siswa.xlsx", "Status Administrasi", AdminStatusImportParser.COLUMNS, notes, rows);
     }
 
     // ------------------------------------------------------------------ Nilai ujian

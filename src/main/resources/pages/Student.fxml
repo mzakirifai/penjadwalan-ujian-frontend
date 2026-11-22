@@ -43,6 +43,12 @@
                         </ImageView>
                     </graphic>
                 </Button>
+                <MenuButton fx:id="adminStatusBtn" text="Status Administrasi">
+                    <items>
+                        <MenuItem fx:id="adminStatusImportItem" text="Import dari Excel keuangan"/>
+                        <MenuItem fx:id="adminStatusTemplateItem" text="Download template (berisi semua siswa)"/>
+                    </items>
+                </MenuButton>
                 <Button fx:id="importBtn" text="Import Excel" styleClass="list-menu-top-button">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">
@@ -71,6 +77,7 @@
                     <TableColumn fx:id="tableColumnName" text="Nama" prefWidth="180"/>
                     <TableColumn fx:id="tableColumnClassroom" text="Kelas" prefWidth="120"/>
                     <TableColumn fx:id="tableColumnGender" text="Jenis Kelamin" prefWidth="110"/>
+                    <TableColumn fx:id="tableColumnAdminStatus" text="Administrasi" prefWidth="160"/>
                 </columns>
             </TableView>
         </VBox>
