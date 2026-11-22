@@ -7,18 +7,22 @@ import co.id.importer.ImportItem;
 import co.id.importer.TableParser;
 import co.id.importer.ScoreImportParser;
 import co.id.importer.SubjectImportParser;
+import co.id.importer.TeachingAssignmentImportParser;
 import co.id.importer.TeacherImportParser;
 import co.id.model.ExamParticipant;
 import co.id.model.ExamSchedule;
 import co.id.model.ExamScore;
 import co.id.model.Subject;
 import co.id.model.Teacher;
+import co.id.model.TeachingAssignment;
 import co.id.service.ExamParticipantService;
 import co.id.service.ExamScoreService;
 import co.id.service.MasterService;
+import co.id.service.TeachingAssignmentService;
 import co.id.service.impl.ExamParticipantServiceImpl;
 import co.id.service.impl.ExamScoreServiceImpl;
 import co.id.service.impl.MasterServiceImpl;
+import co.id.service.impl.TeachingAssignmentServiceImpl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +34,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 /**
- * Aksi tombol "Import Excel" dan "Template" untuk halaman Guru, Mapel, dan Nilai.
+ * Aksi tombol "Import Excel" dan "Template" untuk halaman Guru, Mapel, Pengampu, dan Nilai.
  * Controller cukup memanggil method di sini.
  */
 public class ExcelImportActions {
@@ -118,6 +122,55 @@ public class ExcelImportActions {
                 "Contoh baris: (kosong) | Dasar-dasar Program Keahlian | Kejuruan | TKJ | X | 75");
 
         saveTemplate(owner, "template-import-mapel.xlsx", "Mapel", SubjectImportParser.COLUMNS, notes);
+    }
+
+    // ------------------------------------------------------------------ Pengampu
+
+    public static void importTeachingAssignments(Region mainRoot, Window owner, Runnable onImported) {
+        File file = chooseExcel(owner, "Pilih file Excel data pengampu");
+        if (file == null) {
+            return;
+        }
+
+        try {
+            List<TableParser.Row> rows = readRows(file, TeachingAssignmentImportParser.ALIASES,
+                    TeachingAssignmentImportParser.REQUIRED, Set.of());
+            if (rows.isEmpty()) {
+                noData("Guru dan Kelas (serta Kode Mapel atau Mapel)");
+                return;
+            }
+
+            MasterService masterService = new MasterServiceImpl();
+            TeachingAssignmentService service = new TeachingAssignmentServiceImpl();
+            // getClassroomBy("") memuat jurusan kelas (dibutuhkan untuk cek mapel berlaku di kelas itu)
+            List<ImportItem<TeachingAssignment>> items = TeachingAssignmentImportParser.parse(rows,
+                    masterService.getAllTeachers(), masterService.getAllSubjects(), masterService.getClassroomBy(""),
+                    service.getAllTeachingAssignments());
+
+            ImportPreviewDialog.show(mainRoot, "Import Pengampu dari Excel", file.getName(),
+                    TeachingAssignmentImportParser.COLUMNS, items,
+                    list -> service.importTeachingAssignments(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
+                    onImported);
+        } catch (Exception ex) {
+            readError(ex);
+        }
+    }
+
+    public static void saveTeachingAssignmentTemplate(Window owner) {
+        List<String> notes = List.of(
+                "PETUNJUK PENGISIAN TEMPLATE PENGAMPU",
+                "Import Guru dan Mapel lebih dulu: pengampu hanya bisa merujuk guru, mapel, dan kelas yang sudah ada di aplikasi.",
+                "Isi data di sheet pertama, mulai dari baris 2. Satu baris = satu guru mengajar satu mapel di satu kelas.",
+                "Guru: nama lengkap sesuai menu Guru (perbedaan penulisan gelar masih dikenali). Bila ada nama guru yang sama, isi kolom NIP.",
+                "Kode Mapel: kode di menu Mapel (mis. M10). Boleh dikosongkan bila kolom Mapel berisi nama mapel yang tidak kembar.",
+                "Kode Guru: angka 1 - 99 untuk mapel yang diajar beberapa guru, mis. DDPK TKJ (1), (2), (3). Kosongkan bila tidak perlu.",
+                "Dalam satu mapel, satu Kode Guru hanya boleh dipakai satu guru.",
+                "Kelas: nama kelas sesuai menu Kelas (mis. X TKJ 1). Mapel harus berlaku untuk kelasnya (jurusan dan tingkat).",
+                "Pengampu yang sudah terdaftar (guru, mapel, kelas sama) tidak diimport ulang.",
+                "File data-mapel-pengampu dari sheet \"Pengampu (Rinci)\" bisa langsung diimpor.",
+                "Contoh baris: Nama Guru, S.Kom | (kosong) | M10 | DDPK | 1 | X TKJ 1");
+
+        saveTemplate(owner, "template-import-pengampu.xlsx", "Pengampu", TeachingAssignmentImportParser.COLUMNS, notes);
     }
 
     // ------------------------------------------------------------------ Nilai ujian

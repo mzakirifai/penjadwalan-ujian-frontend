@@ -1,6 +1,7 @@
 package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
+import co.id.component.ExcelImportActions;
 import co.id.model.Teacher;
 import co.id.model.TeachingAssignment;
 import co.id.service.TeachingAssignmentService;
@@ -53,6 +54,8 @@ public class TeachingAssignmentController {
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
     @FXML private Button addBtn;
+    @FXML private Button importBtn;
+    @FXML private Button templateBtn;
     @FXML private TreeTableView<RowData> tableView;
 
     @FXML private TreeTableColumn<RowData, String> tableColumnTeacher, tableColumnNip, tableColumnSubject, tableColumnClassroom;
@@ -220,6 +223,17 @@ public class TeachingAssignmentController {
             currentKeyword = "";
             reload();
         });
+
+        // Import Excel hanya untuk admin (sama seperti hak akses menyimpan data pengampu)
+        if (!AuthContext.isAdmin()) {
+            importBtn.setVisible(false);
+            importBtn.setManaged(false);
+            templateBtn.setVisible(false);
+            templateBtn.setManaged(false);
+        }
+        importBtn.setOnAction(eh -> ExcelImportActions.importTeachingAssignments(
+                (Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::reload));
+        templateBtn.setOnAction(eh -> ExcelImportActions.saveTeachingAssignmentTemplate(templateBtn.getScene().getWindow()));
 
         reload();
     }
