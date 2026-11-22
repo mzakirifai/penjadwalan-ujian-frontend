@@ -1,0 +1,13 @@
+# Contoh konfigurasi koneksi database.
+# Salin file ini menjadi config/connection.properties (folder config/ tidak ikut ke git),
+# lalu isi username dan password database yang sebenarnya.
+#
+# Bila aplikasi dipakai di beberapa komputer, ganti "localhost" dengan alamat IP komputer server
+# database, mis. jdbc:mysql://192.168.1.10:3306/penjadwalan_ujian_db
+jdbc.driver=com.mysql.cj.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/penjadwalan_ujian_db
+jdbc.username=ISI_USERNAME_DATABASE
+jdbc.password=ISI_PASSWORD_DATABASE
+jdbc.pool.timeout=30000
+jdbc.pool.max=5
+jdbc.pool.min=1
