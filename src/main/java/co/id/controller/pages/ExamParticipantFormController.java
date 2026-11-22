@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 public class ExamParticipantFormController {
     @FXML private LookupBox<Student> lookupBoxStudent;
     @FXML private TextField textFieldParticipantNumber;
-    @FXML private TextField textFieldSeatNumber;
     @FXML private Button saveBtn;
 
     private ExamParticipantService examParticipantService;
@@ -53,15 +52,13 @@ public class ExamParticipantFormController {
     private void saveEntity() {
         Student student = lookupBoxStudent.getSelectedItem();
         String participantNumber = textFieldParticipantNumber.getText();
-        String seatNumber = textFieldSeatNumber.getText();
 
         if (student == null) {
             new Alert(AlertType.WARNING, "Siswa wajib dipilih").showAndWait();
             return;
         }
-        if (participantNumber == null || participantNumber.isBlank()
-                || seatNumber == null || seatNumber.isBlank()) {
-            new Alert(AlertType.WARNING, "No. Peserta dan No. Kursi wajib diisi").showAndWait();
+        if (participantNumber == null || participantNumber.isBlank()) {
+            new Alert(AlertType.WARNING, "No. Peserta wajib diisi").showAndWait();
             return;
         }
         if (!participantNumber.matches("\\d+")) {
@@ -73,7 +70,6 @@ public class ExamParticipantFormController {
         participant.setExamSchedule(examSchedule);
         participant.setStudent(student);
         participant.setParticipantNumber(participantNumber);
-        participant.setSeatNumber(seatNumber);
 
         try {
             examParticipantService.save(participant, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());

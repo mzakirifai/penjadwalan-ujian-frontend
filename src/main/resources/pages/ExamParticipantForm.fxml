@@ -17,7 +17,7 @@
     <LookupBox fx:id="lookupBoxStudent" promptText="Pilih Siswa"/>
 
     <TextField fx:id="textFieldParticipantNumber" promptText="No. Peserta"/>
-    <TextField fx:id="textFieldSeatNumber" promptText="No. Kursi"/>
+    <Label text="No. Kursi diatur di menu Penempatan Ruangan."/>
 
     <VBox styleClass="form-vbox"/>
 

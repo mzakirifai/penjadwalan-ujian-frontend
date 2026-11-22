@@ -117,9 +117,9 @@ public class ExamParticipantController {
                 new EditableCell<ExamParticipant>(ExamParticipant::getParticipantNumber,
                         ExamParticipant::setParticipantNumber, () -> editingRowIndex));
 
-        tableColumnSeatNumber.setCellFactory(tc ->
-                new EditableCell<ExamParticipant>(ExamParticipant::getSeatNumber,
-                        ExamParticipant::setSeatNumber, () -> editingRowIndex));
+        // No. Kursi hasil Penempatan Ruangan (tidak bisa diedit di sini); "-" bila belum ditempatkan
+        tableColumnSeatNumber.setCellValueFactory(p -> new SimpleStringProperty(
+                p.getValue().getSeatNumber() != null ? p.getValue().getSeatNumber() : "-"));
 
         tableColumnAction.setCellFactory(params -> new TableCell<>() {
             private final Button btnEdit = new Button("Edit");
@@ -176,9 +176,8 @@ public class ExamParticipantController {
                 btnSave.setOnAction(e -> {
                     ExamParticipant participant = getTableView().getItems().get(getIndex());
 
-                    if (participant.getParticipantNumber() == null || participant.getParticipantNumber().isBlank()
-                            || participant.getSeatNumber() == null || participant.getSeatNumber().isBlank()) {
-                        new Alert(AlertType.WARNING, "No. Peserta dan No. Kursi wajib diisi").showAndWait();
+                    if (participant.getParticipantNumber() == null || participant.getParticipantNumber().isBlank()) {
+                        new Alert(AlertType.WARNING, "No. Peserta wajib diisi").showAndWait();
                         return;
                     }
 
@@ -329,7 +328,8 @@ public class ExamParticipantController {
         Alert confirm = new Alert(AlertType.CONFIRMATION,
                 "Daftarkan " + notRegisteredYet.size() + " siswa dari kelas \""
                         + selectedExamSchedule.getClassroom().getName() + "\" sebagai peserta ujian ini?\n"
-                        + "Nomor peserta & kursi akan digenerate otomatis secara berurutan.",
+                        + "Nomor peserta akan digenerate otomatis secara berurutan.\n"
+                        + "No. Kursi diatur nanti di menu Penempatan Ruangan.",
                 ButtonType.YES, ButtonType.NO);
         confirm.setTitle("Konfirmasi Pendaftaran Massal");
         confirm.setHeaderText(null);
@@ -351,7 +351,6 @@ public class ExamParticipantController {
             participant.setExamSchedule(selectedExamSchedule);
             participant.setStudent(student);
             participant.setParticipantNumber(String.format("%03d", seq));
-            participant.setSeatNumber(String.format("K%02d", seq));
 
             try {
                 examParticipantService.save(participant, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
