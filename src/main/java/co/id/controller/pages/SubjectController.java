@@ -1,6 +1,7 @@
 package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
+import co.id.component.ExcelImportActions;
 import co.id.model.Subject;
 import co.id.service.MasterService;
 import co.id.service.impl.MasterServiceImpl;
@@ -35,6 +36,8 @@ public class SubjectController {
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
     @FXML private Button addBtn;
+    @FXML private Button importBtn;
+    @FXML private Button templateBtn;
     @FXML private TableView<Subject> tableView;
     
     @FXML private TableColumn<Subject, String> tableColumnCode, tableColumnName, tableColumnGrade,
@@ -132,6 +135,17 @@ public class SubjectController {
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
         refreshBtn.setOnAction(e -> refreshTable());
+
+        // Import Excel hanya untuk admin (sama seperti hak akses menyimpan data master)
+        if (!AuthContext.isAdmin()) {
+            importBtn.setVisible(false);
+            importBtn.setManaged(false);
+            templateBtn.setVisible(false);
+            templateBtn.setManaged(false);
+        }
+        importBtn.setOnAction(eh -> ExcelImportActions.importSubjects(
+                (Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::refreshTable));
+        templateBtn.setOnAction(eh -> ExcelImportActions.saveSubjectTemplate(templateBtn.getScene().getWindow()));
     }
     
     private void filterItems() {

@@ -6,10 +6,12 @@ import co.id.importer.ExcelTemplateWriter;
 import co.id.importer.ImportItem;
 import co.id.importer.TableParser;
 import co.id.importer.ScoreImportParser;
+import co.id.importer.SubjectImportParser;
 import co.id.importer.TeacherImportParser;
 import co.id.model.ExamParticipant;
 import co.id.model.ExamSchedule;
 import co.id.model.ExamScore;
+import co.id.model.Subject;
 import co.id.model.Teacher;
 import co.id.service.ExamParticipantService;
 import co.id.service.ExamScoreService;
@@ -28,7 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 /**
- * Aksi tombol "Import Excel" dan "Template" untuk halaman Guru dan Mapel.
+ * Aksi tombol "Import Excel" dan "Template" untuk halaman Guru, Mapel, dan Nilai.
  * Controller cukup memanggil method di sini.
  */
 public class ExcelImportActions {
@@ -72,6 +74,50 @@ public class ExcelImportActions {
                 "Contoh baris: 199001012020011001 | Nama Guru Contoh, S.Pd. | P | 081234567890 | contoh@email.com | Jl. Contoh No. 1");
 
         saveTemplate(owner, "template-import-guru.xlsx", "Guru", TeacherImportParser.COLUMNS, notes);
+    }
+
+    // ------------------------------------------------------------------ Mapel
+
+    public static void importSubjects(Region mainRoot, Window owner, Runnable onImported) {
+        File file = chooseExcel(owner, "Pilih file Excel data mapel");
+        if (file == null) {
+            return;
+        }
+
+        try {
+            List<TableParser.Row> rows = readRows(file, SubjectImportParser.ALIASES, SubjectImportParser.REQUIRED, Set.of());
+            if (rows.isEmpty()) {
+                noData("Nama Mapel dan Jenis");
+                return;
+            }
+
+            MasterService service = new MasterServiceImpl();
+            List<ImportItem<Subject>> items = SubjectImportParser.parse(rows, service.getAllSubjects(), service.getAllMajors());
+
+            ImportPreviewDialog.show(mainRoot, "Import Mapel dari Excel", file.getName(),
+                    SubjectImportParser.COLUMNS, items,
+                    list -> service.importSubjects(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
+                    onImported);
+        } catch (Exception ex) {
+            readError(ex);
+        }
+    }
+
+    public static void saveSubjectTemplate(Window owner) {
+        List<String> notes = List.of(
+                "PETUNJUK PENGISIAN TEMPLATE MAPEL",
+                "Isi data di sheet pertama, mulai dari baris 2. Jangan mengubah judul kolom di baris 1.",
+                "Kolom wajib: Nama Mapel, Jenis. Kolom lain boleh kosong.",
+                "Jenis diisi Umum atau Kejuruan. Mapel Umum: kolom Jurusan dikosongkan. Mapel Kejuruan: Jurusan wajib diisi.",
+                "Jurusan diisi singkatan (mis. TKJ, DKV, TP) atau nama lengkap jurusan, sesuai data di menu Jurusan.",
+                "Tingkat diisi X, XI, atau XII. Kosongkan bila mapel berlaku untuk semua tingkat.",
+                "KKM diisi angka 0 - 100. Bila kosong, dipakai KKM " + SubjectImportParser.DEFAULT_KKM + ".",
+                "Kode Mapel boleh kosong (dibuat otomatis, mis. M16). Isi bila sheet Pengampu di file yang sama "
+                        + "merujuk mapel lewat kodenya. Kode tidak boleh sama dengan mapel lain.",
+                "Mapel yang sudah terdaftar (kode sama, atau nama + jurusan + tingkat sama) tidak diimport ulang.",
+                "Contoh baris: (kosong) | Dasar-dasar Program Keahlian | Kejuruan | TKJ | X | 75");
+
+        saveTemplate(owner, "template-import-mapel.xlsx", "Mapel", SubjectImportParser.COLUMNS, notes);
     }
 
     // ------------------------------------------------------------------ Nilai ujian
