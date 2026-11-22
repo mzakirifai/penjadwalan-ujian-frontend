@@ -4,6 +4,8 @@ import co.id.auth.AuthContext;
 import co.id.model.Teacher;
 import co.id.service.MasterService;
 import co.id.service.impl.MasterServiceImpl;
+import co.id.service.TeachingAssignmentService;
+import co.id.service.impl.TeachingAssignmentServiceImpl;
 import java.io.IOException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -47,6 +49,7 @@ public class TeacherController {
     @FXML private Pagination pagination;
 
     private MasterService masterService;
+    private final TeachingAssignmentService teachingAssignmentService = new TeachingAssignmentServiceImpl();
     private ObservableList<Teacher> observableList;
 
     private ImageView createIcon(String path) {
@@ -94,9 +97,20 @@ public class TeacherController {
                 buttonDelete.setOnAction(eh -> {
                     Teacher teacher = getTableView().getItems().get(getIndex());
 
-                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                            "Yakin ingin menghapus data guru \"" + teacher.getName() + "\"?",
-                            ButtonType.YES, ButtonType.NO);
+                    // Data pengampu guru ikut terhapus (FK CASCADE), jadi jumlahnya disebutkan di konfirmasi
+                    int assignmentCount;
+                    try {
+                        assignmentCount = teachingAssignmentService.getByTeacher(teacher.getId()).size();
+                    } catch (Exception ex) {
+                        new Alert(Alert.AlertType.ERROR, "Gagal memeriksa data pengampu: " + ex.getMessage()).showAndWait();
+                        return;
+                    }
+                    String message = "Yakin ingin menghapus data guru \"" + teacher.getName() + "\"?";
+                    if (assignmentCount > 0) {
+                        message += "\n\n" + assignmentCount + " data pengampu ikut terhapus.";
+                    }
+
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
                     confirm.setTitle("Konfirmasi Hapus");
                     confirm.setHeaderText(null);
 
