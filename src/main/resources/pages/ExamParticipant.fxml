@@ -31,7 +31,7 @@
                     </graphic>
                 </Button>
                 <HBox HBox.hgrow="ALWAYS"/>
-                <Button fx:id="registerAllBtn" text="Daftarkan Semua Siswa Kelas Ini" styleClass="list-menu-top-button"/>
+                <Button fx:id="registerAllBtn" text="Pilih &amp; Daftarkan Siswa Kelas Ini" styleClass="list-menu-top-button"/>
                 <Button fx:id="addBtn" text="Tambah 1 Siswa" styleClass="list-menu-top-button"/>
             </HBox>
         </VBox>
@@ -48,6 +48,7 @@
                     <TableColumn fx:id="tableColumnParticipantNumber" text="No. Peserta" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnRoom" text="Ruangan" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnSeatNumber" text="No. Kursi" prefWidth="100"/>
+                    <TableColumn fx:id="tableColumnAdminStatus" text="Administrasi" prefWidth="160"/>
                 </columns>
             </TableView>
         </VBox>

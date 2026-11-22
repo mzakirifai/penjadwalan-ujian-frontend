@@ -66,6 +66,17 @@ public class ExamParticipantFormController {
             return;
         }
 
+        // Siswa Belum Lunas tetap boleh didaftarkan manual (dispensasi), tetapi admin diminta memastikan dulu
+        if (student.isAdminUnpaid()) {
+            Alert confirm = new Alert(AlertType.CONFIRMATION, "Status administrasi " + student.getName() + " Belum Lunas"
+                    + (student.getAdminNote() != null && !student.getAdminNote().isBlank() ? " (" + student.getAdminNote() + ")" : "")
+                    + ".\nTetap daftarkan sebagai peserta ujian?", javafx.scene.control.ButtonType.YES, javafx.scene.control.ButtonType.NO);
+            confirm.setHeaderText(null);
+            if (confirm.showAndWait().orElse(javafx.scene.control.ButtonType.NO) != javafx.scene.control.ButtonType.YES) {
+                return;
+            }
+        }
+
         ExamParticipant participant = new ExamParticipant();
         participant.setExamSchedule(examSchedule);
         participant.setStudent(student);

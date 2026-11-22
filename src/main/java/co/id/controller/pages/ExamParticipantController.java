@@ -3,6 +3,7 @@ package co.id.controller.pages;
 import co.id.auth.AuthContext;
 import co.id.component.EditableCell;
 import co.id.component.LookupBox;
+import co.id.component.ParticipantPickerDialog;
 import co.id.model.ExamParticipant;
 import co.id.model.ExamSchedule;
 import co.id.model.Student;
@@ -48,6 +49,7 @@ public class ExamParticipantController {
     @FXML private TextField searchField;
     @FXML private Button filterBtn;
 
+    @FXML private TableColumn<ExamParticipant, String> tableColumnAdminStatus;
     @FXML private TableColumn<ExamParticipant, String> tableColumnCode, tableColumnNis, tableColumnName,
             tableColumnParticipantNumber, tableColumnSeatNumber, tableColumnRoom;
     @FXML private TableColumn<ExamParticipant, Void> tableColumnAction;
@@ -108,6 +110,28 @@ public class ExamParticipantController {
                 new SimpleStringProperty(p.getValue().getStudent() != null ? p.getValue().getStudent().getNis() : "-"));
         tableColumnName.setCellValueFactory(p ->
                 new SimpleStringProperty(p.getValue().getStudent() != null ? p.getValue().getStudent().getName() : "-"));
+
+        // Tanda "Belum Lunas" untuk peserta yang status administrasinya belum lunas (keputusan tetap di admin)
+        tableColumnAdminStatus.setCellValueFactory(p -> {
+            Student st = p.getValue().getStudent();
+            if (st == null) {
+                return new SimpleStringProperty("-");
+            }
+            String text = st.getAdminStatus() == null ? Student.ADMIN_PAID : st.getAdminStatus();
+            if (st.getAdminNote() != null && !st.getAdminNote().isBlank()) {
+                text += " (" + st.getAdminNote() + ")";
+            }
+            return new SimpleStringProperty(text);
+        });
+        tableColumnAdminStatus.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : item);
+                setStyle(!empty && item != null && item.startsWith(Student.ADMIN_UNPAID)
+                        ? "-fx-text-fill: #c62828; -fx-font-weight: bold;" : "");
+            }
+        });
 
         // Ruangan peserta hasil Penempatan Ruangan; "-" bila belum ditempatkan
         tableColumnRoom.setCellValueFactory(p -> new SimpleStringProperty(
@@ -263,7 +287,10 @@ public class ExamParticipantController {
         } catch (Exception ex) {
             rooms = "-";
         }
-        lblCapacityInfo.setText("Terdaftar: " + registered + " peserta  |  Ruangan: " + rooms);
+        long unpaid = observableList.stream()
+                .filter(p -> p.getStudent() != null && p.getStudent().isAdminUnpaid()).count();
+        lblCapacityInfo.setText("Terdaftar: " + registered + " peserta  |  Ruangan: " + rooms
+                + (unpaid > 0 ? "  |  Belum lunas: " + unpaid : ""));
     }
 
     private void openAddForm() {
@@ -325,26 +352,35 @@ public class ExamParticipantController {
             return;
         }
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION,
-                "Daftarkan " + notRegisteredYet.size() + " siswa dari kelas \""
-                        + selectedExamSchedule.getClassroom().getName() + "\" sebagai peserta ujian ini?\n"
-                        + "Nomor peserta akan digenerate otomatis secara berurutan.\n"
-                        + "No. Kursi diatur nanti di menu Penempatan Ruangan.",
-                ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Konfirmasi Pendaftaran Massal");
-        confirm.setHeaderText(null);
-
-        boolean proceed = confirm.showAndWait().map(r -> r == ButtonType.YES).orElse(false);
-        if (!proceed) {
+        // Admin memilih siswa yang ikut: Belum Lunas otomatis tidak dicentang, tetapi bisa dicentang manual
+        String title = (selectedExamSchedule.getCode() != null ? selectedExamSchedule.getCode() + " - " : "")
+                + (selectedExamSchedule.getSubject() != null ? selectedExamSchedule.getSubject().getName() : "")
+                + " | Kelas: " + selectedExamSchedule.getClassroom().getName();
+        List<Student> chosen = ParticipantPickerDialog.show((Region) registerAllBtn.getScene().getRoot(),
+                title, notRegisteredYet, alreadyRegistered.size());
+        if (chosen == null) {
             return;
         }
+        if (chosen.isEmpty()) {
+            new Alert(AlertType.INFORMATION, "Tidak ada siswa yang dicentang. Tidak ada yang didaftarkan.").showAndWait();
+            return;
+        }
+        chosen = chosen.stream()
+                .sorted(java.util.Comparator.comparing(s -> s.getName() == null ? "" : s.getName(), String.CASE_INSENSITIVE_ORDER))
+                .toList();
 
-        int startingNumber = alreadyRegistered.size() + 1;
+        // Nomor peserta lanjut dari nomor terbesar yang sudah ada (bukan dari jumlah peserta), supaya tidak bentrok
+        // bila ada peserta yang pernah dihapus
+        int startingNumber = alreadyRegistered.stream()
+                .map(ExamParticipant::getParticipantNumber)
+                .filter(n -> n != null && n.matches("\\d+"))
+                .mapToInt(Integer::parseInt)
+                .max().orElse(0) + 1;
         int successCount = 0;
         StringBuilder failedMessages = new StringBuilder();
 
-        for (int i = 0; i < notRegisteredYet.size(); i++) {
-            Student student = notRegisteredYet.get(i);
+        for (int i = 0; i < chosen.size(); i++) {
+            Student student = chosen.get(i);
             int seq = startingNumber + i;
 
             ExamParticipant participant = new ExamParticipant();
@@ -362,7 +398,11 @@ public class ExamParticipantController {
 
         refreshTable();
 
-        String summary = "Berhasil mendaftarkan " + successCount + " dari " + notRegisteredYet.size() + " siswa.";
+        String summary = "Berhasil mendaftarkan " + successCount + " dari " + chosen.size() + " siswa yang dipilih.";
+        int skipped = notRegisteredYet.size() - chosen.size();
+        if (skipped > 0) {
+            summary += "\n" + skipped + " siswa tidak dicentang, jadi tidak didaftarkan.";
+        }
         if (failedMessages.length() > 0) {
             summary += "\n\nGagal:\n" + failedMessages;
         }
