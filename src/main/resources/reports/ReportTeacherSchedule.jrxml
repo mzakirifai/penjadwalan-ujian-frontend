@@ -18,6 +18,10 @@
 	<field name="subjectName" class="java.lang.String"/>
 	<field name="classroomName" class="java.lang.String"/>
 	<field name="roomName" class="java.lang.String"/>
+	<!-- Satu sesi = tanggal + jam; ruangan campur menghasilkan beberapa baris (satu per kelas) untuk sesi yang sama. -->
+	<variable name="TOTAL_SESSIONS" class="java.lang.Integer" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{date} + "|" + $F{startTime} + "|" + $F{endTime}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -321,7 +325,7 @@ new java.text.SimpleDateFormat(
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{TOTAL_SESSIONS}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
