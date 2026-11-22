@@ -31,6 +31,7 @@
                     </graphic>
                 </Button>
                 <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="bulkRegisterBtn" text="Daftarkan Banyak Jadwal" styleClass="list-menu-top-button"/>
                 <Button fx:id="registerAllBtn" text="Pilih &amp; Daftarkan Siswa Kelas Ini" styleClass="list-menu-top-button"/>
                 <Button fx:id="addBtn" text="Tambah 1 Siswa" styleClass="list-menu-top-button"/>
             </HBox>

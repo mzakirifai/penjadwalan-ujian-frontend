@@ -2,6 +2,7 @@ package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
 import co.id.component.EditableCell;
+import co.id.component.BulkRegisterDialog;
 import co.id.component.LookupBox;
 import co.id.component.ParticipantPickerDialog;
 import co.id.model.ExamParticipant;
@@ -44,6 +45,7 @@ public class ExamParticipantController {
     @FXML private LookupBox<ExamSchedule> lookupBoxExamSchedule;
     @FXML private Label lblCapacityInfo;
     @FXML private Button registerAllBtn;
+    @FXML private Button bulkRegisterBtn;
     @FXML private Button addBtn;
     @FXML private TableView<ExamParticipant> tableView;
     @FXML private TextField searchField;
@@ -81,7 +83,10 @@ public class ExamParticipantController {
             addBtn.setManaged(false);
             registerAllBtn.setVisible(false);
             registerAllBtn.setManaged(false);
+            bulkRegisterBtn.setVisible(false);
+            bulkRegisterBtn.setManaged(false);
         }
+        bulkRegisterBtn.setOnAction(e -> registerManySchedules());
 
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -369,32 +374,8 @@ public class ExamParticipantController {
                 .sorted(java.util.Comparator.comparing(s -> s.getName() == null ? "" : s.getName(), String.CASE_INSENSITIVE_ORDER))
                 .toList();
 
-        // Nomor peserta lanjut dari nomor terbesar yang sudah ada (bukan dari jumlah peserta), supaya tidak bentrok
-        // bila ada peserta yang pernah dihapus
-        int startingNumber = alreadyRegistered.stream()
-                .map(ExamParticipant::getParticipantNumber)
-                .filter(n -> n != null && n.matches("\\d+"))
-                .mapToInt(Integer::parseInt)
-                .max().orElse(0) + 1;
-        int successCount = 0;
         StringBuilder failedMessages = new StringBuilder();
-
-        for (int i = 0; i < chosen.size(); i++) {
-            Student student = chosen.get(i);
-            int seq = startingNumber + i;
-
-            ExamParticipant participant = new ExamParticipant();
-            participant.setExamSchedule(selectedExamSchedule);
-            participant.setStudent(student);
-            participant.setParticipantNumber(String.format("%03d", seq));
-
-            try {
-                examParticipantService.save(participant, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
-                successCount++;
-            } catch (Exception ex) {
-                failedMessages.append("- ").append(student.getName()).append(": ").append(ex.getMessage()).append("\n");
-            }
-        }
+        int successCount = registerStudents(selectedExamSchedule, chosen, alreadyRegistered, failedMessages);
 
         refreshTable();
 
@@ -407,5 +388,94 @@ public class ExamParticipantController {
             summary += "\n\nGagal:\n" + failedMessages;
         }
         new Alert(AlertType.INFORMATION, summary).showAndWait();
+    }
+
+    /**
+     * Daftarkan siswa (sudah berurutan nama) ke satu jadwal. Nomor peserta lanjut dari nomor terbesar yang sudah ada
+     * (bukan dari jumlah peserta), supaya tidak bentrok bila ada peserta yang pernah dihapus.
+     * @return jumlah yang berhasil; kegagalan ditambahkan ke failedMessages
+     */
+    private int registerStudents(ExamSchedule schedule, List<Student> students, List<ExamParticipant> alreadyRegistered,
+                                 StringBuilder failedMessages) {
+        int startingNumber = alreadyRegistered.stream()
+                .map(ExamParticipant::getParticipantNumber)
+                .filter(n -> n != null && n.matches("\\d+"))
+                .mapToInt(Integer::parseInt)
+                .max().orElse(0) + 1;
+        int successCount = 0;
+
+        for (int i = 0; i < students.size(); i++) {
+            Student student = students.get(i);
+
+            ExamParticipant participant = new ExamParticipant();
+            participant.setExamSchedule(schedule);
+            participant.setStudent(student);
+            participant.setParticipantNumber(String.format("%03d", startingNumber + i));
+
+            try {
+                examParticipantService.save(participant, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
+                successCount++;
+            } catch (Exception ex) {
+                failedMessages.append("- ").append(student.getName()).append(": ").append(ex.getMessage()).append("\n");
+            }
+        }
+        return successCount;
+    }
+
+    /** Daftarkan peserta untuk banyak jadwal sekaligus; siswa Belum Lunas otomatis dilewati. */
+    private void registerManySchedules() {
+        List<BulkRegisterDialog.Plan> plans;
+        java.util.Map<Integer, List<ExamParticipant>> participantsBySchedule;
+        try {
+            List<ExamSchedule> schedules = examScheduleService.getAllExamSchedulesDetailed();
+            // getStudentBy("") dan getExamParticipantBy("") masing-masing satu query untuk semua data
+            java.util.Map<Integer, List<Student>> studentsByClass = masterService.getStudentBy("").stream()
+                    .filter(s -> s.getClassroom() != null)
+                    .collect(java.util.stream.Collectors.groupingBy(s -> s.getClassroom().getId()));
+            participantsBySchedule = examParticipantService.getExamParticipantBy("").stream()
+                    .filter(p -> p.getExamSchedule() != null && p.getStudent() != null)
+                    .collect(java.util.stream.Collectors.groupingBy(p -> p.getExamSchedule().getId()));
+            java.util.Map<Integer, java.util.Set<Integer>> registeredIds = new java.util.HashMap<>();
+            participantsBySchedule.forEach((id, list) -> registeredIds.put(id,
+                    list.stream().map(p -> p.getStudent().getId()).collect(java.util.stream.Collectors.toSet())));
+            plans = BulkRegisterDialog.buildPlans(schedules, studentsByClass, registeredIds);
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, "Gagal memuat data jadwal: " + ex.getMessage()).showAndWait();
+            return;
+        }
+
+        List<BulkRegisterDialog.Plan> chosen = BulkRegisterDialog.show((Region) bulkRegisterBtn.getScene().getRoot(), plans);
+        if (chosen == null || chosen.isEmpty()) {
+            return;
+        }
+
+        int totalSuccess = 0, totalStudents = 0, totalSkipped = 0;
+        StringBuilder perSchedule = new StringBuilder();
+        StringBuilder failedMessages = new StringBuilder();
+        for (BulkRegisterDialog.Plan plan : chosen) {
+            ExamSchedule schedule = plan.getSchedule();
+            int ok = registerStudents(schedule, plan.getToRegister(),
+                    participantsBySchedule.getOrDefault(schedule.getId(), List.of()), failedMessages);
+            totalSuccess += ok;
+            totalStudents += plan.getToRegister().size();
+            totalSkipped += plan.getUnpaidSkipped().size();
+            perSchedule.append("- ").append(schedule.getCode()).append(" ")
+                    .append(schedule.getClassroom().getName()).append(": ").append(ok).append(" siswa")
+                    .append(plan.getUnpaidSkipped().isEmpty() ? "" : ", " + plan.getUnpaidSkipped().size() + " belum lunas dilewati")
+                    .append("\n");
+        }
+
+        refreshTable();
+
+        String summary = "Berhasil mendaftarkan " + totalSuccess + " dari " + totalStudents + " siswa di "
+                + chosen.size() + " jadwal." + (totalSkipped > 0 ? "\n" + totalSkipped + " siswa belum lunas dilewati." : "")
+                + "\n\n" + perSchedule;
+        if (failedMessages.length() > 0) {
+            summary += "\nGagal:\n" + failedMessages;
+        }
+        Alert done = new Alert(AlertType.INFORMATION, summary);
+        done.setHeaderText("Pendaftaran banyak jadwal selesai");
+        done.setResizable(true);
+        done.showAndWait();
     }
 }
