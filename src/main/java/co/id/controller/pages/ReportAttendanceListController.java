@@ -39,16 +39,18 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import win.zqxu.jrviewer.JRViewerFX;
 
 /**
- * Daftar hadir per ruangan: pilih tanggal, sesi, lalu ruangan (atau semua ruangan).
- * Isi diambil dari penempatan ruangan yang sudah disimpan, sehingga satu lembar memuat
- * semua siswa di ruangan itu walaupun berasal dari beberapa kelas.
+ * Daftar hadir.
+ * - Offline (per ruangan): pilih tanggal, sesi, lalu ruangan (atau semua ruangan). Isi diambil dari penempatan
+ *   ruangan yang sudah disimpan, sehingga satu lembar memuat semua siswa di ruangan itu walaupun dari beberapa kelas.
+ * - Online (per kelas): pilih tanggal, sesi, lalu kelas (atau semua kelas). Satu lembar per kelas + mapel,
+ *   berisi peserta terdaftar jadwal itu, tanpa ruangan dan nomor kursi.
  */
 public class ReportAttendanceListController {
     private static final Locale ID = new Locale("id", "ID");
     private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm");
     private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("dd MMMM yyyy", ID);
 
-    /** Pilihan ruangan; roomId null = semua ruangan pada sesi tersebut. */
+    /** Pilihan ruangan (Offline) atau jadwal/kelas (Online); roomId null = semua pada sesi tersebut. */
     private record RoomOption(Integer roomId, String label) {
         @Override
         public String toString() {
@@ -56,6 +58,10 @@ public class ReportAttendanceListController {
         }
     }
 
+    private static final String MODE_OFFLINE = "Offline - per ruangan";
+    private static final String MODE_ONLINE = "Online - per kelas";
+
+    @FXML private ComboBox<String> comboMode;
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<ExamSession> comboSession;
     @FXML private ComboBox<RoomOption> comboRoom;
@@ -81,6 +87,9 @@ public class ReportAttendanceListController {
         comboExamType.setItems(FXCollections.observableArrayList(co.id.model.ExamTypes.ALL));
         comboSemester.setItems(FXCollections.observableArrayList("Ganjil", "Genap"));
 
+        comboMode.setItems(FXCollections.observableArrayList(MODE_OFFLINE, MODE_ONLINE));
+        comboMode.setValue(MODE_OFFLINE);
+        comboMode.valueProperty().addListener((obs, oldVal, mode) -> loadSessions(datePicker.getValue()));
         datePicker.valueProperty().addListener((obs, oldVal, date) -> loadSessions(date));
         comboSession.valueProperty().addListener((obs, oldVal, session) -> loadPlan(session));
         btnViewReport.setOnAction(e -> onViewReport());
@@ -95,10 +104,13 @@ public class ReportAttendanceListController {
             return;
         }
         try {
-            List<ExamSession> sessions = roomAllocationService.getSessions(date);
+            List<ExamSession> sessions = isOnline()
+                    ? roomAllocationService.getOnlineSessions(date)
+                    : roomAllocationService.getSessions(date);
             comboSession.setItems(FXCollections.observableArrayList(sessions));
             if (sessions.isEmpty()) {
-                lblInfo.setText("Tidak ada jadwal ujian pada tanggal ini.");
+                lblInfo.setText(isOnline() ? "Tidak ada ujian online pada tanggal ini."
+                        : "Tidak ada jadwal ujian (offline) pada tanggal ini.");
             } else {
                 comboSession.getSelectionModel().selectFirst();
             }
@@ -113,6 +125,18 @@ public class ReportAttendanceListController {
         comboRoom.getItems().clear();
         lblInfo.setText("");
         if (session == null) {
+            return;
+        }
+        if (isOnline()) {
+            List<RoomOption> options = new ArrayList<>();
+            options.add(new RoomOption(null, "Semua kelas (" + session.getSchedules().size() + ")"));
+            session.getSchedules().stream()
+                    .sorted(java.util.Comparator.comparing(s -> s.getClassroom().getName()))
+                    .forEach(s -> options.add(new RoomOption(s.getId(), s.getClassroom().getName()
+                            + (s.getSubject() != null ? " - " + s.getSubjectLabel() : ""))));
+            comboRoom.setItems(FXCollections.observableArrayList(options));
+            comboRoom.getSelectionModel().selectFirst();
+            lblInfo.setText(session.getSchedules().size() + " kelas ujian online. Satu lembar per kelas, berisi peserta yang sudah didaftarkan.");
             return;
         }
         try {
@@ -146,10 +170,12 @@ public class ReportAttendanceListController {
         String semester = comboSemester.getValue();
         String academicYear = textFieldAcademicYear.getText() == null ? "" : textFieldAcademicYear.getText().trim();
 
-        if (session == null || currentPlan == null || room == null || examType == null || semester == null
+        boolean online = isOnline();
+        if (session == null || (!online && currentPlan == null) || room == null || examType == null || semester == null
                 || academicYear.isEmpty()) {
-            new Alert(Alert.AlertType.WARNING,
-                    "Tanggal, Sesi (yang sudah ditempatkan), Ruangan, Jenis Ujian, Semester, dan Tahun Akademik wajib diisi!",
+            new Alert(Alert.AlertType.WARNING, online
+                    ? "Tanggal, Sesi, Kelas, Jenis Ujian, Semester, dan Tahun Akademik wajib diisi!"
+                    : "Tanggal, Sesi (yang sudah ditempatkan), Ruangan, Jenis Ujian, Semester, dan Tahun Akademik wajib diisi!",
                     ButtonType.OK).showAndWait();
             return;
         }
@@ -159,9 +185,13 @@ public class ReportAttendanceListController {
                 getClass().getResourceAsStream("/reports/ReportAttendanceList.jasper")
             );
 
-            List<RoomAttendanceReportItem> data = reportService.getRoomAttendanceReport(currentPlan, room.roomId());
+            List<RoomAttendanceReportItem> data = online
+                    ? reportService.getOnlineAttendanceReport(session.getSchedules(), room.roomId())
+                    : reportService.getRoomAttendanceReport(currentPlan, room.roomId());
             if (data.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION, "Tidak ada peserta di ruangan ini.", ButtonType.OK).showAndWait();
+                new Alert(Alert.AlertType.INFORMATION, online
+                        ? "Belum ada peserta terdaftar. Daftarkan dulu di menu Peserta Ujian."
+                        : "Tidak ada peserta di ruangan ini.", ButtonType.OK).showAndWait();
                 return;
             }
 
@@ -184,6 +214,10 @@ public class ReportAttendanceListController {
             ex.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Gagal memuat laporan: " + ex.getMessage()).showAndWait();
         }
+    }
+
+    private boolean isOnline() {
+        return MODE_ONLINE.equals(comboMode.getValue());
     }
 
     private String toExamTypeLabel(String examType) {

@@ -17,9 +17,10 @@
         <VBox spacing="10" styleClass="form-report-vbox">
             <Label text="Daftar Hadir Peserta" styleClass="list-menu-top-label"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
+                <ComboBox fx:id="comboMode" prefWidth="190"/>
                 <DatePicker fx:id="datePicker" promptText="Tanggal ujian" prefWidth="140"/>
                 <ComboBox fx:id="comboSession" promptText="Sesi" prefWidth="260"/>
-                <ComboBox fx:id="comboRoom" promptText="Ruangan" prefWidth="200"/>
+                <ComboBox fx:id="comboRoom" promptText="Ruangan / Kelas" prefWidth="240"/>
             </HBox>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>
