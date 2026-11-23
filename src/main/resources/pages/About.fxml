@@ -19,15 +19,15 @@
     </ImageView>
     
     <Label text="Sistem Penjadwalan Ujian" styleClass="form-label"/>
-    <Label text="Version 1.0"/> 
+    <Label text="Versi 1.0"/> 
     
     <Separator/> 
     
-    <Label text="Developed by: Kelompok 2 - R7M"/>
+    <Label text="Dikembangkan oleh: Kelompok 2 - R7M"/>
     <Label text="Universitas Indraprasta PGRI (UNINDRA)" />
     
     <Separator/>
 
-    <Label text="Built with : JavaFX, MySQL, JasperReports, HikariCP"/>
+    <Label text="Dibuat dengan: JavaFX, MySQL, JasperReports, HikariCP"/>
 
 </VBox>

@@ -16,7 +16,7 @@
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="Penempatan Ruangan Ujian" styleClass="list-menu-top-label"/>
                 <HBox HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnExport" text="Export Daftar Hadir (Excel)">
+                <Button fx:id="btnExport" text="Ekspor Daftar Hadir (Excel)">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">
                             <image><Image url="@/icons/report.png"/></image>

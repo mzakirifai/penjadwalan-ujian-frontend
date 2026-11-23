@@ -63,9 +63,9 @@ public class NavbarController {
     @FXML
     private void handleLogout(){
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, 
-            "Apakah Anda yakin ingin logout?", 
+            "Apakah Anda yakin ingin keluar?", 
             ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Confirm Logout");
+        confirm.setTitle("Konfirmasi Keluar");
         confirm.setHeaderText(null);
 
         confirm.showAndWait().ifPresent(response -> {
@@ -81,7 +81,7 @@ public class NavbarController {
                     scene.getStylesheets().add(getClass().getResource("/css/material.css").toExternalForm());
 
                     stage.setScene(scene);
-                    stage.setTitle("Sistem Penjadwalan Ujian - Login");
+                    stage.setTitle("Sistem Penjadwalan Ujian - Masuk");
                     stage.centerOnScreen();
 
                 } catch (Exception exception) {

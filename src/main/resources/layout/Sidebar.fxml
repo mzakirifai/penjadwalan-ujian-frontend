@@ -136,16 +136,16 @@
             <BorderPane.margin>
                 <Insets top="15"/>
             </BorderPane.margin>
-            <Button fx:id="userManagementBtn" text="User Management" onAction="#handleUserManagementClick" styleClass="menu-parent">
+            <Button fx:id="userManagementBtn" text="Manajemen Pengguna" onAction="#handleUserManagementClick" styleClass="menu-parent">
                 <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/user.png"/></image></ImageView></graphic>
             </Button>
-            <Button fx:id="settingsBtn" text="Settings" onAction="#handleSettingsClick" styleClass="menu-parent">
+            <Button fx:id="settingsBtn" text="Pengaturan" onAction="#handleSettingsClick" styleClass="menu-parent">
                 <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/settings.png"/></image></ImageView></graphic>
             </Button>
-            <Button fx:id="helpBtn" text="Help" onAction="#handleHelpClick" styleClass="menu-parent">
+            <Button fx:id="helpBtn" text="Bantuan" onAction="#handleHelpClick" styleClass="menu-parent">
                 <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/help.png"/></image></ImageView></graphic>
             </Button>
-            <Button fx:id="aboutBtn" text="About" onAction="#handleAboutClick" styleClass="menu-parent">
+            <Button fx:id="aboutBtn" text="Tentang" onAction="#handleAboutClick" styleClass="menu-parent">
                 <graphic><ImageView fitWidth="20" fitHeight="20" preserveRatio="true"><image><Image url="@/icons/about.png"/></image></ImageView></graphic>
             </Button>
         </VBox>

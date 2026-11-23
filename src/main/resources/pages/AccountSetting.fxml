@@ -12,23 +12,23 @@
       fx:controller="co.id.controller.pages.AccountSettingController"
       spacing="20" styleClass="form-background">
       
-    <Label text="Account Setting" styleClass="form-label"/>
+    <Label text="Pengaturan Akun" styleClass="form-label"/>
     <Separator/>
     
     <VBox spacing="10" maxWidth="350">
-        <Label text="Old Password:"/>
+        <Label text="Password Lama:"/>
         <PasswordToggleField fx:id="fieldOldPassword"/>
         
-        <Label text="New Password:"/>
+        <Label text="Password Baru:"/>
         <PasswordToggleField fx:id="fieldNewPassword"/>
         
-        <Label text="Confirm New Password:"/>
+        <Label text="Ulangi Password Baru:"/>
         <PasswordToggleField fx:id="fieldConfirmPassword"/>
     </VBox>
     
     <VBox styleClass="form-vbox"/>
     <HBox alignment="CENTER_RIGHT">
-        <Button text="Change Password" fx:id="saveBtn" onAction="#handleChangePassword" styleClass="form-button">
+        <Button text="Ganti Password" fx:id="saveBtn" onAction="#handleChangePassword" styleClass="form-button">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16">
                     <image>

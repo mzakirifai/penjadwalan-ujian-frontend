@@ -12,7 +12,7 @@
       fx:controller="co.id.controller.pages.EditProfileController"
       spacing="20" styleClass="form-background">
       
-    <Label text="Edit Profile" styleClass="form-label"/>
+    <Label text="Edit Profil" styleClass="form-label"/>
     <Separator/>
     
     <VBox spacing="15" alignment="CENTER_LEFT">
@@ -22,9 +22,9 @@
             </ImageView>
         </StackPane>
         
-        <Button fx:id="btnChoosePhoto" text="Choose Photo" onAction="#handleChoosePhoto"/>
+        <Button fx:id="btnChoosePhoto" text="Pilih Foto" onAction="#handleChoosePhoto"/>
         
-        <Label text="Full Name:"/>
+        <Label text="Nama Lengkap:"/>
         <TextField fx:id="textFieldFullName"/>
         
         <Label fx:id="lblUsername" style="-fx-text-fill: #888;"/>
@@ -34,7 +34,7 @@
     
     <VBox styleClass="form-vbox"/>
     <HBox alignment="CENTER_RIGHT">
-        <Button text="Save" fx:id="saveBtn" onAction="#saveProfile" styleClass="form-button">
+        <Button text="Simpan" fx:id="saveBtn" onAction="#saveProfile" styleClass="form-button">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16">
                     <image>

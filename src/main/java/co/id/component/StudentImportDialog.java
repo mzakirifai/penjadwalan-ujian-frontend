@@ -170,7 +170,7 @@ public class StudentImportDialog {
         onlyProblemCheck = new CheckBox("Hanya tampilkan yang bermasalah");
         onlyProblemCheck.setOnAction(eh -> applyFilter());
 
-        importBtn = new Button("Import");
+        importBtn = new Button("Impor");
         importBtn.getStyleClass().add("list-menu-top-button");
         importBtn.setOnAction(eh -> doImport());
 
@@ -192,7 +192,7 @@ public class StudentImportDialog {
         }
 
         stage = new Stage();
-        stage.setTitle("Import Siswa dari Excel");
+        stage.setTitle("Impor Siswa dari Excel");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UTILITY);
 
@@ -372,7 +372,7 @@ public class StudentImportDialog {
                 students.size() + " siswa akan ditambahkan" + (skipped > 0 ? ", " + skipped + " baris dilewati." : ".")
                         + "\nLanjutkan?",
                 ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Konfirmasi Import");
+        confirm.setTitle("Konfirmasi Impor");
         confirm.setHeaderText(null);
         if (confirm.showAndWait().orElse(ButtonType.NO) != ButtonType.YES) {
             return;
@@ -399,7 +399,7 @@ public class StudentImportDialog {
 
         task.setOnFailed(eh -> {
             Throwable ex = task.getException();
-            new Alert(Alert.AlertType.ERROR, ex == null ? "Import gagal." : ex.getMessage()).showAndWait();
+            new Alert(Alert.AlertType.ERROR, ex == null ? "Impor gagal." : ex.getMessage()).showAndWait();
             importBtn.setDisable(false);
             cancelBtn.setDisable(false);
         });

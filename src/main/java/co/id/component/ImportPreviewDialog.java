@@ -78,7 +78,7 @@ public class ImportPreviewDialog<T> {
         Label fileLabel = new Label("File: " + fileName);
         fileLabel.setStyle("-fx-font-weight: bold;");
         Label hint = new Label("Hanya baris berstatus \"" + READY + "\" yang akan disimpan. "
-                + "Perbaiki baris bermasalah di Excel lalu import ulang jika perlu.");
+                + "Perbaiki baris bermasalah di Excel lalu impor ulang jika perlu.");
         hint.setWrapText(true);
         VBox top = new VBox(6, fileLabel, hint);
         top.setPadding(new Insets(0, 0, 10, 0));
@@ -120,7 +120,7 @@ public class ImportPreviewDialog<T> {
         onlyProblemCheck.setOnAction(eh ->
                 filtered.setPredicate(onlyProblemCheck.isSelected() ? i -> !i.isValid() : i -> true));
 
-        importBtn = new Button("Import");
+        importBtn = new Button("Impor");
         importBtn.getStyleClass().add("list-menu-top-button");
         importBtn.setDisable(ready == 0);
         importBtn.setOnAction(eh -> doImport());
@@ -176,7 +176,7 @@ public class ImportPreviewDialog<T> {
                 valid.size() + " data akan ditambahkan" + (skipped > 0 ? ", " + skipped + " baris dilewati." : ".")
                         + "\nLanjutkan?",
                 ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Konfirmasi Import");
+        confirm.setTitle("Konfirmasi Impor");
         confirm.setHeaderText(null);
         if (confirm.showAndWait().orElse(ButtonType.NO) != ButtonType.YES) {
             return;
@@ -203,7 +203,7 @@ public class ImportPreviewDialog<T> {
 
         task.setOnFailed(eh -> {
             Throwable ex = task.getException();
-            new Alert(Alert.AlertType.ERROR, ex == null ? "Import gagal." : ex.getMessage()).showAndWait();
+            new Alert(Alert.AlertType.ERROR, ex == null ? "Impor gagal." : ex.getMessage()).showAndWait();
             importBtn.setDisable(false);
             cancelBtn.setDisable(false);
         });

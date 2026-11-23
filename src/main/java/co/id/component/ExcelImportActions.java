@@ -62,7 +62,7 @@ public class ExcelImportActions {
             MasterService service = new MasterServiceImpl();
             List<ImportItem<Teacher>> items = TeacherImportParser.parse(rows, service.getAllTeachers());
 
-            ImportPreviewDialog.show(mainRoot, "Import Guru dari Excel", file.getName(),
+            ImportPreviewDialog.show(mainRoot, "Impor Guru dari Excel", file.getName(),
                     TeacherImportParser.COLUMNS, items,
                     list -> service.importTeachers(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
                     onImported);
@@ -103,7 +103,7 @@ public class ExcelImportActions {
             MasterService service = new MasterServiceImpl();
             List<ImportItem<Subject>> items = SubjectImportParser.parse(rows, service.getAllSubjects(), service.getAllMajors());
 
-            ImportPreviewDialog.show(mainRoot, "Import Mapel dari Excel", file.getName(),
+            ImportPreviewDialog.show(mainRoot, "Impor Mapel dari Excel", file.getName(),
                     SubjectImportParser.COLUMNS, items,
                     list -> service.importSubjects(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
                     onImported);
@@ -152,7 +152,7 @@ public class ExcelImportActions {
                     masterService.getAllTeachers(), masterService.getAllSubjects(), masterService.getClassroomBy(""),
                     service.getAllTeachingAssignments());
 
-            ImportPreviewDialog.show(mainRoot, "Import Pengampu dari Excel", file.getName(),
+            ImportPreviewDialog.show(mainRoot, "Impor Pengampu dari Excel", file.getName(),
                     TeachingAssignmentImportParser.COLUMNS, items,
                     list -> service.importTeachingAssignments(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
                     onImported);
@@ -164,7 +164,7 @@ public class ExcelImportActions {
     public static void saveTeachingAssignmentTemplate(Window owner) {
         List<String> notes = List.of(
                 "PETUNJUK PENGISIAN TEMPLATE PENGAMPU",
-                "Import Guru dan Mapel lebih dulu: pengampu hanya bisa merujuk guru, mapel, dan kelas yang sudah ada di aplikasi.",
+                "Impor Guru dan Mapel lebih dulu: pengampu hanya bisa merujuk guru, mapel, dan kelas yang sudah ada di aplikasi.",
                 "Isi data di sheet pertama, mulai dari baris 2. Satu baris = satu guru mengajar satu mapel di satu kelas.",
                 "Guru: nama lengkap sesuai menu Guru (perbedaan penulisan gelar masih dikenali). Bila ada nama guru yang sama, isi kolom NIP.",
                 "Kode Mapel: kode di menu Mapel (mis. M10). Boleh dikosongkan bila kolom Mapel berisi nama mapel yang tidak kembar.",
@@ -202,7 +202,7 @@ public class ExcelImportActions {
                     new TeachingAssignmentServiceImpl().getAllTeachingAssignments(),
                     service.getAllExamSchedulesDetailed());
 
-            ImportPreviewDialog.show(mainRoot, "Import Jadwal Ujian dari Excel", file.getName(),
+            ImportPreviewDialog.show(mainRoot, "Impor Jadwal Ujian dari Excel", file.getName(),
                     ExamScheduleImportParser.COLUMNS, items,
                     list -> service.importExamSchedules(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
                     onImported);
@@ -253,7 +253,7 @@ public class ExcelImportActions {
                 return;
             }
 
-            ImportPreviewDialog.show(mainRoot, "Import Status Administrasi", file.getName(),
+            ImportPreviewDialog.show(mainRoot, "Impor Status Administrasi", file.getName(),
                     AdminStatusImportParser.COLUMNS, items,
                     list -> service.importAdminStatuses(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
                     onImported);
@@ -318,7 +318,7 @@ public class ExcelImportActions {
             Integer teacherId = AuthContext.getCurrentUser().getTeacher() != null
                     ? AuthContext.getCurrentUser().getTeacher().getId() : null;
 
-            ImportPreviewDialog.show(mainRoot, "Import Nilai: " + scheduleTitle(schedule), file.getName(),
+            ImportPreviewDialog.show(mainRoot, "Impor Nilai: " + scheduleTitle(schedule), file.getName(),
                     ScoreImportParser.COLUMNS, items,
                     list -> scoreService.importScores(list, AuthContext.getCurrentUsername(),
                             AuthContext.getCurrentRole(), teacherId),

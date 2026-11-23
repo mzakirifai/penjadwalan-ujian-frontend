@@ -31,7 +31,7 @@ public class Main extends Application{
         
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/favicon.png")));
         
-        stage.setTitle("Sistem Penjadwalan Ujian - Login");
+        stage.setTitle("Sistem Penjadwalan Ujian - Masuk");
         stage.setScene(scene);
         
         stage.setX(screenBounds.getMinX() + screenWidth * 0.125);

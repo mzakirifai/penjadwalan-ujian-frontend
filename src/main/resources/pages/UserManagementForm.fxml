@@ -14,13 +14,13 @@
       fx:controller="co.id.controller.pages.UserManagementFormController"
       spacing="12" styleClass="form-background">
 
-    <Label text="Form User" styleClass="form-label"/>
+    <Label text="Form Pengguna" styleClass="form-label"/>
 
     <TextField fx:id="textFieldUsername" promptText="Username"/>
     
     <PasswordToggleField fx:id="passwordField"/>
 
-    <ComboBox fx:id="comboRole" promptText="Role">
+    <ComboBox fx:id="comboRole" promptText="Hak Akses">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="admin"/>

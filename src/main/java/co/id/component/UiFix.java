@@ -70,7 +70,41 @@ public final class UiFix {
         });
     }
 
+    // Teks bawaan JavaFX (bahasa Inggris) -> bahasa Indonesia
+    private static final java.util.Map<String, String> TRANSLATIONS = java.util.Map.ofEntries(
+            java.util.Map.entry("Confirmation", "Konfirmasi"),
+            java.util.Map.entry("Error", "Kesalahan"),
+            java.util.Map.entry("Information", "Informasi"),
+            java.util.Map.entry("Warning", "Peringatan"),
+            java.util.Map.entry("Message", "Pesan"),
+            java.util.Map.entry("Choice Dialog", "Pilihan"),
+            java.util.Map.entry("Choose", "Pilih"),
+            java.util.Map.entry("Select an option.", "Pilih salah satu."),
+            java.util.Map.entry("Text Input Dialog", "Isian"),
+            java.util.Map.entry("Yes", "Ya"),
+            java.util.Map.entry("No", "Tidak"),
+            java.util.Map.entry("Cancel", "Batal"),
+            java.util.Map.entry("Close", "Tutup"),
+            java.util.Map.entry("Apply", "Terapkan"),
+            java.util.Map.entry("Finish", "Selesai"),
+            java.util.Map.entry("Next", "Berikutnya"),
+            java.util.Map.entry("Previous", "Sebelumnya"));
+
+    private static String translate(String text) {
+        return text == null ? null : TRANSLATIONS.getOrDefault(text.trim(), text);
+    }
+
     private static void fixDialog(Window window, DialogPane pane) {
+        if (window instanceof Stage stage) {
+            stage.setTitle(translate(stage.getTitle()));
+        }
+        pane.setHeaderText(translate(pane.getHeaderText()));
+        for (javafx.scene.control.ButtonType type : pane.getButtonTypes()) {
+            Node button = pane.lookupButton(type);
+            if (button instanceof javafx.scene.control.Button b) {
+                b.setText(translate(b.getText()));
+            }
+        }
         pane.setMinHeight(Region.USE_PREF_SIZE);
         for (Node node : pane.lookupAll(".content")) {
             if (node instanceof Label label) {

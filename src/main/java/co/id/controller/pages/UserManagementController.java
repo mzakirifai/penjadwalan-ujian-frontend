@@ -190,7 +190,7 @@ public class UserManagementController {
             mainRoot.setEffect(new GaussianBlur(10));
 
             Stage dialog = new Stage();
-            dialog.setTitle(user == null ? "Tambah User" : "Edit User");
+            dialog.setTitle(user == null ? "Tambah Pengguna" : "Edit Pengguna");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initStyle(StageStyle.UTILITY);
 

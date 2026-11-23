@@ -24,12 +24,12 @@
             </ImageView>  
         </StackPane>
         <!-- User Dropdown -->
-        <MenuButton fx:id="menuButtonUser" text="User" styleClass="navbar-menu">
+        <MenuButton fx:id="menuButtonUser" text="Pengguna" styleClass="navbar-menu">
             <items>
-                <MenuItem text="Edit Profile" onAction="#handleEditProfile"/>
-                <MenuItem text="Account Setting" onAction="#handleAccountSetting"/>
+                <MenuItem text="Edit Profil" onAction="#handleEditProfile"/>
+                <MenuItem text="Pengaturan Akun" onAction="#handleAccountSetting"/>
                 <SeparatorMenuItem />
-                <MenuItem fx:id="menuItemLogout" text="Logout" onAction="#handleLogout"/>
+                <MenuItem fx:id="menuItemLogout" text="Keluar" onAction="#handleLogout"/>
             </items>
         </MenuButton> 
     </HBox>

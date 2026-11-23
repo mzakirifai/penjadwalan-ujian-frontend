@@ -24,7 +24,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="importBtn" text="Import Nilai" styleClass="list-menu-top-button">
+                <Button fx:id="importBtn" text="Impor Nilai" styleClass="list-menu-top-button">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">
                             <image><Image url="@/icons/report.png"/></image>

@@ -21,9 +21,9 @@ public class AccountSettingController {
     @FXML
     public void initialize(){
         userService = new UserServiceImpl();
-        fieldOldPassword.setPromptText("Enter your current password");
-        fieldNewPassword.setPromptText("Enter new password");
-        fieldConfirmPassword.setPromptText("Re-enter new password");
+        fieldOldPassword.setPromptText("Masukkan password saat ini");
+        fieldNewPassword.setPromptText("Masukkan password baru");
+        fieldConfirmPassword.setPromptText("Ulangi password baru");
     }
     
     @FXML

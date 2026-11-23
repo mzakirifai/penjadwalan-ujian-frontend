@@ -26,13 +26,13 @@
 
     <Separator/>
     
-    <Label text="Transaction" styleClass="section-title"/>
+    <Label text="Transaksi" styleClass="section-title"/>
     <Label text="Jadwal Ujian — Mengelola data Jadwal ujian."/>
     <Label text="Peserta Ujian — Mengelola data peserta ujian."/>
     <Label text="Nilai Ujian — Mengelola data nilai ujian."/>
 
     <Separator/>
     
-    <Label text="Report" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+    <Label text="Laporan" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
     <Label text="Cetak laporan untuk Data dan Identitas, serta data yang berkaitan dengan ujian berdasarkan kriteria yang dipilih."/>
 </VBox>

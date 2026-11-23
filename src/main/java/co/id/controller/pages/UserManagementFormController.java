@@ -101,7 +101,7 @@ public class UserManagementFormController {
             return;
         }
         if (role == null) {
-            new Alert(AlertType.WARNING, "Role wajib dipilih").showAndWait();
+            new Alert(AlertType.WARNING, "Hak Akses wajib dipilih").showAndWait();
             return;
         }
         if (ROLE_GURU.equals(role) && teacher == null) {
@@ -112,7 +112,7 @@ public class UserManagementFormController {
         try {
             if (selectedUser == null) {
                 if (password == null || password.isBlank()) {
-                    new Alert(AlertType.WARNING, "Password wajib diisi untuk user baru").showAndWait();
+                    new Alert(AlertType.WARNING, "Password wajib diisi untuk pengguna baru").showAndWait();
                     return;
                 }
                 if (password.length() < 6) {
@@ -127,7 +127,7 @@ public class UserManagementFormController {
                 newUser.setTeacher(ROLE_GURU.equals(role) ? teacher : null);
 
                 userService.register(newUser, password, AuthContext.getCurrentUsername());
-                new Alert(AlertType.INFORMATION, "User berhasil ditambahkan").showAndWait();
+                new Alert(AlertType.INFORMATION, "Pengguna berhasil ditambahkan").showAndWait();
             } else {
                 selectedUser.setRole(role);
                 selectedUser.setFullName(ROLE_ADMIN.equals(role) ? fullName : null);
@@ -145,7 +145,7 @@ public class UserManagementFormController {
                 }
                 
                 userService.updateProfile(selectedUser, AuthContext.getCurrentUsername());
-                new Alert(AlertType.INFORMATION, "User berhasil diperbarui").showAndWait();
+                new Alert(AlertType.INFORMATION, "Pengguna berhasil diperbarui").showAndWait();
             }
         } catch (Exception ex) {
             new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();

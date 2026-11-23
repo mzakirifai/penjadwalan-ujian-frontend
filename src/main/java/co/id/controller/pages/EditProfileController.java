@@ -62,7 +62,7 @@ public class EditProfileController {
         }
         
         lblUsername.setText("Username: " + currentUser.getUsername());
-        lblRole.setText("Role: " + currentUser.getRole());
+        lblRole.setText("Hak Akses: " + currentUser.getRole());
             
         loadCurrentPhoto(); 
     }
@@ -86,9 +86,9 @@ public class EditProfileController {
     @FXML
     private void handleChoosePhoto(){
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Profile Photo");
+        fileChooser.setTitle("Pilih Foto Profil");
         fileChooser.getExtensionFilters().add(
-            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+            new FileChooser.ExtensionFilter("File Gambar", "*.png", "*.jpg", "*.jpeg")
         );
         
         File file = fileChooser.showOpenDialog(btnChoosePhoto.getScene().getWindow());
@@ -136,7 +136,7 @@ public class EditProfileController {
             navbar.refreshProfile();
 }
         
-        Alert alert = new Alert(AlertType.INFORMATION, "Profile berhasil diperbarui");
+        Alert alert = new Alert(AlertType.INFORMATION, "Profil berhasil diperbarui");
         alert.showAndWait();
     }
     
