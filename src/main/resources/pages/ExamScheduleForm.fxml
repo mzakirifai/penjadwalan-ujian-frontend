@@ -54,6 +54,19 @@
 
             <ComboBox fx:id="comboCode" promptText="Kode guru (pilih mapel terlebih dahulu)"/>
 
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Mode ujian:"/>
+                <ComboBox fx:id="comboMode">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Offline"/>
+                            <String fx:value="Online"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Label text="Online = tanpa ruangan &amp; pengawas" style="-fx-text-fill: #666;"/>
+            </HBox>
+
             <TextArea fx:id="textAreaNotes" promptText="Keterangan (opsional)" prefRowCount="2"/>
 
             <Label fx:id="labelPlacementInfo" wrapText="true" style="-fx-text-fill: #1565c0;"

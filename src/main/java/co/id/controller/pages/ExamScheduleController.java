@@ -40,6 +40,7 @@ public class ExamScheduleController {
     @FXML private Button addBtn;
     @FXML private Button importBtn;
     @FXML private Button templateBtn;
+    @FXML private Button modeBtn;
     @FXML private TableView<ExamSchedule> tableView;
 
     @FXML private TableColumn<ExamSchedule, String> tableColumnCode, tableColumnType, tableColumnAcademicYear,
@@ -74,6 +75,8 @@ public class ExamScheduleController {
             importBtn.setManaged(false);
             templateBtn.setVisible(false);
             templateBtn.setManaged(false);
+            modeBtn.setVisible(false);
+            modeBtn.setManaged(false);
         }
 
         // tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -205,6 +208,7 @@ public class ExamScheduleController {
         importBtn.setOnAction(eh -> ExcelImportActions.importExamSchedules(
                 (Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::refreshTable));
         templateBtn.setOnAction(eh -> ExcelImportActions.saveExamScheduleTemplate(templateBtn.getScene().getWindow()));
+        modeBtn.setOnAction(eh -> changeExamMode());
         refreshBtn.setOnAction(e -> refreshTable());
     }
 
@@ -232,6 +236,54 @@ public class ExamScheduleController {
         tableView.refresh();
     }
 
+    // Ubah banyak jadwal sekaligus menjadi Online / Offline
+    private void changeExamMode() {
+        Region root = (Region) modeBtn.getScene().getRoot();
+        co.id.component.ExamModeDialog.Result result;
+        try {
+            result = co.id.component.ExamModeDialog.show(root, examScheduleService.getAllExamSchedulesDetailed());
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+            return;
+        }
+        if (result == null || result.getSchedules().isEmpty()) {
+            return;
+        }
+
+        java.util.List<Integer> ids = new java.util.ArrayList<>();
+        result.getSchedules().forEach(s -> ids.add(s.getId()));
+        boolean toOnline = ExamSchedule.MODE_ONLINE.equals(result.getMode());
+
+        StringBuilder message = new StringBuilder(ids.size() + " jadwal akan dijadikan " + result.getMode() + ".");
+        if (toOnline) {
+            long placed = examScheduleService.getPlacementSummaries(ids).values().stream()
+                    .filter(s -> !s.getRooms().isEmpty()).count();
+            message.append("\n\nJadwal Online tidak memakai ruangan dan pengawas.");
+            if (placed > 0) {
+                message.append(" ").append(placed).append(" jadwal di antaranya sudah ditempatkan; ruangan, nomor kursi, ")
+                        .append("dan pengawasnya akan dikosongkan.");
+            }
+        } else {
+            message.append("\n\nSetelah ini atur ruangan dan pengawasnya lewat menu Penempatan Ruangan.");
+        }
+        message.append("\n\nLanjutkan?");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, message.toString(), ButtonType.YES, ButtonType.NO);
+        confirm.setTitle("Ubah Mode Ujian");
+        confirm.setHeaderText(null);
+        if (!confirm.showAndWait().map(r -> r == ButtonType.YES).orElse(false)) {
+            return;
+        }
+
+        try {
+            int changed = examScheduleService.changeMode(ids, result.getMode(),
+                    AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
+            new Alert(Alert.AlertType.INFORMATION, changed + " jadwal sekarang " + result.getMode() + ".").showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+        }
+        refreshTable();
+    }
+
     private PlacementSummary summaryOf(ExamSchedule schedule) {
         return summaries.getOrDefault(schedule.getId(), new PlacementSummary(schedule.getId()));
     }
@@ -245,6 +297,8 @@ public class ExamScheduleController {
                 return "#ef6c00";   // oranye
             case TANPA_SISWA:
                 return "#757575";   // abu-abu
+            case ONLINE:
+                return "#1565c0";   // biru: ujian online, tanpa ruangan
             default:
                 return "#c62828";   // merah: belum ditempatkan
         }

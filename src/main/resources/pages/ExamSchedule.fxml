@@ -32,6 +32,13 @@
                     </graphic>
                 </Button>
                 <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="modeBtn" text="Mode Ujian">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/settings.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
                 <Button fx:id="templateBtn" text="Template">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">

@@ -47,6 +47,7 @@ public class ExamScheduleFormController {
     @FXML private ComboBox<Subject> comboSubject;
     @FXML private ComboBox<TeachingAssignment> comboCode;
     @FXML private TextArea textAreaNotes;
+    @FXML private ComboBox<String> comboMode;
     @FXML private Button saveBtn;
     @FXML private Label labelPlacementInfo;
 
@@ -64,6 +65,7 @@ public class ExamScheduleFormController {
         examScheduleService = new ExamScheduleServiceImpl();
         masterService = new MasterServiceImpl();
         teachingAssignmentService = new TeachingAssignmentServiceImpl();
+        comboMode.setValue(ExamSchedule.MODE_OFFLINE);
 
         TableColumn<Classroom, String> colClassroomName = new TableColumn<>("Kelas");
         colClassroomName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
@@ -205,6 +207,7 @@ public class ExamScheduleFormController {
             textFieldAcademicYear.setText(examSchedule.getAcademicYear());
             datePickerDate.setValue(examSchedule.getDate());
             textAreaNotes.setText(examSchedule.getNotes());
+            comboMode.setValue(examSchedule.getMode());
 
             if (!isDuplicate) {
                 // Mode Edit: salin juga jam dan kelas
@@ -286,7 +289,10 @@ public class ExamScheduleFormController {
 
         // Sesi ujian dikelompokkan berdasarkan jam yang sama persis. Jika jam ini bertumpuk dengan sesi lain
         // tapi tidak sama (mis. 07:30 vs 08:00), kelas ini tidak ikut dicampur di Penempatan Ruangan.
-        LocalTime[] alignedTime = askAlignSession(date, startTime, endTime, excludeId);
+        // Ujian online tidak memakai ruangan, jadi tidak perlu disamakan jamnya dengan sesi ruangan lain
+        LocalTime[] alignedTime = ExamSchedule.MODE_ONLINE.equals(comboMode.getValue())
+                ? new LocalTime[]{startTime, endTime}
+                : askAlignSession(date, startTime, endTime, excludeId);
         if (alignedTime == null) {
             return;
         }
@@ -330,12 +336,13 @@ public class ExamScheduleFormController {
         examSchedule.setSubject(subject);
         examSchedule.setTeacherCode(teacherCode);
         examSchedule.setNotes(notes);
+        examSchedule.setMode(comboMode.getValue());
 
         // Tanggal/jam/kelas berubah pada jadwal yang sudah ditempatkan: minta konfirmasi dulu
         try {
             if (examScheduleService.willResetPlacement(examSchedule)) {
                 Alert confirm = new Alert(AlertType.CONFIRMATION,
-                        "Jadwal ini sudah ditempatkan di ruangan. Karena tanggal, jam, atau kelasnya diubah, "
+                        "Jadwal ini sudah ditempatkan di ruangan. Karena tanggal, jam, kelas, atau mode ujiannya diubah, "
                                 + "penempatan ruangan, nomor kursi, dan pengawasnya akan dikosongkan.\n\n"
                                 + "Setelah disimpan, atur ulang lewat menu Penempatan Ruangan. Lanjutkan?",
                         ButtonType.YES, ButtonType.NO);

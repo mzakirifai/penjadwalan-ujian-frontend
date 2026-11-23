@@ -221,9 +221,10 @@ public class ExcelImportActions {
                 "Mapel harus berlaku untuk kelasnya (jurusan dan tingkat), sama seperti form Jadwal Ujian.",
                 "Kode Guru: wajib bila mapel itu di kelas tsb punya pengampu berkode (mis. DDPK TKJ (1), (2), (3)); pilihannya mengikuti data Pengampu.",
                 "Jenis Ujian: " + String.join(", ", co.id.model.ExamTypes.ALL) + ". Semester: Ganjil / Genap. Tahun Akademik: 2026/2027.",
+                "Mode Ujian: Offline (di ruangan) atau Online (tanpa ruangan & pengawas). Kosong = Offline.",
                 "Kelas yang sama tidak boleh ujian di jam yang bertumpuk. Jadwal yang persis sama dengan yang sudah ada dilewati.",
-                "Kode ujian dibuat otomatis. Ruangan dan pengawas diatur di menu Penempatan Ruangan.",
-                "Contoh baris: 2026-11-30 | 07:00 | 08:30 | X TKJ 1 | M19 | PAI | 3 | AAS | Ganjil | 2026/2027 | (kosong)");
+                "Kode ujian dibuat otomatis. Ruangan dan pengawas jadwal Offline diatur di menu Penempatan Ruangan.",
+                "Contoh baris: 2026-11-30 | 07:00 | 08:30 | X TKJ 1 | M19 | PAI | 3 | AAS | Ganjil | 2026/2027 | Offline | (kosong)");
 
         saveTemplate(owner, "template-import-jadwal-ujian.xlsx", "Jadwal Ujian", ExamScheduleImportParser.COLUMNS, notes);
     }
