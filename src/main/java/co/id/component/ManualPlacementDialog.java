@@ -113,6 +113,7 @@ public final class ManualPlacementDialog {
                 + "disusun selang-seling otomatis supaya siswa sejadwal tidak duduk bersebelahan. Ruangan yang muncul = "
                 + "ruangan yang dicentang di halaman Penempatan Ruangan.");
         info.setWrapText(true);
+        info.setMinHeight(Region.USE_PREF_SIZE);
         Label sessionLabel = new Label("Sesi: " + session.getDate().format(DATE) + "  " + session.getStartTime().format(TIME)
                 + " - " + session.getEndTime().format(TIME));
         sessionLabel.setStyle("-fx-font-weight: bold;");
@@ -352,6 +353,7 @@ public final class ManualPlacementDialog {
                 + "lalu langsung disimpan. Jumlah siswa menyesuaikan kelas di sesi tujuan; kursi disusun ulang; pengawas "
                 + "sesi tujuan yang sudah ada dipertahankan. Kelas yang tidak ada di susunan sumber tidak ditempatkan.");
         info.setWrapText(true);
+        info.setMinHeight(Region.USE_PREF_SIZE);
 
         TableView<Target> table = new TableView<>(FXCollections.observableArrayList(targets));
         table.setEditable(true);
@@ -364,7 +366,7 @@ public final class ManualPlacementDialog {
         TableColumn<Target, String> colSession = new TableColumn<>("Sesi");
         colSession.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().session.getDate().format(DATE) + "  "
                 + c.getValue().session.getStartTime().format(TIME) + " - " + c.getValue().session.getEndTime().format(TIME)));
-        colSession.setPrefWidth(170);
+        colSession.setPrefWidth(200);
         TableColumn<Target, String> colClasses = new TableColumn<>("Kelas");
         colClasses.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().session.getSchedules().size())
                 + " jadwal"));
@@ -372,7 +374,7 @@ public final class ManualPlacementDialog {
         TableColumn<Target, String> colStatus = new TableColumn<>("Status");
         colStatus.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().hasPlacement
                 ? "Sudah ditempatkan (akan DITIMPA)" : "Belum ditempatkan"));
-        colStatus.setPrefWidth(230);
+        colStatus.setPrefWidth(270);
         table.getColumns().add(colPick);
         table.getColumns().add(colSession);
         table.getColumns().add(colClasses);
@@ -400,7 +402,7 @@ public final class ManualPlacementDialog {
         dialog.setTitle("Terapkan Susunan ke Sesi Lain");
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.UTILITY);
-        Scene scene = new Scene(root, 640, 520);
+        Scene scene = new Scene(root, 700, 540);
         java.net.URL css = ManualPlacementDialog.class.getResource("/css/material.css");
         if (css != null) {
             scene.getStylesheets().add(css.toExternalForm());

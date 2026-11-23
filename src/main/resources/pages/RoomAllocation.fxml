@@ -37,8 +37,8 @@
                 <DatePicker fx:id="datePicker"/>
                 <Label text="Sesi:" styleClass="form-field-label"/>
                 <ComboBox fx:id="comboSession" prefWidth="220" promptText="Pilih sesi ujian"/>
-                <Label fx:id="lblSessionInfo" styleClass="form-field-label" wrapText="true"/>
             </HBox>
+            <Label fx:id="lblSessionInfo" styleClass="form-field-label" wrapText="true" maxWidth="Infinity"/>
         </VBox>
     </top>
 
@@ -60,16 +60,16 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Isi tiap ruangan" styleClass="form-field-label"/>
                     <HBox HBox.hgrow="ALWAYS"/>
-                    <Label fx:id="lblStatus" wrapText="true"/>
                     <Button fx:id="btnAutoSupervisor" text="Isi Pengawas Otomatis"/>
                 </HBox>
+                <Label fx:id="lblStatus" wrapText="true" maxWidth="Infinity"/>
                 <TableView fx:id="tableRooms" prefHeight="240">
                     <columns>
-                        <TableColumn fx:id="colRoom" text="Ruangan" prefWidth="110"/>
-                        <TableColumn fx:id="colCapacity" text="Kapasitas" prefWidth="75"/>
-                        <TableColumn fx:id="colFilled" text="Terisi" prefWidth="60"/>
-                        <TableColumn fx:id="colClasses" text="Kelas (jumlah siswa)" prefWidth="290"/>
-                        <TableColumn fx:id="colSupervisor" text="Pengawas" prefWidth="210"/>
+                        <TableColumn fx:id="colRoom" text="Ruangan" prefWidth="90" minWidth="70"/>
+                        <TableColumn fx:id="colCapacity" text="Kapasitas" prefWidth="75" minWidth="75"/>
+                        <TableColumn fx:id="colFilled" text="Terisi" prefWidth="60" minWidth="55"/>
+                        <TableColumn fx:id="colClasses" text="Kelas (jumlah siswa)" prefWidth="320" minWidth="260"/>
+                        <TableColumn fx:id="colSupervisor" text="Pengawas" prefWidth="240" minWidth="230"/>
                     </columns>
                 </TableView>
 

@@ -68,14 +68,14 @@
         <VBox spacing="10" styleClass="list-menu-center-vbox">
             <TableView fx:id="tableView" prefHeight="400">
                 <columns>
-                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="230"/>
+                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="260" minWidth="260"/>
                     <TableColumn fx:id="tableColumnCode" text="Kode Ujian" prefWidth="90"/>
                     <TableColumn fx:id="tableColumnType" text="Jenis" prefWidth="80"/>
-                    <TableColumn fx:id="tableColumnAcademicYear" text="Tahun Akademik" prefWidth="110"/>
+                    <TableColumn fx:id="tableColumnAcademicYear" text="Tahun Akademik" prefWidth="120" minWidth="115"/>
                     <TableColumn fx:id="tableColumnDate" text="Tanggal" prefWidth="100"/>
                     <TableColumn fx:id="tableColumnStartTime" text="Jam Mulai" prefWidth="80"/>
                     <TableColumn fx:id="tableColumnEndTime" text="Jam Selesai" prefWidth="80"/>
-                    <TableColumn fx:id="tableColumnSubject" text="Mapel" prefWidth="130"/>
+                    <TableColumn fx:id="tableColumnSubject" text="Mapel" prefWidth="150" minWidth="130"/>
                     <TableColumn fx:id="tableColumnClassroom" text="Kelas" prefWidth="100"/>
                     <TableColumn fx:id="tableColumnRoom" text="Ruangan" prefWidth="140"/>
                     <TableColumn fx:id="tableColumnTeacher" text="Pengawas" prefWidth="160"/>

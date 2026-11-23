@@ -13,6 +13,9 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
+        // Teks di popup & halaman tidak terpotong menjadi "..."
+        co.id.component.UiFix.install();
+
         Parent root = FXMLLoader.load(getClass().getResource("/pages/Login.fxml"));
         
         // Ukuran Layar Utama

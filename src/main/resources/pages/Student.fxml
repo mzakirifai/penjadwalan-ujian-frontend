@@ -74,7 +74,7 @@
                     <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
                     <TableColumn fx:id="tableColumnNis" text="NIS" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnNisn" text="NISN" prefWidth="120"/>
-                    <TableColumn fx:id="tableColumnName" text="Nama" prefWidth="180"/>
+                    <TableColumn fx:id="tableColumnName" text="Nama" prefWidth="220" minWidth="200"/>
                     <TableColumn fx:id="tableColumnClassroom" text="Kelas" prefWidth="120"/>
                     <TableColumn fx:id="tableColumnGender" text="Jenis Kelamin" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnAdminStatus" text="Administrasi" prefWidth="160"/>

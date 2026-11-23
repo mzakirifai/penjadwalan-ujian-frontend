@@ -39,7 +39,7 @@
                 </items>
             </ComboBox>
 
-            <TextField fx:id="textFieldAcademicYear" promptText="Tahun Akademik (contoh: 2026/2027)"/>
+            <TextField fx:id="textFieldAcademicYear" promptText="Tahun Akademik (contoh: 2026/2027)" prefWidth="260"/>
 
             <DatePicker fx:id="datePickerDate" promptText="Tanggal Ujian"/>
 

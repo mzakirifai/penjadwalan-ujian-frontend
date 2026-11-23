@@ -51,7 +51,7 @@
                     <TableColumn fx:id="tableColumnCode" text="Kode Kelas" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnName" text="Nama Kelas" prefWidth="160"/>
                     <TableColumn fx:id="tableColumnGrade" text="Tingkat" prefWidth="90"/>
-                    <TableColumn fx:id="tableColumnMajor" text="Jurusan" prefWidth="180"/>
+                    <TableColumn fx:id="tableColumnMajor" text="Jurusan" prefWidth="220" minWidth="200"/>
                 </columns>
             </TableView>
         </VBox>

@@ -25,6 +25,7 @@ public class MainLayoutController {
             }
             
             Node node = FXMLLoader.load(resource);
+            co.id.component.UiFix.preventShrink(node);
             contentArea.getChildren().setAll(node);
         } catch (Exception exception) {
             exception.printStackTrace();

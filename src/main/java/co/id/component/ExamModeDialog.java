@@ -84,6 +84,7 @@ public final class ExamModeDialog {
                 + "ruangan dan pengawas, jadi tidak muncul di Penempatan Ruangan. Jadwal yang sudah ditempatkan lalu "
                 + "dijadikan Online akan dikosongkan ruangan, kursi, dan pengawasnya.");
         info.setWrapText(true);
+        info.setMinHeight(Region.USE_PREF_SIZE);
 
         Set<String> periods = new LinkedHashSet<>();
         sorted.forEach(s -> periods.add(period(s)));
@@ -121,7 +122,7 @@ public final class ExamModeDialog {
         colPick.setPrefWidth(50);
         table.getColumns().add(colPick);
         table.getColumns().add(column("Kode", 70, s -> s.getCode()));
-        table.getColumns().add(column("Periode", 150, ExamModeDialog::period));
+        table.getColumns().add(column("Periode", 175, ExamModeDialog::period));
         table.getColumns().add(column("Tanggal", 90, s -> s.getDate().format(DATE)));
         table.getColumns().add(column("Jam", 95, s -> s.getStartTime() != null && s.getEndTime() != null
                 ? s.getStartTime().format(TIME) + "-" + s.getEndTime().format(TIME) : "-"));

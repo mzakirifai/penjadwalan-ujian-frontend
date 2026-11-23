@@ -63,11 +63,11 @@
                 <columns>
                     <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
                     <TableColumn fx:id="tableColumnCode" text="Kode Mapel" prefWidth="100"/>
-                    <TableColumn fx:id="tableColumnName" text="Nama Mapel" prefWidth="180"/>
+                    <TableColumn fx:id="tableColumnName" text="Nama Mapel" prefWidth="220" minWidth="200"/>
                     <TableColumn fx:id="tableColumnGrade" text="Tingkat" prefWidth="80"/>
                     <TableColumn fx:id="tableColumnType" text="Jenis" prefWidth="90"/>
                     <TableColumn fx:id="tableColumnKkm" text="KKM" prefWidth="70"/>
-                    <TableColumn fx:id="tableColumnMajor" text="Jurusan" prefWidth="150"/>
+                    <TableColumn fx:id="tableColumnMajor" text="Jurusan" prefWidth="200" minWidth="180"/>
                 </columns>
             </TableView>
         </VBox>
