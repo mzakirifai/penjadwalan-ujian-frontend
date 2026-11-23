@@ -332,9 +332,11 @@ public class StudentController {
     
     private void importFromExcel() {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Pilih file Excel data siswa");
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("File Excel (*.xlsx, *.xls)", "*.xlsx", "*.xls"));
+        chooser.setTitle("Pilih file Excel/CSV data siswa");
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Excel / CSV (*.xlsx, *.xls, *.csv)", "*.xlsx", "*.xls", "*.csv", "*.txt"),
+                new FileChooser.ExtensionFilter("File Excel (*.xlsx, *.xls)", "*.xlsx", "*.xls"),
+                new FileChooser.ExtensionFilter("File CSV (*.csv, *.txt)", "*.csv", "*.txt"));
 
         File file = chooser.showOpenDialog(importBtn.getScene().getWindow());
         if (file == null) {
@@ -354,7 +356,8 @@ public class StudentController {
             Region mainRoot = (Region) importBtn.getScene().getRoot();
             StudentImportDialog.show(mainRoot, file, result, this::refreshTable);
         } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, "Gagal membaca file Excel: " + ex.getMessage()).showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Gagal membaca file: " + ex.getMessage()
+                    + "\nPastikan file berformat Excel (.xlsx/.xls) atau CSV.").showAndWait();
         }
     }
     

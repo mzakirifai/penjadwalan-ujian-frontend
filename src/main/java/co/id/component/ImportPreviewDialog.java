@@ -89,8 +89,14 @@ public class ImportPreviewDialog<T> {
         filtered = new FilteredList<>(FXCollections.observableArrayList(items), r -> true);
         tableView.setItems(filtered);
 
-        tableView.getColumns().add(column("Sheet", 60, i -> i.getSheet()));
-        tableView.getColumns().add(column("Baris", 45, i -> String.valueOf(i.getRowNumber())));
+        TableColumn<ImportItem<T>, String> sheetCol = column("Sheet", 60, i -> i.getSheet());
+        sheetCol.setMinWidth(60);
+        sheetCol.setMaxWidth(110);
+        TableColumn<ImportItem<T>, String> rowCol = column("Baris", 45, i -> String.valueOf(i.getRowNumber()));
+        rowCol.setMinWidth(50);
+        rowCol.setMaxWidth(60);
+        tableView.getColumns().add(sheetCol);
+        tableView.getColumns().add(rowCol);
         for (int c = 0; c < columns.size(); c++) {
             final int index = c;
             tableView.getColumns().add(column(columns.get(c), 100, i -> index < i.getCells().size() ? i.getCells().get(index) : ""));
@@ -102,6 +108,8 @@ public class ImportPreviewDialog<T> {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty ? null : item);
+                // alasan yang panjang tetap bisa dibaca utuh dengan mengarahkan mouse ke sel
+                setTooltip(empty || item == null ? null : new javafx.scene.control.Tooltip(item));
                 if (empty || item == null) {
                     setStyle("");
                 } else {
@@ -110,6 +118,7 @@ public class ImportPreviewDialog<T> {
                 }
             }
         });
+        statusCol.setMinWidth(260);
         tableView.getColumns().add(statusCol);
         root.setCenter(tableView);
 
@@ -144,7 +153,7 @@ public class ImportPreviewDialog<T> {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UTILITY);
 
-        Scene scene = new Scene(root, 900, 560);
+        Scene scene = new Scene(root, 1000, 560);
         scene.getStylesheets().add(getClass().getResource("/css/material.css").toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();

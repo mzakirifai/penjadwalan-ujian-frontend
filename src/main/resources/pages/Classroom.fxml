@@ -32,6 +32,20 @@
                     </graphic>
                 </Button>
                 <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="templateBtn" text="Template">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/save.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="importBtn" text="Impor Excel" styleClass="list-menu-top-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/report.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
                 <Button fx:id="addBtn" text="Tambah" styleClass="list-menu-top-button">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">

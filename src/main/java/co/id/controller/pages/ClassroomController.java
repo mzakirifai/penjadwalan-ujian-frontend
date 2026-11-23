@@ -36,6 +36,8 @@ public class ClassroomController {
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
     @FXML private Button addBtn;
+    @FXML private Button importBtn;
+    @FXML private Button templateBtn;
     @FXML private TableView<Classroom> tableView;
 
     @FXML private TableColumn<Classroom, String> tableColumnCode, tableColumnName, tableColumnGrade, tableColumnMajor;
@@ -140,6 +142,17 @@ public class ClassroomController {
                     .placeBelow(addBtn.getParent());
         }
         refreshBtn.setOnAction(e -> refreshTable());
+
+        // Impor Excel/CSV hanya untuk admin (sama seperti hak akses menyimpan data master)
+        if (!AuthContext.isAdmin()) {
+            importBtn.setVisible(false);
+            importBtn.setManaged(false);
+            templateBtn.setVisible(false);
+            templateBtn.setManaged(false);
+        }
+        importBtn.setOnAction(eh -> co.id.component.ExcelImportActions.importClassrooms(
+                (javafx.scene.layout.Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::refreshTable));
+        templateBtn.setOnAction(eh -> co.id.component.ExcelImportActions.saveClassroomTemplate(templateBtn.getScene().getWindow()));
     }
 
     private void filterItems() {

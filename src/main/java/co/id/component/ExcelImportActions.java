@@ -1,7 +1,10 @@
 package co.id.component;
 
 import co.id.auth.AuthContext;
+import co.id.importer.ClassroomImportParser;
+import co.id.importer.CsvTemplateWriter;
 import co.id.importer.ExcelGridReader;
+import co.id.importer.RoomImportParser;
 import co.id.importer.ExcelTemplateWriter;
 import co.id.importer.ImportItem;
 import co.id.importer.TableParser;
@@ -11,10 +14,12 @@ import co.id.importer.ScoreImportParser;
 import co.id.importer.SubjectImportParser;
 import co.id.importer.TeachingAssignmentImportParser;
 import co.id.importer.TeacherImportParser;
+import co.id.model.Classroom;
 import co.id.model.ExamParticipant;
 import co.id.model.ExamSchedule;
 import co.id.model.ExamScore;
 import co.id.model.Student;
+import co.id.model.Room;
 import co.id.model.Subject;
 import co.id.model.Teacher;
 import co.id.model.TeachingAssignment;
@@ -39,10 +44,95 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 /**
- * Aksi tombol "Import Excel" dan "Template" untuk halaman Guru, Mapel, Pengampu, dan Nilai.
+ * Aksi tombol "Impor Excel" dan "Template" untuk halaman Kelas, Ruangan, Guru, Mapel, Pengampu,
+ * Jadwal Ujian, Status Administrasi, dan Nilai. Semua impor menerima file Excel (.xlsx/.xls) maupun CSV.
  * Controller cukup memanggil method di sini.
  */
 public class ExcelImportActions {
+
+    // ------------------------------------------------------------------ Kelas
+
+    public static void importClassrooms(Region mainRoot, Window owner, Runnable onImported) {
+        File file = chooseExcel(owner, "Pilih file Excel/CSV data kelas");
+        if (file == null) {
+            return;
+        }
+
+        try {
+            // Cara 1: kolom Tingkat + Jurusan (+ Rombel). Cara 2: hanya kolom Nama Kelas (mis. "X TKJ 1").
+            List<TableParser.Row> rows = readRows(file, ClassroomImportParser.ALIASES, ClassroomImportParser.REQUIRED, Set.of());
+            if (rows.isEmpty()) {
+                rows = readRows(file, ClassroomImportParser.ALIASES, ClassroomImportParser.REQUIRED_BY_NAME, Set.of());
+            }
+            if (rows.isEmpty()) {
+                noData("Tingkat dan Jurusan (atau Nama Kelas)");
+                return;
+            }
+
+            MasterService service = new MasterServiceImpl();
+            List<ImportItem<Classroom>> items = ClassroomImportParser.parse(rows, service.getAllClassrooms(), service.getAllMajors());
+
+            ImportPreviewDialog.show(mainRoot, "Impor Kelas", file.getName(),
+                    ClassroomImportParser.COLUMNS, items,
+                    list -> service.importClassrooms(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
+                    onImported);
+        } catch (Exception ex) {
+            readError(ex);
+        }
+    }
+
+    public static void saveClassroomTemplate(Window owner) {
+        List<String> notes = List.of(
+                "PETUNJUK PENGISIAN TEMPLATE KELAS",
+                "Isi data Jurusan lebih dulu. Isi di sheet pertama mulai baris 2. Satu baris = satu kelas.",
+                "Tingkat diisi X, XI, atau XII. Jurusan diisi singkatan (mis. TKJ) atau nama lengkap sesuai menu Jurusan.",
+                "Rombel diisi satu angka/huruf (mis. 1, 2). Kosongkan bila jurusan itu hanya punya satu kelas di tingkat tsb.",
+                "Nama kelas dibuat otomatis seperti di form Kelas: Tingkat + Jurusan + Rombel, mis. X TKJ 1. Kolom Nama Kelas boleh kosong.",
+                "Atau cukup isi kolom Nama Kelas saja (mis. XI DKV 2); tingkat, jurusan, dan rombel dibaca dari namanya.",
+                "Kode kelas dibuat otomatis. Kelas yang namanya sudah ada tidak diimpor ulang.",
+                "Contoh baris: X | TKJ | 1 | (kosong)");
+
+        saveTemplate(owner, "template-import-kelas.xlsx", "Kelas", ClassroomImportParser.COLUMNS, notes);
+    }
+
+    // ------------------------------------------------------------------ Ruangan
+
+    public static void importRooms(Region mainRoot, Window owner, Runnable onImported) {
+        File file = chooseExcel(owner, "Pilih file Excel/CSV data ruangan");
+        if (file == null) {
+            return;
+        }
+
+        try {
+            List<TableParser.Row> rows = readRows(file, RoomImportParser.ALIASES, RoomImportParser.REQUIRED, Set.of());
+            if (rows.isEmpty()) {
+                noData("Nama Ruangan dan Kapasitas");
+                return;
+            }
+
+            MasterService service = new MasterServiceImpl();
+            List<ImportItem<Room>> items = RoomImportParser.parse(rows, service.getAllRooms());
+
+            ImportPreviewDialog.show(mainRoot, "Impor Ruangan", file.getName(),
+                    RoomImportParser.COLUMNS, items,
+                    list -> service.importRooms(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
+                    onImported);
+        } catch (Exception ex) {
+            readError(ex);
+        }
+    }
+
+    public static void saveRoomTemplate(Window owner) {
+        List<String> notes = List.of(
+                "PETUNJUK PENGISIAN TEMPLATE RUANGAN",
+                "Isi data di sheet pertama mulai baris 2. Satu baris = satu ruangan ujian.",
+                "Kolom wajib: Nama Ruangan dan Kapasitas (jumlah kursi peserta, angka 1 - " + RoomImportParser.MAX_CAPACITY + ").",
+                "Lantai boleh kosong (dianggap lantai 1).",
+                "Kode ruangan dibuat otomatis. Ruangan yang namanya sudah ada (mis. \"R 1\" dan \"R1\" dianggap sama) tidak diimpor ulang.",
+                "Contoh baris: R 1 | 1 | 36");
+
+        saveTemplate(owner, "template-import-ruangan.xlsx", "Ruangan", RoomImportParser.COLUMNS, notes);
+    }
 
     // ------------------------------------------------------------------ Guru
 
@@ -367,11 +457,14 @@ public class ExcelImportActions {
 
     // ------------------------------------------------------------------ helper
 
+    /** Pilih file impor: Excel (.xlsx/.xls) atau CSV (.csv, juga .txt hasil ekspor aplikasi lain). */
     private static File chooseExcel(Window owner, String title) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle(title);
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("File Excel (*.xlsx, *.xls)", "*.xlsx", "*.xls"));
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Excel / CSV (*.xlsx, *.xls, *.csv)", "*.xlsx", "*.xls", "*.csv", "*.txt"),
+                new FileChooser.ExtensionFilter("File Excel (*.xlsx, *.xls)", "*.xlsx", "*.xls"),
+                new FileChooser.ExtensionFilter("File CSV (*.csv, *.txt)", "*.csv", "*.txt"));
         return chooser.showOpenDialog(owner);
     }
 
@@ -393,16 +486,33 @@ public class ExcelImportActions {
     private static void saveTemplate(Window owner, String defaultName, String sheetName,
                                      List<String> headers, List<String> notes, List<List<String>> rows) {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Simpan template Excel");
+        chooser.setTitle("Simpan template");
         chooser.setInitialFileName(defaultName);
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File Excel (*.xlsx)", "*.xlsx"));
+        FileChooser.ExtensionFilter excelFilter = new FileChooser.ExtensionFilter("File Excel (*.xlsx)", "*.xlsx");
+        FileChooser.ExtensionFilter csvFilter = new FileChooser.ExtensionFilter("File CSV (*.csv)", "*.csv");
+        chooser.getExtensionFilters().addAll(excelFilter, csvFilter);
 
         File file = chooser.showSaveDialog(owner);
         if (file == null) {
             return;
         }
 
+        // Format mengikuti pilihan jenis file (atau akhiran nama file yang diketik)
+        boolean csv = file.getName().toLowerCase().endsWith(".csv")
+                || (chooser.getSelectedExtensionFilter() == csvFilter && !file.getName().toLowerCase().endsWith(".xlsx"));
+        if (csv && !file.getName().toLowerCase().endsWith(".csv")) {
+            file = new File(file.getParentFile(), file.getName().replaceFirst("(?i)\\.xlsx$", "") + ".csv");
+        }
+
         try {
+            if (csv) {
+                CsvTemplateWriter.write(file, headers, rows);
+                new Alert(Alert.AlertType.INFORMATION, "Template CSV tersimpan di:\n" + file.getAbsolutePath()
+                        + "\n\nPetunjuk pengisian hanya ada di template Excel. Bila file CSV dibuka lalu disimpan "
+                        + "dengan Excel, angka panjang (NIP, NIS, No. HP) bisa berubah bentuk; untuk data seperti itu "
+                        + "lebih aman memakai template Excel.").showAndWait();
+                return;
+            }
             ExcelTemplateWriter.write(file, sheetName, headers, notes, rows);
             new Alert(Alert.AlertType.INFORMATION, "Template tersimpan di:\n" + file.getAbsolutePath()).showAndWait();
         } catch (Exception ex) {
@@ -419,7 +529,8 @@ public class ExcelImportActions {
     }
 
     private static void readError(Exception ex) {
-        new Alert(Alert.AlertType.ERROR, "Gagal membaca file Excel: " + ex.getMessage()
-                + "\nJika file sedang dibuka di Excel, tutup dulu lalu coba lagi.").showAndWait();
+        new Alert(Alert.AlertType.ERROR, "Gagal membaca file: " + ex.getMessage()
+                + "\nPastikan file berformat Excel (.xlsx/.xls) atau CSV. "
+                + "Jika file sedang dibuka di Excel, tutup dulu lalu coba lagi.").showAndWait();
     }
 }

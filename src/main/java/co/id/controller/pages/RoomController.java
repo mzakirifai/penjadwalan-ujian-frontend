@@ -30,6 +30,8 @@ public class RoomController {
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
     @FXML private Button addBtn;
+    @FXML private Button importBtn;
+    @FXML private Button templateBtn;
     @FXML private TableView<Room> tableView;
     @FXML private TableColumn<Room, String> tableColumnCode;
     @FXML private TableColumn<Room, String> tableColumnName;
@@ -185,6 +187,17 @@ public class RoomController {
                     .placeBelow(addBtn.getParent());
         }
         refreshBtn.setOnAction(e -> refreshTable());
+
+        // Impor Excel/CSV hanya untuk admin (sama seperti hak akses menyimpan data master)
+        if (!AuthContext.isAdmin()) {
+            importBtn.setVisible(false);
+            importBtn.setManaged(false);
+            templateBtn.setVisible(false);
+            templateBtn.setManaged(false);
+        }
+        importBtn.setOnAction(eh -> co.id.component.ExcelImportActions.importRooms(
+                (javafx.scene.layout.Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::refreshTable));
+        templateBtn.setOnAction(eh -> co.id.component.ExcelImportActions.saveRoomTemplate(templateBtn.getScene().getWindow()));
     }
     
     private ImageView createIcon(String path) {
