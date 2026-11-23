@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.ExcelImportActions;
 import co.id.model.Teacher;
@@ -235,13 +236,25 @@ public class TeachingAssignmentController {
                 (Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::reload));
         templateBtn.setOnAction(eh -> ExcelImportActions.saveTeachingAssignmentTemplate(templateBtn.getScene().getWindow()));
 
+        // Hapus banyak pengampu sekaligus. Centang baris guru = semua pengampu guru itu.
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<TeachingAssignment>("pengampu", ta -> ta.getId(),
+                    ta -> ta.getTeacher().getName() + " - " + ta.getSubjectLabel() + " (" + ta.getClassroom().getName() + ")",
+                    ta -> teachingAssignmentService.delete(ta.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView, row -> row.isGroup() ? row.group.assignments : List.of(row.assignment))
+                    // semua guru di semua halaman (atau semua hasil pencarian)
+                    .allItems(() -> groups.stream().flatMap(g -> g.assignments.stream()).toList())
+                    .afterDelete(this::reload)
+                    .placeBelow(addBtn.getParent());
+        }
+
         reload();
     }
 
     private boolean isInsideButton(Object target, Node stopAt) {
         Node node = target instanceof Node ? (Node) target : null;
         while (node != null && node != stopAt) {
-            if (node instanceof Button) {
+            if (node instanceof javafx.scene.control.ButtonBase) {
                 return true;
             }
             node = node.getParent();

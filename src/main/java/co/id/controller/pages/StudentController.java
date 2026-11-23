@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.ExcelImportActions;
 import co.id.component.LookupBox;
@@ -202,6 +203,21 @@ public class StudentController {
         }
         deleteGroupBtn.setOnAction(eh -> deleteGroup());
         refreshBtn.setOnAction(e -> refreshTable());
+
+        // Hapus banyak sekaligus (centang + Hapus Terpilih), hanya admin seperti tombol Hapus per siswa
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<Student>("siswa", s -> s.getId(),
+                    s -> s.getNis() + " - " + s.getName() + (s.getClassroom() != null ? " (" + s.getClassroom().getName() + ")" : ""),
+                    s -> masterService.deleteStudent(s.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    // "Pilih semua data" mengikuti tampilan: hasil pencarian, kelas yang difilter, atau semua siswa
+                    .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                            ? List.copyOf(tableView.getItems())
+                            : filterClassroom != null ? List.copyOf(classStudents) : masterService.getAllStudents())
+                    .warning("Data peserta ujian dan nilai milik siswa yang dipilih ikut terhapus.")
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(addBtn.getParent());
+        }
     }
 
     // Hapus seluruh siswa dalam satu kelas sekaligus (mis. siswa yang sudah lulus), tanpa menghapus satu per satu.

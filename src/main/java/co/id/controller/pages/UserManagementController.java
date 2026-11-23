@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.model.User;
 import co.id.service.UserService;
@@ -150,6 +151,18 @@ public class UserManagementController {
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
         refreshBtn.setOnAction(e -> refreshTable());
+
+        // Hapus banyak akun sekaligus; akun yang sedang dipakai dan Admin terakhir tidak ikut dihapus
+        new BulkDeleteBar<User>("akun pengguna", u -> u.getId(),
+                u -> u.getUsername() + " (" + resolveDisplayName(u) + ", "
+                        + ("admin".equalsIgnoreCase(u.getRole()) ? "Admin" : "Guru") + ")",
+                u -> userService.delete(u.getId()))
+                .attachTo(tableView)
+                .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                        ? java.util.List.copyOf(tableView.getItems()) : userService.getAllUsers())
+                .precheck(this::bulkDeleteRules)
+                .afterDelete(this::refreshTable)
+                .placeBelow(addBtn.getParent());
     }   
     
     private String resolveDisplayName(User user) {
@@ -249,6 +262,27 @@ public class UserManagementController {
         tableView.setItems(observableList);
     }
     
+    // Aturan sama dengan tombol Hapus per akun: tidak boleh menghapus akun sendiri dan minimal tersisa 1 Admin
+    private java.util.Map<Object, String> bulkDeleteRules(java.util.List<User> chosen) {
+        java.util.Map<Object, String> skipped = new java.util.LinkedHashMap<>();
+        User currentUser = AuthContext.getCurrentUser();
+        for (User user : chosen) {
+            if (currentUser != null && currentUser.getId() == user.getId()) {
+                skipped.put(user.getId(), "akun yang sedang Anda pakai untuk login");
+            }
+        }
+        long remainingAdmins = userService.getAllUsers().stream()
+                .filter(u -> "admin".equalsIgnoreCase(u.getRole()))
+                .filter(u -> skipped.containsKey(u.getId())
+                        || chosen.stream().noneMatch(c -> c.getId() == u.getId()))
+                .count();
+        if (remainingAdmins == 0) {
+            chosen.stream().filter(u -> "admin".equalsIgnoreCase(u.getRole())).findFirst()
+                    .ifPresent(u -> skipped.put(u.getId(), "Admin terakhir; sistem harus punya minimal 1 Admin"));
+        }
+        return skipped;
+    }
+
     private void refreshTable() {
         int totalRows = userService.countUsers();
         int rowsPerPage = 10;

@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.model.Classroom;
 import co.id.service.MasterService;
@@ -127,6 +128,17 @@ public class ClassroomController {
 
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
+        // Hapus banyak sekaligus (centang + Hapus Terpilih), hanya admin seperti tombol Hapus per baris
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<Classroom>("kelas", x -> x.getId(), x -> x.getName(),
+                    x -> masterService.deleteClassroom(x.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                            ? java.util.List.copyOf(tableView.getItems()) : masterService.getAllClassrooms())
+                    .warning("Data pengampu kelas ikut terhapus dan siswanya menjadi tanpa kelas. Kelas yang masih punya jadwal ujian tidak akan dihapus.")
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(addBtn.getParent());
+        }
         refreshBtn.setOnAction(e -> refreshTable());
     }
 

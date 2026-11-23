@@ -47,7 +47,7 @@
         <VBox spacing="10" styleClass="list-menu-center-vbox">
             <TableView fx:id="tableView" prefHeight="400">
                 <columns>
-                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="200"/>
+                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="200" minWidth="150"/>
                     <TableColumn fx:id="tableColumnCode" text="Kode Ruangan" prefWidth="110"/>
                     <TableColumn fx:id="tableColumnName" text="Nama Ruangan" prefWidth="180"/>
                     <TableColumn fx:id="tableColumnFloor" text="Lantai" prefWidth="90"/>

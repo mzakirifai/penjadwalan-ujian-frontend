@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.ExcelImportActions;
 import co.id.model.ExamSchedule;
@@ -210,6 +211,21 @@ public class ExamScheduleController {
         templateBtn.setOnAction(eh -> ExcelImportActions.saveExamScheduleTemplate(templateBtn.getScene().getWindow()));
         modeBtn.setOnAction(eh -> changeExamMode());
         refreshBtn.setOnAction(e -> refreshTable());
+
+        // Hapus banyak sekaligus (centang + Hapus Terpilih), hanya admin seperti tombol Hapus per baris
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<ExamSchedule>("jadwal ujian", s -> s.getId(),
+                    s -> s.getCode() + " - " + (s.getSubject() != null ? s.getSubjectLabel() : "-")
+                            + " - " + (s.getClassroom() != null ? s.getClassroom().getName() : "-")
+                            + (s.getDate() != null ? " (" + s.getDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")" : ""),
+                    s -> examScheduleService.delete(s.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                            ? java.util.List.copyOf(tableView.getItems()) : examScheduleService.getAllExamSchedulesDetailed())
+                    .warning("Semua peserta, nilai, dan penempatan ruangan di jadwal yang dipilih ikut terhapus.")
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(addBtn.getParent());
+        }
     }
 
     private void filterItems() {

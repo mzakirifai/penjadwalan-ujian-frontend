@@ -61,7 +61,7 @@
         <VBox spacing="10" styleClass="list-menu-center-vbox">
             <TableView fx:id="tableView" prefHeight="400">
                 <columns>
-                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160"/>
+                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="160" minWidth="150"/>
                     <TableColumn fx:id="tableColumnNip" text="NIP" prefWidth="120"/>
                     <TableColumn fx:id="tableColumnName" text="Nama" prefWidth="220" minWidth="200"/>
                     <TableColumn fx:id="tableColumnGender" text="Jenis Kelamin" prefWidth="110"/>

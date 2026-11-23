@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.EditableCell;
 import co.id.model.Major;
@@ -156,6 +157,17 @@ public class MajorController {
 
         addBtn.setOnAction(e -> addRow());
         filterBtn.setOnAction(e -> filterItems());
+        // Hapus banyak sekaligus (centang + Hapus Terpilih), hanya admin seperti tombol Hapus per baris
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<Major>("jurusan", x -> x.getId(), x -> x.getName(),
+                    x -> masterService.deleteMajor(x.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                            ? java.util.List.copyOf(tableView.getItems()) : masterService.getAllMajors())
+                    .warning("Kelas dan mapel milik jurusan ini tidak ikut terhapus, tetapi kolom jurusannya menjadi kosong.")
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(addBtn.getParent());
+        }
         refreshBtn.setOnAction(e -> refreshTable());
     }
 

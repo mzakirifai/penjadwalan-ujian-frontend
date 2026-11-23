@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.EditableCell;
 import co.id.component.ExcelImportActions;
@@ -56,6 +57,7 @@ public class ExamScoreController {
 
     private ExamSchedule selectedExamSchedule;
     private int editingRowIndex = -1;
+    private BulkDeleteBar<ExamScore> bulkDelete;
 
     private ImageView createIcon(String path) {
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(path)));
@@ -86,6 +88,9 @@ public class ExamScoreController {
         lookupBoxExamSchedule.selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedExamSchedule = newVal;
             editingRowIndex = -1;
+            if (bulkDelete != null) {
+                bulkDelete.clearSelection(); // pilihan milik jadwal lain tidak boleh ikut terhapus
+            }
             refreshTable();
         });
 
@@ -227,6 +232,22 @@ public class ExamScoreController {
             }
             ExcelImportActions.saveScoreTemplate(templateBtn.getScene().getWindow(), selectedExamSchedule);
         });
+
+        // Hapus banyak nilai sekaligus, hanya admin seperti tombol Hapus per baris.
+        // Baris "Belum dinilai" belum punya data nilai, jadi tidak bisa dicentang.
+        if (AuthContext.isAdmin()) {
+            bulkDelete = new BulkDeleteBar<ExamScore>("nilai", es -> es.getId(),
+                    es -> (es.getStudent() != null ? es.getStudent().getNis() + " - " + es.getStudent().getName() : "-")
+                            + " (nilai " + es.getScore() + ")",
+                    es -> examScoreService.delete(es.getId(), AuthContext.getCurrentRole()))
+                    .selectable(es -> es.getId() != 0)
+                    .attachTo(tableView)
+                    .afterDelete(() -> {
+                        editingRowIndex = -1;
+                        refreshTable();
+                    })
+                    .placeBelow(searchField.getParent());
+        }
     }
 
     // Import butuh jadwal ujian yang dipilih dan hak input nilai untuk jadwal itu (sama seperti input manual)

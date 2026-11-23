@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.ExcelImportActions;
 import co.id.model.Subject;
@@ -134,6 +135,17 @@ public class SubjectController {
 
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
+        // Hapus banyak sekaligus (centang + Hapus Terpilih), hanya admin seperti tombol Hapus per baris
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<Subject>("mapel", x -> x.getId(), x -> x.getCode() + " - " + x.getName(),
+                    x -> masterService.deleteSubject(x.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                            ? java.util.List.copyOf(tableView.getItems()) : masterService.getAllSubjects())
+                    .warning("Data pengampu mapel ikut terhapus. Mapel yang masih dipakai di jadwal ujian tidak akan dihapus.")
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(addBtn.getParent());
+        }
         refreshBtn.setOnAction(e -> refreshTable());
 
         // Import Excel hanya untuk admin (sama seperti hak akses menyimpan data master)

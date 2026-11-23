@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.model.Teacher;
 import co.id.service.MasterService;
@@ -146,6 +147,17 @@ public class TeacherController {
 
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null));
+        // Hapus banyak sekaligus (centang + Hapus Terpilih), hanya admin seperti tombol Hapus per baris
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<Teacher>("guru", x -> x.getId(), x -> x.getName() + (x.getNip() != null && !x.getNip().isBlank() ? " (" + x.getNip() + ")" : ""),
+                    x -> masterService.deleteTeacher(x.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                            ? java.util.List.copyOf(tableView.getItems()) : masterService.getAllTeachers())
+                    .warning("Data pengampu guru ikut terhapus. Guru yang masih punya akun login atau masih menjadi pengawas tidak akan dihapus.")
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(addBtn.getParent());
+        }
         refreshBtn.setOnAction(e -> refreshTable());
         
         // Import Excel hanya untuk admin (sama seperti hak akses menyimpan data master)

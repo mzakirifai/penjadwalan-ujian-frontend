@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.EditableCell;
 import co.id.component.BulkRegisterDialog;
@@ -63,6 +64,7 @@ public class ExamParticipantController {
 
     private ExamSchedule selectedExamSchedule;
     private int editingRowIndex = -1;
+    private BulkDeleteBar<ExamParticipant> bulkDelete;
 
     private ImageView createIcon(String path) {
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(path)));
@@ -107,6 +109,9 @@ public class ExamParticipantController {
         lookupBoxExamSchedule.selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedExamSchedule = newVal;
             editingRowIndex = -1;
+            if (bulkDelete != null) {
+                bulkDelete.clearSelection(); // pilihan milik jadwal lain tidak boleh ikut terhapus
+            }
             refreshTable();
         });
 
@@ -246,6 +251,16 @@ public class ExamParticipantController {
         filterBtn.setOnAction(e -> filterParticipants());
         addBtn.setOnAction(e -> openAddForm());
         registerAllBtn.setOnAction(e -> registerAllStudents());
+
+        // Hapus banyak peserta sekaligus dari jadwal yang dipilih, hanya admin seperti tombol Hapus per baris
+        if (AuthContext.isAdmin()) {
+            bulkDelete = new BulkDeleteBar<ExamParticipant>("peserta", pp -> pp.getId(),
+                    pp -> (pp.getStudent() != null ? pp.getStudent().getNis() + " - " + pp.getStudent().getName() : pp.getCode()),
+                    pp -> examParticipantService.delete(pp.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(searchField.getParent());
+        }
     }
     
     private void filterParticipants() {

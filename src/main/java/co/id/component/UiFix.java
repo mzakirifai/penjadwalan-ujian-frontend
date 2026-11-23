@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Cell;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -43,8 +44,19 @@ public final class UiFix {
         Window.getWindows().addListener((ListChangeListener<Window>) change -> {
             while (change.next()) {
                 for (Window window : change.getAddedSubList()) {
-                    fixWindow(window);
-                    window.sceneProperty().addListener((obs, oldScene, scene) -> fixScene(window, scene));
+                    // perbaikan tampilan tidak boleh sampai membuat aplikasi error
+                    try {
+                        fixWindow(window);
+                    } catch (RuntimeException ex) {
+                        System.err.println("UiFix dilewati: " + ex);
+                    }
+                    window.sceneProperty().addListener((obs, oldScene, scene) -> {
+                        try {
+                            fixScene(window, scene);
+                        } catch (RuntimeException ex) {
+                            System.err.println("UiFix dilewati: " + ex);
+                        }
+                    });
                 }
             }
         });
@@ -55,7 +67,8 @@ public final class UiFix {
     }
 
     private static void fixScene(Window window, Scene scene) {
-        if (scene == null || scene.getRoot() == null) {
+        // Popup (isi dropdown ComboBox, menu, tooltip) dikelola sendiri oleh JavaFX: jangan diubah
+        if (scene == null || scene.getRoot() == null || window instanceof javafx.stage.PopupWindow) {
             return;
         }
         if (scene.getRoot() instanceof DialogPane pane) {
@@ -134,10 +147,17 @@ public final class UiFix {
     /** Label (tanpa wrapText) dan tombol di bawah node ini tidak mengecil sampai teksnya terpotong. */
     public static void preventShrink(Node node) {
         // tabel/daftar kosong: tulisan bawaan "No content in table" diganti bahasa Indonesia
-        if (node instanceof TableView<?> table && table.getPlaceholder() == null) {
+        // (lewati yang placeholder-nya terikat ke kontrol lain, mis. daftar di dalam dropdown ComboBox)
+        if (node instanceof TableView<?> table && table.getPlaceholder() == null
+                && !table.placeholderProperty().isBound()) {
             table.setPlaceholder(new Label("Belum ada data"));
-        } else if (node instanceof ListView<?> list && list.getPlaceholder() == null) {
+        } else if (node instanceof ListView<?> list && list.getPlaceholder() == null
+                && !list.placeholderProperty().isBound()) {
             list.setPlaceholder(new Label("Belum ada data"));
+        } else if (node instanceof ComboBox<?> combo && combo.getPlaceholder() == null
+                && !combo.placeholderProperty().isBound()) {
+            // dropdown kosong tidak lagi tampil sebagai kotak putih kosong
+            combo.setPlaceholder(new Label("Belum ada pilihan"));
         }
         if (node == null || node instanceof Cell || node instanceof TableView || node instanceof ListView
                 || node instanceof TreeView || node instanceof TreeTableView || node instanceof ComboBoxBase

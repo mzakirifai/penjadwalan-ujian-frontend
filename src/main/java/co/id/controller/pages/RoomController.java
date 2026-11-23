@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.component.BulkDeleteBar;
 import co.id.auth.AuthContext;
 import co.id.component.EditableCell;
 import co.id.model.Room;
@@ -172,6 +173,17 @@ public class RoomController {
 
         addBtn.setOnAction(e -> addRow());
         filterBtn.setOnAction(e -> filterItems());
+        // Hapus banyak sekaligus (centang + Hapus Terpilih), hanya admin seperti tombol Hapus per baris
+        if (AuthContext.isAdmin()) {
+            new BulkDeleteBar<Room>("ruangan", x -> x.getId(), x -> (x.getCode() != null ? x.getCode() + " - " : "") + x.getName(),
+                    x -> masterService.deleteRoom(x.getId(), AuthContext.getCurrentRole()))
+                    .attachTo(tableView)
+                    .allItems(() -> searchField.getText() != null && !searchField.getText().isBlank()
+                            ? java.util.List.copyOf(tableView.getItems()) : masterService.getAllRooms())
+                    .warning("Ruangan yang masih dipakai di Penempatan Ruangan tidak akan dihapus.")
+                    .afterDelete(this::refreshTable)
+                    .placeBelow(addBtn.getParent());
+        }
         refreshBtn.setOnAction(e -> refreshTable());
     }
     
