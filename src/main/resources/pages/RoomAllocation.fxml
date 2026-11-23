@@ -23,6 +23,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
+                <Button fx:id="btnApply" text="Terapkan ke Sesi Lain"/>
                 <Button fx:id="btnSave" text="Simpan Penempatan" styleClass="list-menu-top-button">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">
@@ -52,6 +53,7 @@
                 </HBox>
                 <Button fx:id="btnAutoRooms" text="Pilih Ruangan Otomatis" maxWidth="Infinity"/>
                 <Button fx:id="btnGenerate" text="Buat Penempatan Otomatis" maxWidth="Infinity" styleClass="list-menu-top-button"/>
+                <Button fx:id="btnManual" text="Atur Penempatan Manual" maxWidth="Infinity"/>
             </VBox>
 
             <VBox spacing="8" HBox.hgrow="ALWAYS">
@@ -71,7 +73,11 @@
                     </columns>
                 </TableView>
 
-                <Label fx:id="lblSeatsTitle" text="Daftar kursi: klik satu ruangan di atas" styleClass="form-field-label"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="lblSeatsTitle" text="Daftar kursi: klik satu ruangan di atas" styleClass="form-field-label"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnMoveSeat" text="Pindahkan Siswa Terpilih"/>
+                </HBox>
                 <TableView fx:id="tableSeats" prefHeight="230" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colSeat" text="Kursi" prefWidth="65"/>

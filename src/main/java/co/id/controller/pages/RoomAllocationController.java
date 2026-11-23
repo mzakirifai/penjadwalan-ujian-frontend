@@ -66,6 +66,9 @@ public class RoomAllocationController {
     @FXML private TableColumn<SeatAssignment, String> colSeat, colNumber, colNis, colName, colClass, colSubject;
 
     @FXML private TextArea areaWarnings;
+    @FXML private Button btnManual;
+    @FXML private Button btnMoveSeat;
+    @FXML private Button btnApply;
 
     private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -155,6 +158,10 @@ public class RoomAllocationController {
         btnAutoSupervisor.setOnAction(e -> autoSupervisors());
         btnSave.setOnAction(e -> save());
         btnExport.setOnAction(e -> export());
+        btnManual.setOnAction(e -> manual());
+        btnMoveSeat.setOnAction(e -> moveSeat());
+        btnApply.setOnAction(e -> applyToOtherSessions());
+        tableSeats.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> updateButtons());
 
         btnSave.setDisable(!AuthContext.isAdmin());
         updateButtons();
@@ -227,7 +234,7 @@ public class RoomAllocationController {
                     }
                 });
             } else {
-                lblStatus.setText("Belum ada penempatan. Centang ruangan lalu klik \"Buat Penempatan Otomatis\".");
+                lblStatus.setText("Belum ada penempatan. Centang ruangan lalu klik \"Buat Penempatan Otomatis\" atau \"Atur Penempatan Manual\".");
             }
         } catch (Exception ex) {
             error(ex);
@@ -360,6 +367,143 @@ public class RoomAllocationController {
         }
     }
 
+    // Penempatan manual: admin menentukan jumlah siswa tiap kelas per ruangan
+    private void manual() {
+        if (currentSession == null) {
+            return;
+        }
+        List<Room> rooms = selectedRooms();
+        if (rooms.isEmpty()) {
+            new Alert(AlertType.WARNING, "Centang dulu ruangan yang akan dipakai (daftar di kiri), lalu klik "
+                    + "\"Atur Penempatan Manual\" lagi.").showAndWait();
+            return;
+        }
+        try {
+            java.util.Map<Integer, Integer> counts = service.getStudentCounts(currentSession);
+            java.util.Map<Integer, java.util.Map<Integer, Integer>> distribution = co.id.component.ManualPlacementDialog.show(
+                    (javafx.scene.layout.Region) btnManual.getScene().getRoot(), currentSession, counts, rooms, currentPlan);
+            if (distribution == null) {
+                return;
+            }
+            RoomPlan plan = service.buildManual(currentSession, distribution, rooms);
+            // pengawas yang sudah dipilih untuk ruangan yang sama tetap dipakai
+            if (currentPlan != null) {
+                for (RoomAssignment assignment : plan.getRooms()) {
+                    for (RoomAssignment old : currentPlan.getRooms()) {
+                        if (old.getRoom().getId() == assignment.getRoom().getId()) {
+                            assignment.setSupervisor(old.getSupervisor());
+                        }
+                    }
+                }
+            }
+            showPlan(plan, false);
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+        }
+    }
+
+    // Pindahkan siswa yang dipilih di tabel kursi ke ruangan lain
+    private void moveSeat() {
+        SeatAssignment seat = tableSeats.getSelectionModel().getSelectedItem();
+        RoomAssignment from = tableRooms.getSelectionModel().getSelectedItem();
+        if (currentPlan == null || seat == null || from == null) {
+            new Alert(AlertType.INFORMATION, "Klik satu ruangan, lalu pilih siswa di daftar kursi.").showAndWait();
+            return;
+        }
+        // tujuan: ruangan yang sudah dipakai di rencana ini + ruangan lain yang dicentang
+        java.util.Map<Integer, Room> options = new java.util.LinkedHashMap<>();
+        currentPlan.getRooms().forEach(r -> options.put(r.getRoom().getId(), r.getRoom()));
+        selectedRooms().forEach(r -> options.putIfAbsent(r.getId(), r));
+        options.remove(from.getRoom().getId());
+        if (options.isEmpty()) {
+            new Alert(AlertType.INFORMATION, "Tidak ada ruangan lain. Centang ruangan tambahan di daftar kiri.").showAndWait();
+            return;
+        }
+        java.util.Map<String, Room> byLabel = new java.util.LinkedHashMap<>();
+        options.values().stream()
+                .sorted((a, b) -> co.id.component.ManualPlacementDialog.naturalCompare(a.getName(), b.getName()))
+                .forEach(r -> {
+                    int filled = currentPlan.getRooms().stream().filter(x -> x.getRoom().getId() == r.getId())
+                            .mapToInt(RoomAssignment::getFilled).sum();
+                    byLabel.put(r.getName() + "  (" + filled + "/" + r.getCapacity() + ")", r);
+                });
+        javafx.scene.control.ChoiceDialog<String> dialog = new javafx.scene.control.ChoiceDialog<>(
+                byLabel.keySet().iterator().next(), byLabel.keySet());
+        dialog.setTitle("Pindahkan Siswa");
+        dialog.setHeaderText("Pindahkan " + seat.getStudent().getName() + " (" + seat.getClassName() + ") dari "
+                + from.getRoom().getName() + " ke:");
+        dialog.setContentText("Ruangan:");
+        java.util.Optional<String> choice = dialog.showAndWait();
+        if (choice.isEmpty()) {
+            return;
+        }
+        try {
+            service.moveSeat(currentPlan, seat, byLabel.get(choice.get()));
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+            return;
+        }
+        RoomAssignment keep = currentPlan.getRooms().contains(from) ? from : null;
+        tableRooms.setItems(FXCollections.observableArrayList(currentPlan.getRooms()));
+        tableRooms.refresh();
+        if (keep != null) {
+            tableRooms.getSelectionModel().select(keep);
+            showSeats(keep);
+        } else if (!currentPlan.getRooms().isEmpty()) {
+            tableRooms.getSelectionModel().selectFirst();
+        }
+        markUnsaved();
+    }
+
+    // Salin susunan kelas -> ruangan sesi ini ke sesi lain di periode yang sama
+    private void applyToOtherSessions() {
+        if (currentPlan == null || currentSession == null) {
+            return;
+        }
+        if (!saved) {
+            new Alert(AlertType.INFORMATION, "Simpan dulu penempatan sesi ini, baru terapkan ke sesi lain.").showAndWait();
+            return;
+        }
+        co.id.model.ExamSchedule first = currentSession.getSchedules().get(0);
+        try {
+            List<ExamSession> sessions = service.getSessionsInPeriod(first.getExamType(), first.getSemester(), first.getAcademicYear());
+            List<co.id.component.ManualPlacementDialog.Target> targets = new java.util.ArrayList<>();
+            for (ExamSession session : sessions) {
+                if (session.getDate().equals(currentSession.getDate()) && session.getStartTime().equals(currentSession.getStartTime())
+                        && session.getEndTime().equals(currentSession.getEndTime())) {
+                    continue;
+                }
+                targets.add(new co.id.component.ManualPlacementDialog.Target(session, service.loadSaved(session) != null));
+            }
+            if (targets.isEmpty()) {
+                new Alert(AlertType.INFORMATION, "Tidak ada sesi lain pada periode " + first.getExamType() + " "
+                        + first.getSemester() + " " + first.getAcademicYear() + ".").showAndWait();
+                return;
+            }
+            String label = currentSession.getDate() + " " + currentSession.getStartTime().format(TIME) + "-"
+                    + currentSession.getEndTime().format(TIME);
+            List<ExamSession> chosen = co.id.component.ManualPlacementDialog.pickSessions(
+                    (javafx.scene.layout.Region) btnApply.getScene().getRoot(), label, targets);
+            if (chosen == null || chosen.isEmpty()) {
+                return;
+            }
+            List<String> report = service.applyLayout(currentPlan, chosen, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
+            TextArea area = new TextArea(String.join("\n", report));
+            area.setEditable(false);
+            area.setWrapText(true);
+            area.setPrefRowCount(Math.min(18, report.size() + 1));
+            Alert done = new Alert(AlertType.INFORMATION);
+            done.setTitle("Terapkan ke Sesi Lain");
+            done.setHeaderText(report.stream().filter(r -> r.startsWith("OK")).count() + " sesi berhasil, "
+                    + report.stream().filter(r -> !r.startsWith("OK")).count() + " dilewati. "
+                    + "Pengawas tiap sesi tetap perlu dicek/diisi.");
+            done.getDialogPane().setContent(area);
+            done.showAndWait();
+        } catch (Exception ex) {
+            error(ex);
+        }
+    }
+
     private void autoSupervisors() {
         if (currentPlan == null) {
             return;
@@ -489,6 +633,9 @@ public class RoomAllocationController {
         btnSave.setDisable(!hasPlan || !AuthContext.isAdmin());
         btnGenerate.setDisable(currentSession == null || !AuthContext.isAdmin());
         btnAutoRooms.setDisable(currentSession == null || !AuthContext.isAdmin());
+        btnManual.setDisable(currentSession == null || !AuthContext.isAdmin());
+        btnMoveSeat.setDisable(!hasPlan || !AuthContext.isAdmin() || tableSeats.getSelectionModel().getSelectedItem() == null);
+        btnApply.setDisable(!hasPlan || !AuthContext.isAdmin());
     }
 
     private Teacher teacherFor(Teacher supervisor) {
