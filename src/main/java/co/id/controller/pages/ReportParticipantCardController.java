@@ -57,7 +57,7 @@ public class ReportParticipantCardController {
             () -> masterService.getAllStudents(), List.of(colNis, colName), Student::getName
         );
 
-        comboExamType.setItems(FXCollections.observableArrayList("UTS", "UAS", "UKK", "PRAKTIK"));
+        comboExamType.setItems(FXCollections.observableArrayList(co.id.model.ExamTypes.ALL));
         comboSemester.setItems(FXCollections.observableArrayList("Ganjil", "Genap"));
 
         btnViewReport.setOnAction(e -> onViewReport());
@@ -116,12 +116,6 @@ public class ReportParticipantCardController {
     }
 
     private String toExamTypeLabel(String examType) {
-        return switch (examType) {
-            case "UTS" -> "UJIAN TENGAH SEMESTER";
-            case "UAS" -> "UJIAN AKHIR SEMESTER";
-            case "UKK" -> "UJIAN KENAIKAN KELAS";
-            case "PRAKTIK" -> "UJIAN PRAKTIK";
-            default -> examType;
-        };
+        return co.id.model.ExamTypes.label(examType);
     }
 }

@@ -78,7 +78,7 @@ public class ReportAttendanceListController {
         comboSession.setCellFactory(list -> new SessionCell());
         comboSession.setButtonCell(new SessionCell());
 
-        comboExamType.setItems(FXCollections.observableArrayList("UTS", "UAS", "UKK", "PRAKTIK"));
+        comboExamType.setItems(FXCollections.observableArrayList(co.id.model.ExamTypes.ALL));
         comboSemester.setItems(FXCollections.observableArrayList("Ganjil", "Genap"));
 
         datePicker.valueProperty().addListener((obs, oldVal, date) -> loadSessions(date));
@@ -187,13 +187,7 @@ public class ReportAttendanceListController {
     }
 
     private String toExamTypeLabel(String examType) {
-        return switch (examType) {
-            case "UTS" -> "UJIAN TENGAH SEMESTER";
-            case "UAS" -> "UJIAN AKHIR SEMESTER";
-            case "UKK" -> "UJIAN KENAIKAN KELAS";
-            case "PRAKTIK" -> "UJIAN PRAKTIK";
-            default -> examType;
-        };
+        return co.id.model.ExamTypes.label(examType);
     }
 
     /** Menampilkan sesi sebagai "08:00 - 09:30  |  X TKJ 1, XI TKJ 1, X TP". */

@@ -6,6 +6,7 @@ import co.id.importer.ExcelTemplateWriter;
 import co.id.importer.ImportItem;
 import co.id.importer.TableParser;
 import co.id.importer.AdminStatusImportParser;
+import co.id.importer.ExamScheduleImportParser;
 import co.id.importer.ScoreImportParser;
 import co.id.importer.SubjectImportParser;
 import co.id.importer.TeachingAssignmentImportParser;
@@ -18,10 +19,12 @@ import co.id.model.Subject;
 import co.id.model.Teacher;
 import co.id.model.TeachingAssignment;
 import co.id.service.ExamParticipantService;
+import co.id.service.ExamScheduleService;
 import co.id.service.ExamScoreService;
 import co.id.service.MasterService;
 import co.id.service.TeachingAssignmentService;
 import co.id.service.impl.ExamParticipantServiceImpl;
+import co.id.service.impl.ExamScheduleServiceImpl;
 import co.id.service.impl.ExamScoreServiceImpl;
 import co.id.service.impl.MasterServiceImpl;
 import co.id.service.impl.TeachingAssignmentServiceImpl;
@@ -173,6 +176,56 @@ public class ExcelImportActions {
                 "Contoh baris: Nama Guru, S.Kom | (kosong) | M10 | DDPK | 1 | X TKJ 1");
 
         saveTemplate(owner, "template-import-pengampu.xlsx", "Pengampu", TeachingAssignmentImportParser.COLUMNS, notes);
+    }
+
+    // ------------------------------------------------------------------ Jadwal ujian
+
+    public static void importExamSchedules(Region mainRoot, Window owner, Runnable onImported) {
+        File file = chooseExcel(owner, "Pilih file Excel jadwal ujian");
+        if (file == null) {
+            return;
+        }
+
+        try {
+            List<TableParser.Row> rows = readRows(file, ExamScheduleImportParser.ALIASES,
+                    ExamScheduleImportParser.REQUIRED, Set.of());
+            if (rows.isEmpty()) {
+                noData("Tanggal, Jam Mulai, Jam Selesai, Kelas (serta Kode Mapel atau Mapel)");
+                return;
+            }
+
+            MasterService masterService = new MasterServiceImpl();
+            ExamScheduleService service = new ExamScheduleServiceImpl();
+            // getClassroomBy("") memuat jurusan kelas (dibutuhkan untuk cek mapel berlaku di kelas itu)
+            List<ImportItem<ExamSchedule>> items = ExamScheduleImportParser.parse(rows,
+                    masterService.getAllSubjects(), masterService.getClassroomBy(""),
+                    new TeachingAssignmentServiceImpl().getAllTeachingAssignments(),
+                    service.getAllExamSchedulesDetailed());
+
+            ImportPreviewDialog.show(mainRoot, "Import Jadwal Ujian dari Excel", file.getName(),
+                    ExamScheduleImportParser.COLUMNS, items,
+                    list -> service.importExamSchedules(list, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole()),
+                    onImported);
+        } catch (Exception ex) {
+            readError(ex);
+        }
+    }
+
+    public static void saveExamScheduleTemplate(Window owner) {
+        List<String> notes = List.of(
+                "PETUNJUK PENGISIAN TEMPLATE JADWAL UJIAN",
+                "Isi data Kelas, Mapel, dan Pengampu lebih dulu. Isi di sheet pertama mulai baris 2. Satu baris = satu mapel diujikan di satu kelas.",
+                "Tanggal: tulis sebagai teks 2026-11-30 (atau 30/11/2026). Jam Mulai/Selesai: 07:00 (atau 07.00).",
+                "Kelas: nama kelas sesuai menu Kelas (mis. X TKJ 1).",
+                "Kode Mapel: kode di menu Mapel (mis. M10). Boleh dikosongkan bila kolom Mapel berisi nama mapel yang tidak kembar.",
+                "Mapel harus berlaku untuk kelasnya (jurusan dan tingkat), sama seperti form Jadwal Ujian.",
+                "Kode Guru: wajib bila mapel itu di kelas tsb punya pengampu berkode (mis. DDPK TKJ (1), (2), (3)); pilihannya mengikuti data Pengampu.",
+                "Jenis Ujian: " + String.join(", ", co.id.model.ExamTypes.ALL) + ". Semester: Ganjil / Genap. Tahun Akademik: 2026/2027.",
+                "Kelas yang sama tidak boleh ujian di jam yang bertumpuk. Jadwal yang persis sama dengan yang sudah ada dilewati.",
+                "Kode ujian dibuat otomatis. Ruangan dan pengawas diatur di menu Penempatan Ruangan.",
+                "Contoh baris: 2026-11-30 | 07:00 | 08:30 | X TKJ 1 | M19 | PAI | 3 | AAS | Ganjil | 2026/2027 | (kosong)");
+
+        saveTemplate(owner, "template-import-jadwal-ujian.xlsx", "Jadwal Ujian", ExamScheduleImportParser.COLUMNS, notes);
     }
 
     // ------------------------------------------------------------------ Status administrasi siswa

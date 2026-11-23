@@ -1,6 +1,7 @@
 package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
+import co.id.component.ExcelImportActions;
 import co.id.model.ExamSchedule;
 import co.id.model.PlacementSummary;
 import co.id.service.ExamScheduleService;
@@ -37,6 +38,8 @@ public class ExamScheduleController {
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
     @FXML private Button addBtn;
+    @FXML private Button importBtn;
+    @FXML private Button templateBtn;
     @FXML private TableView<ExamSchedule> tableView;
 
     @FXML private TableColumn<ExamSchedule, String> tableColumnCode, tableColumnType, tableColumnAcademicYear,
@@ -67,6 +70,10 @@ public class ExamScheduleController {
         if (!AuthContext.isAdmin()) {
             addBtn.setVisible(false);
             addBtn.setManaged(false);
+            importBtn.setVisible(false);
+            importBtn.setManaged(false);
+            templateBtn.setVisible(false);
+            templateBtn.setManaged(false);
         }
 
         // tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -195,6 +202,9 @@ public class ExamScheduleController {
 
         filterBtn.setOnAction(eh -> filterItems());
         addBtn.setOnAction(eh -> openForm(null, false));
+        importBtn.setOnAction(eh -> ExcelImportActions.importExamSchedules(
+                (Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::refreshTable));
+        templateBtn.setOnAction(eh -> ExcelImportActions.saveExamScheduleTemplate(templateBtn.getScene().getWindow()));
         refreshBtn.setOnAction(e -> refreshTable());
     }
 

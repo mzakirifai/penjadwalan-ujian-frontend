@@ -37,7 +37,7 @@ public class ReportExamScheduleController {
     public void initialize() {
         reportService = new ReportServiceImpl();
 
-        comboExamType.setItems(FXCollections.observableArrayList("UTS", "UAS", "UKK", "PRAKTIK"));
+        comboExamType.setItems(FXCollections.observableArrayList(co.id.model.ExamTypes.ALL));
         comboSemester.setItems(FXCollections.observableArrayList("Ganjil", "Genap"));
 
         btnViewReport.setOnAction(e -> onViewReport());
@@ -84,12 +84,6 @@ public class ReportExamScheduleController {
     }
 
     private String toExamTypeLabel(String examType) {
-        return switch (examType) {
-            case "UTS" -> "UJIAN TENGAH SEMESTER";
-            case "UAS" -> "UJIAN AKHIR SEMESTER";
-            case "UKK" -> "UJIAN KENAIKAN KELAS";
-            case "PRAKTIK" -> "UJIAN PRAKTIK";
-            default -> examType;
-        };
+        return co.id.model.ExamTypes.label(examType);
     }
 }
