@@ -2,6 +2,7 @@ package co.id.controller.pages;
 
 import co.id.auth.AuthContext;
 import co.id.component.PasswordToggleField;
+import co.id.config.DatabaseConfiguration;
 import co.id.model.User;
 import co.id.service.UserService;
 import co.id.service.impl.UserServiceImpl;
@@ -40,6 +41,13 @@ public class LoginController {
             return;
         }
         
+        // Tanpa cek ini, server yang tidak terjangkau tampil sebagai "Username atau password salah"
+        String connectionError = DatabaseConfiguration.checkConnection();
+        if (connectionError != null) {
+            showError(connectionError);
+            return;
+        }
+
         User user = userService.login(username, password);
         
         if (user == null) {
