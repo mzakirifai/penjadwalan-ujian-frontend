@@ -56,7 +56,7 @@ public class ReportTeacherScheduleController {
             () -> masterService.getAllTeachers(), List.of(colNip, colName), Teacher::getName
         );
 
-        comboExamType.setItems(FXCollections.observableArrayList(co.id.model.ExamTypes.ALL));
+        comboExamType.setItems(FXCollections.observableArrayList(new co.id.service.impl.ExamTypeServiceImpl().getAllCodes()));
         comboSemester.setItems(FXCollections.observableArrayList("Ganjil", "Genap"));
 
         btnViewReport.setOnAction(e -> onViewReport());
@@ -107,6 +107,6 @@ public class ReportTeacherScheduleController {
     }
 
     private String toExamTypeLabel(String examType) {
-        return co.id.model.ExamTypes.label(examType);
+        return new co.id.service.impl.ExamTypeServiceImpl().label(examType);
     }
 }

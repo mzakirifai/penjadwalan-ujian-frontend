@@ -18,17 +18,8 @@
 
             <Label text="Form Jadwal Ujian" styleClass="form-label"/>
 
-            <ComboBox fx:id="comboExamType" promptText="Jenis Ujian">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="UTS"/>
-                        <String fx:value="UAS"/>
-                        <String fx:value="AAS"/>
-                        <String fx:value="UKK"/>
-                        <String fx:value="PRAKTIK"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
+            <!-- isi pilihan diambil dari menu Master > Jenis Ujian (lihat controller) -->
+            <ComboBox fx:id="comboExamType" promptText="Jenis Ujian"/>
 
             <ComboBox fx:id="comboSemester" promptText="Semester">
                 <items>

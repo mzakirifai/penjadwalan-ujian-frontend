@@ -128,7 +128,7 @@ public class SidebarController {
     private void toggleMasterMenu() {
         if (collapsed) {
             showFlyoutMenu(masterMenu,
-                    new String[]{"Guru", "Jurusan", "Kelas", "Siswa", "Mapel", "Ruangan", "Pengampu"},
+                    new String[]{"Guru", "Jurusan", "Kelas", "Siswa", "Mapel", "Ruangan", "Pengampu", "Jenis Ujian"},
                     new Runnable[]{
                             this::handleTeacherClick,
                             this::handleMajorClick,
@@ -136,7 +136,8 @@ public class SidebarController {
                             this::handleStudentClick,
                             this::handleSubjectClick,
                             this::handleRoomClick,
-                            this::handleTeachingAssignmentClick
+                            this::handleTeachingAssignmentClick,
+                            this::handleExamTypeClick
                     });
             return;
         }
@@ -203,6 +204,7 @@ public class SidebarController {
     @FXML private void handleSubjectClick() { loadPage("/pages/Subject.fxml"); }
     @FXML private void handleRoomClick() { loadPage("/pages/Room.fxml"); }
     @FXML private void handleTeachingAssignmentClick() { loadPage("/pages/TeachingAssignment.fxml"); }
+    @FXML private void handleExamTypeClick() { loadPage("/pages/ExamType.fxml"); }
     
     @FXML private void handleExamScheduleClick() { loadPage("/pages/ExamSchedule.fxml"); }
     @FXML private void handleExamParticipantClick() { loadPage("/pages/ExamParticipant.fxml"); }

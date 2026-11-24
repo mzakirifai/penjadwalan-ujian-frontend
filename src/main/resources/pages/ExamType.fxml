@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="co.id.controller.pages.ExamTypeController"
+            styleClass="list-menu-background">
+
+    <top>
+        <VBox spacing="10" styleClass="list-menu-top-vbox">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Jenis Ujian" styleClass="list-menu-top-label"/>
+                <Button fx:id="refreshBtn" text="Refresh">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/refresh.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="addBtn" text="Tambah" styleClass="list-menu-top-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/add.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+            <Label fx:id="infoLabel" wrapText="true"
+                   text="Daftar jenis ujian untuk form Jadwal Ujian, filter laporan, dan impor jadwal. Nama lengkap dipakai sebagai judul laporan. Jenis yang sudah dipakai jadwal tidak bisa dihapus, tetapi bisa dinonaktifkan supaya tidak muncul di pilihan jadwal baru."/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" styleClass="list-menu-center-vbox">
+            <TableView fx:id="tableView" prefHeight="400" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="tableColumnAction" text="Aksi" prefWidth="170" minWidth="160" maxWidth="190"/>
+                    <TableColumn fx:id="tableColumnOrder" text="Urutan" prefWidth="70" minWidth="60" maxWidth="90"/>
+                    <TableColumn fx:id="tableColumnCode" text="Kode" prefWidth="120" minWidth="90" maxWidth="170"/>
+                    <TableColumn fx:id="tableColumnName" text="Nama Lengkap (judul laporan)" prefWidth="420" minWidth="220"/>
+                    <TableColumn fx:id="tableColumnStatus" text="Status" prefWidth="100" minWidth="90" maxWidth="120"/>
+                    <TableColumn fx:id="tableColumnUsage" text="Dipakai" prefWidth="110" minWidth="100" maxWidth="140"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

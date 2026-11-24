@@ -84,7 +84,7 @@ public class ReportAttendanceListController {
         comboSession.setCellFactory(list -> new SessionCell());
         comboSession.setButtonCell(new SessionCell());
 
-        comboExamType.setItems(FXCollections.observableArrayList(co.id.model.ExamTypes.ALL));
+        comboExamType.setItems(FXCollections.observableArrayList(new co.id.service.impl.ExamTypeServiceImpl().getAllCodes()));
         comboSemester.setItems(FXCollections.observableArrayList("Ganjil", "Genap"));
 
         comboMode.setItems(FXCollections.observableArrayList(MODE_OFFLINE, MODE_ONLINE));
@@ -221,7 +221,7 @@ public class ReportAttendanceListController {
     }
 
     private String toExamTypeLabel(String examType) {
-        return co.id.model.ExamTypes.label(examType);
+        return new co.id.service.impl.ExamTypeServiceImpl().label(examType);
     }
 
     /** Menampilkan sesi sebagai "08:00 - 09:30  |  X TKJ 1, XI TKJ 1, X TP". */

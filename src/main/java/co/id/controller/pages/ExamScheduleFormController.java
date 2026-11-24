@@ -66,6 +66,8 @@ public class ExamScheduleFormController {
         masterService = new MasterServiceImpl();
         teachingAssignmentService = new TeachingAssignmentServiceImpl();
         comboMode.setValue(ExamSchedule.MODE_OFFLINE);
+        // jenis ujian aktif dari menu Master > Jenis Ujian
+        comboExamType.getItems().setAll(new co.id.service.impl.ExamTypeServiceImpl().getActiveCodes());
 
         TableColumn<Classroom, String> colClassroomName = new TableColumn<>("Kelas");
         colClassroomName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
@@ -202,6 +204,10 @@ public class ExamScheduleFormController {
         this.selectedExamSchedule = isDuplicate ? null : examSchedule;
 
         if (examSchedule != null) {
+            // jadwal lama dengan jenis yang sudah dinonaktifkan tetap ditampilkan jenisnya
+            if (examSchedule.getExamType() != null && !comboExamType.getItems().contains(examSchedule.getExamType())) {
+                comboExamType.getItems().add(examSchedule.getExamType());
+            }
             comboExamType.setValue(examSchedule.getExamType());
             comboSemester.setValue(examSchedule.getSemester());
             textFieldAcademicYear.setText(examSchedule.getAcademicYear());

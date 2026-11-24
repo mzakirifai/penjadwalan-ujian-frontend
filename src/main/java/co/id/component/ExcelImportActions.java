@@ -290,7 +290,8 @@ public class ExcelImportActions {
             List<ImportItem<ExamSchedule>> items = ExamScheduleImportParser.parse(rows,
                     masterService.getAllSubjects(), masterService.getClassroomBy(""),
                     new TeachingAssignmentServiceImpl().getAllTeachingAssignments(),
-                    service.getAllExamSchedulesDetailed());
+                    service.getAllExamSchedulesDetailed(),
+                    new co.id.service.impl.ExamTypeServiceImpl().getActiveCodes());
 
             ImportPreviewDialog.show(mainRoot, "Impor Jadwal Ujian dari Excel", file.getName(),
                     ExamScheduleImportParser.COLUMNS, items,
@@ -310,7 +311,8 @@ public class ExcelImportActions {
                 "Kode Mapel: kode di menu Mapel (mis. M10). Boleh dikosongkan bila kolom Mapel berisi nama mapel yang tidak kembar.",
                 "Mapel harus berlaku untuk kelasnya (jurusan dan tingkat), sama seperti form Jadwal Ujian.",
                 "Kode Guru: wajib bila mapel itu di kelas tsb punya pengampu berkode (mis. DDPK TKJ (1), (2), (3)); pilihannya mengikuti data Pengampu.",
-                "Jenis Ujian: " + String.join(", ", co.id.model.ExamTypes.ALL) + ". Semester: Ganjil / Genap. Tahun Akademik: 2026/2027.",
+                "Jenis Ujian: " + String.join(", ", new co.id.service.impl.ExamTypeServiceImpl().getActiveCodes())
+                        + " (daftar ini diatur di menu Master > Jenis Ujian)" + ". Semester: Ganjil / Genap. Tahun Akademik: 2026/2027.",
                 "Mode Ujian: Offline (di ruangan) atau Online (tanpa ruangan & pengawas). Kosong = Offline.",
                 "Kelas yang sama tidak boleh ujian di jam yang bertumpuk. Jadwal yang persis sama dengan yang sudah ada dilewati.",
                 "Kode ujian dibuat otomatis. Ruangan dan pengawas jadwal Offline diatur di menu Penempatan Ruangan.",

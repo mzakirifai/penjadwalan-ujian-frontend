@@ -73,6 +73,9 @@
                         <Button text="Pengampu" onAction="#handleTeachingAssignmentClick" styleClass="menu-child">
                             <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/subject.png"/></image></ImageView></graphic>
                         </Button>
+                        <Button text="Jenis Ujian" onAction="#handleExamTypeClick" styleClass="menu-child">
+                            <graphic><ImageView fitWidth="16" fitHeight="16" preserveRatio="true"><image><Image url="@/icons/exam_schedule.png"/></image></ImageView></graphic>
+                        </Button>
                     </VBox>
 
                     <!-- Transaksi -->
