@@ -32,6 +32,13 @@
                     </graphic>
                 </Button>
                 <HBox HBox.hgrow="ALWAYS"/>
+                <Button fx:id="accountBtn" text="Buat Akun Guru">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <image><Image url="@/icons/user.png"/></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
                 <Button fx:id="templateBtn" text="Template">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16">

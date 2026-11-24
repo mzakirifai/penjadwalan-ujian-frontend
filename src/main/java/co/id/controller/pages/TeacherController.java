@@ -39,6 +39,7 @@ public class TeacherController {
     @FXML private Button filterBtn;
     @FXML private Button refreshBtn;
     @FXML private Button importBtn;
+    @FXML private Button accountBtn;
     @FXML private Button templateBtn;
     @FXML private Button addBtn;
     @FXML private TableView<Teacher> tableView;
@@ -166,7 +167,11 @@ public class TeacherController {
             importBtn.setManaged(false);
             templateBtn.setVisible(false);
             templateBtn.setManaged(false);
+            accountBtn.setVisible(false);
+            accountBtn.setManaged(false);
         }
+        // Buat akun login untuk banyak guru sekaligus (hanya guru yang belum punya akun)
+        accountBtn.setOnAction(eh -> co.id.component.TeacherAccountDialog.show(accountBtn.getScene().getWindow(), null));
         importBtn.setOnAction(eh -> ExcelImportActions.importTeachers(
                 (Region) importBtn.getScene().getRoot(), importBtn.getScene().getWindow(), this::refreshTable));
         templateBtn.setOnAction(eh -> ExcelImportActions.saveTeacherTemplate(templateBtn.getScene().getWindow()));
