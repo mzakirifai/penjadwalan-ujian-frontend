@@ -107,6 +107,60 @@ public final class UiFix {
         return text == null ? null : TRANSLATIONS.getOrDefault(text.trim(), text);
     }
 
+    /** Pesan lebih dari sekian baris dipindah ke kotak bergulir, supaya popup tidak lebih tinggi dari layar. */
+    private static final int MAX_PLAIN_LINES = 14;
+
+    /**
+     * Popup berisi teks panjang (mis. hasil "Daftarkan Banyak Jadwal" dengan puluhan jadwal):
+     * paragraf pertama tetap tampil biasa sebagai ringkasan, sisanya masuk kotak teks yang bisa digulir
+     * (dan bisa diblok/disalin).
+     */
+    private static void scrollLongText(DialogPane pane) {
+        String text = pane.getContent() == null ? pane.getContentText() : null;
+        if (text == null || text.lines().count() <= MAX_PLAIN_LINES) {
+            return;
+        }
+        String summary;
+        String detail;
+        int blank = text.indexOf("\n\n");
+        if (blank > 0 && text.substring(0, blank).lines().count() <= 4) {
+            summary = text.substring(0, blank).trim();
+            detail = text.substring(blank).trim();
+        } else {
+            summary = "Rincian:";
+            detail = text.trim();
+        }
+        Label summaryLabel = new Label(summary);
+        summaryLabel.setWrapText(true);
+        summaryLabel.setPrefWidth(DIALOG_TEXT_WIDTH);
+        summaryLabel.setMinHeight(Region.USE_PREF_SIZE);
+        javafx.scene.control.TextArea area = new javafx.scene.control.TextArea(detail);
+        area.setEditable(false);
+        area.setWrapText(true);
+        area.setPrefRowCount((int) Math.min(MAX_PLAIN_LINES, detail.lines().count() + 1));
+        area.setPrefWidth(DIALOG_TEXT_WIDTH);
+        javafx.scene.layout.VBox box = new javafx.scene.layout.VBox(8, summaryLabel, area);
+        javafx.scene.layout.VBox.setVgrow(area, javafx.scene.layout.Priority.ALWAYS);
+        pane.setContent(box);
+    }
+
+    /** Jaga jendela popup tidak melebihi layar tempat ia muncul (tinggi maks. 90% area layar). */
+    private static void keepInsideScreen(Stage stage) {
+        var screens = javafx.stage.Screen.getScreensForRectangle(stage.getX(), stage.getY(),
+                Math.max(1, stage.getWidth()), Math.max(1, stage.getHeight()));
+        javafx.geometry.Rectangle2D bounds = (screens.isEmpty() ? javafx.stage.Screen.getPrimary() : screens.get(0)).getVisualBounds();
+        double maxHeight = bounds.getHeight() * 0.9;
+        if (stage.getHeight() > maxHeight) {
+            stage.setHeight(maxHeight);
+        }
+        if (stage.getY() + stage.getHeight() > bounds.getMaxY()) {
+            stage.setY(Math.max(bounds.getMinY(), bounds.getMaxY() - stage.getHeight()));
+        }
+        if (stage.getY() < bounds.getMinY()) {
+            stage.setY(bounds.getMinY());
+        }
+    }
+
     private static void fixDialog(Window window, DialogPane pane) {
         if (window instanceof Stage stage) {
             stage.setTitle(translate(stage.getTitle()));
@@ -119,6 +173,7 @@ public final class UiFix {
             }
         }
         pane.setMinHeight(Region.USE_PREF_SIZE);
+        scrollLongText(pane);
         for (Node node : pane.lookupAll(".content")) {
             if (node instanceof Label label) {
                 label.setWrapText(true);
@@ -132,7 +187,7 @@ public final class UiFix {
         if (pane.getHeader() != null) {
             preventShrink(pane.getHeader());
         }
-        // ukuran popup dihitung ulang setelah teks dibuat membungkus
+        // ukuran popup dihitung ulang setelah teks dibuat membungkus, lalu dijaga agar tetap di dalam layar
         Platform.runLater(() -> {
             if (window instanceof Stage stage && window.isShowing()) {
                 double oldHeight = stage.getHeight();
@@ -140,6 +195,7 @@ public final class UiFix {
                 if (stage.getHeight() > oldHeight) {
                     stage.setY(Math.max(0, stage.getY() - (stage.getHeight() - oldHeight) / 2));
                 }
+                keepInsideScreen(stage);
             }
         });
     }
