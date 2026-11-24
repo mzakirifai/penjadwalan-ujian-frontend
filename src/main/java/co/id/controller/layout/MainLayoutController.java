@@ -28,7 +28,7 @@ public class MainLayoutController {
             co.id.component.UiFix.preventShrink(node);
             contentArea.getChildren().setAll(node);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            co.id.component.ErrorDialog.show("MainLayoutController.setContent", "Halaman tidak bisa dibuka.", exception);
         }
     }
 }

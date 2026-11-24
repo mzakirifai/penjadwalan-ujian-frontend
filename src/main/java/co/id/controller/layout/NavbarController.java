@@ -85,7 +85,7 @@ public class NavbarController {
                     stage.centerOnScreen();
 
                 } catch (Exception exception) {
-                    exception.printStackTrace();
+                    co.id.component.ErrorDialog.show("NavbarController.handleLogout", "Gagal kembali ke halaman masuk.", exception);
                 }
             }
         });

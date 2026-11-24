@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.config.AppLog;
 import co.id.component.ReportParameters;
 import co.id.component.LookupBox;
 import co.id.model.Teacher;
@@ -101,7 +102,7 @@ public class ReportTeacherScheduleController {
             reportPane.getChildren().setAll(viewerFX);
 
         } catch (JRException ex) {
-            ex.printStackTrace();
+            AppLog.error("ReportTeacherScheduleController.onViewReport", ex);
             new Alert(Alert.AlertType.ERROR, "Gagal memuat laporan: " + ex.getMessage()).showAndWait();
         }
     }

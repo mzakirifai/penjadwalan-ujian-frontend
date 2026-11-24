@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.config.AppLog;
 import co.id.component.ReportParameters;
 import co.id.model.report.ExamScheduleReportItem;
 import co.id.service.ReportService;
@@ -78,7 +79,7 @@ public class ReportExamScheduleController {
             reportPane.getChildren().setAll(viewerFX);
 
         } catch (JRException ex) {
-            ex.printStackTrace();
+            AppLog.error("ReportExamScheduleController.onViewReport", ex);
             new Alert(Alert.AlertType.ERROR, "Gagal memuat laporan: " + ex.getMessage()).showAndWait();
         }
     }

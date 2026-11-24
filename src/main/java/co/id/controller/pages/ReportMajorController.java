@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.config.AppLog;
 import co.id.component.ReportParameters;
 import co.id.model.report.MajorReportItem;
 import co.id.service.ReportService;
@@ -46,7 +47,7 @@ public class ReportMajorController {
             reportPane.getChildren().setAll(viewerFX);
 
         } catch (JRException ex) {
-            ex.printStackTrace();
+            AppLog.error("ReportMajorController.onViewReport", ex);
             new Alert(Alert.AlertType.ERROR, "Gagal memuat laporan: " + ex.getMessage()).showAndWait();
         }
     }

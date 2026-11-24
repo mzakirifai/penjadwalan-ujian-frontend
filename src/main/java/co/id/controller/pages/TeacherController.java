@@ -219,7 +219,7 @@ public class TeacherController {
 
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("TeacherController.openForm", "Form guru tidak bisa dibuka.", e);
         }
     }
 

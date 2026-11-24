@@ -90,7 +90,7 @@ public class LoginController {
             stage.centerOnScreen();
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            co.id.component.ErrorDialog.show("LoginController.openMainLayout", "Halaman utama tidak bisa dibuka.", exception);
         }
     }
 }

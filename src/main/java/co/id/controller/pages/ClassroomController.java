@@ -197,7 +197,7 @@ public class ClassroomController {
 
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("ClassroomController.openForm", "Form kelas tidak bisa dibuka.", e);
         }
     }
 

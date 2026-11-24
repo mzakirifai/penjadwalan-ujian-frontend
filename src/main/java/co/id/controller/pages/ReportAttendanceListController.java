@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.config.AppLog;
 import co.id.component.ReportParameters;
 import co.id.model.ExamSession;
 import co.id.model.RoomAssignment;
@@ -115,7 +116,7 @@ public class ReportAttendanceListController {
                 comboSession.getSelectionModel().selectFirst();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            AppLog.error("ReportAttendanceListController.loadSessions", ex);
             new Alert(Alert.AlertType.ERROR, "Gagal memuat sesi ujian: " + ex.getMessage()).showAndWait();
         }
     }
@@ -142,7 +143,7 @@ public class ReportAttendanceListController {
         try {
             currentPlan = roomAllocationService.loadSaved(session);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            AppLog.error("ReportAttendanceListController.loadPlan", ex);
             new Alert(Alert.AlertType.ERROR, "Gagal memuat penempatan ruangan: " + ex.getMessage()).showAndWait();
             return;
         }
@@ -211,7 +212,7 @@ public class ReportAttendanceListController {
             reportPane.getChildren().setAll(viewerFX);
 
         } catch (JRException ex) {
-            ex.printStackTrace();
+            AppLog.error("ReportAttendanceListController.onViewReport", ex);
             new Alert(Alert.AlertType.ERROR, "Gagal memuat laporan: " + ex.getMessage()).showAndWait();
         }
     }

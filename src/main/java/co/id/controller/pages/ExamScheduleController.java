@@ -352,7 +352,7 @@ public class ExamScheduleController {
 
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("ExamScheduleController.openForm", "Form jadwal ujian tidak bisa dibuka.", e);
         }
     }
 

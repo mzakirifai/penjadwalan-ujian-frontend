@@ -1,5 +1,6 @@
 package co.id.component;
 
+import co.id.config.AppLog;
 import co.id.model.SchoolSettings;
 import co.id.service.SchoolSettingsService;
 import co.id.service.impl.SchoolSettingsServiceImpl;
@@ -26,7 +27,7 @@ public final class ReportParameters {
             }
         } catch (Exception exception) {
             // Pengaturan gagal dibaca: laporan tetap dicetak, tanda tangan kepala sekolah dikosongkan
-            exception.printStackTrace();
+            AppLog.warn("ReportParameters.withSchool", exception);
         }
         return parameters;
     }

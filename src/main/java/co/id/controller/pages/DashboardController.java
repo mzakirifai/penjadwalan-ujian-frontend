@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.config.AppLog;
 import co.id.model.ExamSchedule;
 import co.id.model.SchoolSettings;
 import co.id.model.report.PassFailSummary;
@@ -134,7 +135,7 @@ public class DashboardController {
             placements = examScheduleService.getPlacementSummaries(todaySchedules.stream()
                     .map(co.id.model.ExamSchedule::getId).collect(java.util.stream.Collectors.toList()));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            AppLog.warn("DashboardController.setupTodayScheduleTable", ex);
             placements = new java.util.HashMap<>();
         }
         final java.util.Map<Integer, co.id.model.PlacementSummary> placementById = placements;

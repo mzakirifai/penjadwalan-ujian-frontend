@@ -1,5 +1,6 @@
 package co.id.controller.pages;
 
+import co.id.config.AppLog;
 import co.id.controller.layout.ControllerRegistry;
 import co.id.controller.layout.NavbarController;
 import co.id.auth.AuthContext;
@@ -98,7 +99,7 @@ public class EditProfileController {
                 selectedPhotoData = resizeToJpeg(file);
                 profileImageView.setImage(new Image(new ByteArrayInputStream(selectedPhotoData)));
             } catch (Exception e) {
-                e.printStackTrace();
+                AppLog.error("EditProfileController.handleChoosePhoto", e);
                 new Alert(AlertType.ERROR, "Gagal memproses foto. Pastikan file berupa gambar PNG atau JPG.").showAndWait();
             }
         }

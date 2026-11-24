@@ -414,7 +414,7 @@ public class TeachingAssignmentController {
             dialog.setOnHidden(eh -> mainRoot.setEffect(null));
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("TeachingAssignmentController.openForm", "Form pengampu tidak bisa dibuka.", e);
         }
     }
 }

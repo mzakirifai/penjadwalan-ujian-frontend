@@ -217,7 +217,7 @@ public class UserManagementController {
 
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("UserManagementController.openForm", "Form pengguna tidak bisa dibuka.", e);
         }
     }
     

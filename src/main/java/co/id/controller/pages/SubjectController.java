@@ -202,7 +202,7 @@ public class SubjectController {
 
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("SubjectController.openForm", "Form mata pelajaran tidak bisa dibuka.", e);
         }
     }
     

@@ -345,7 +345,7 @@ public class ExamParticipantController {
 
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("ExamParticipantController.openAddForm", "Form peserta ujian tidak bisa dibuka.", e);
         }
     }
 

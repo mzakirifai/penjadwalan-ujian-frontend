@@ -429,7 +429,7 @@ public class StudentController {
 
             dialog.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            co.id.component.ErrorDialog.show("StudentController.openForm", "Form siswa tidak bisa dibuka.", e);
         }
     }
     
