@@ -80,6 +80,7 @@ public class RoomAllocationController {
     private ObservableList<Teacher> teacherItems;
 
     private ExamSession currentSession;
+    private String baseFingerprint;                       // isi sesi di database saat dibuka (cek dua admin)
     private RoomPlan currentPlan;
     private boolean saved;                                // currentPlan sama dengan yang tersimpan di database
 
@@ -232,6 +233,8 @@ public class RoomAllocationController {
             long busy = rooms.stream().filter(r -> !r.isAvailable()).count();
             lblRoomHint.setText(busy > 0 ? busy + " ruangan (abu-abu) sedang dipakai sesi lain yang waktunya bertumpuk." : "");
 
+            // dicatat saat sesi dibuka; dipakai saat Simpan untuk mendeteksi perubahan oleh admin lain
+            baseFingerprint = service.getFingerprint(session);
             RoomPlan savedPlan = service.loadSaved(session);
             if (savedPlan != null) {
                 showPlan(savedPlan, true);
@@ -559,15 +562,50 @@ public class RoomAllocationController {
             return;
         }
 
-        try {
-            service.save(currentPlan, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
-        } catch (Exception ex) {
-            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+        if (!saveChecked(baseFingerprint)) {
             return;
         }
         new Alert(AlertType.INFORMATION, "Penempatan ruangan tersimpan: " + currentPlan.getTotalStudents()
                 + " siswa di " + currentPlan.getRooms().size() + " ruangan.").showAndWait();
         openSession(currentSession);
+    }
+
+    /**
+     * Simpan dengan pemeriksaan perubahan oleh admin lain. Bila sesi sudah diubah orang lain sejak dibuka,
+     * pengguna memilih: muat ulang versi terbaru, timpa dengan versinya sendiri, atau batal (tetap di layar).
+     * @return true bila tersimpan
+     */
+    private boolean saveChecked(String expectedFingerprint) {
+        try {
+            service.save(currentPlan, expectedFingerprint, AuthContext.getCurrentUsername(), AuthContext.getCurrentRole());
+            return true;
+        } catch (co.id.dao.ConcurrentChangeException ex) {
+            ButtonType reload = new ButtonType("Muat Ulang Versi Terbaru", javafx.scene.control.ButtonBar.ButtonData.LEFT);
+            ButtonType overwrite = new ButtonType("Timpa dengan Versi Saya", javafx.scene.control.ButtonBar.ButtonData.OTHER);
+            ButtonType cancel = new ButtonType("Batal", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert conflict = new Alert(AlertType.WARNING, ex.getMessage() + "\n\n"
+                    + "Penempatan Anda BELUM disimpan.\n"
+                    + "- Muat Ulang: tampilkan penempatan terbaru dari database (perubahan Anda di layar ini dibuang).\n"
+                    + "- Timpa: simpan penempatan Anda dan ganti perubahan pengguna lain tadi.\n"
+                    + "- Batal: kembali ke layar tanpa menyimpan.", reload, overwrite, cancel);
+            conflict.setTitle("Data Sudah Diubah Pengguna Lain");
+            conflict.setHeaderText("Penempatan sesi ini berubah sejak Anda membukanya");
+            ButtonType choice = conflict.showAndWait().orElse(cancel);
+            if (choice == reload) {
+                openSession(currentSession);
+            } else if (choice == overwrite) {
+                Alert sure = new Alert(AlertType.CONFIRMATION, "Yakin menimpa perubahan pengguna lain pada sesi ini?",
+                        ButtonType.YES, ButtonType.NO);
+                sure.setHeaderText(null);
+                if (sure.showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+                    return saveChecked(service.getFingerprint(currentSession));
+                }
+            }
+            return false;
+        } catch (Exception ex) {
+            new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+            return false;
+        }
     }
 
     private void export() {
