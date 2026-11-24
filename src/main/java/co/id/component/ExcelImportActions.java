@@ -213,7 +213,7 @@ public class ExcelImportActions {
                 "KKM diisi angka 0 - 100. Bila kosong, dipakai KKM " + SubjectImportParser.DEFAULT_KKM + ".",
                 "Kode Mapel boleh kosong (dibuat otomatis, mis. M16). Isi bila sheet Pengampu di file yang sama "
                         + "merujuk mapel lewat kodenya. Kode tidak boleh sama dengan mapel lain.",
-                "Mapel yang sudah terdaftar (kode sama, atau nama + jurusan + tingkat sama) tidak diimport ulang.",
+                "Mapel yang sudah terdaftar (kode sama, atau nama + jurusan + tingkat sama) tidak diimpor ulang.",
                 "Contoh baris: (kosong) | Dasar-dasar Program Keahlian | Kejuruan | TKJ | X | 75");
 
         saveTemplate(owner, "template-import-mapel.xlsx", "Mapel", SubjectImportParser.COLUMNS, notes);
@@ -261,7 +261,7 @@ public class ExcelImportActions {
                 "Kode Guru: angka 1 - 99 untuk mapel yang diajar beberapa guru, mis. DDPK TKJ (1), (2), (3). Kosongkan bila tidak perlu.",
                 "Dalam satu mapel, satu Kode Guru hanya boleh dipakai satu guru.",
                 "Kelas: nama kelas sesuai menu Kelas (mis. X TKJ 1). Mapel harus berlaku untuk kelasnya (jurusan dan tingkat).",
-                "Pengampu yang sudah terdaftar (guru, mapel, kelas sama) tidak diimport ulang.",
+                "Pengampu yang sudah terdaftar (guru, mapel, kelas sama) tidak diimpor ulang.",
                 "File data-mapel-pengampu dari sheet \"Pengampu (Rinci)\" bisa langsung diimpor.",
                 "Contoh baris: Nama Guru, S.Kom | (kosong) | M10 | DDPK | 1 | X TKJ 1");
 

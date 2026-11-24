@@ -52,7 +52,7 @@ import javafx.util.StringConverter;
  * Tidak ada data yang masuk database sebelum tombol Import ditekan.
  */
 public class StudentImportDialog {
-    private static final String READY = "Siap diimport";
+    private static final String READY = "Siap diimpor";
 
     /** Satu baris di tabel pratinjau. */
     private static class RowView {
@@ -342,7 +342,7 @@ public class StudentImportDialog {
         }
 
         int skipped = rowViews.size() - ready;
-        summaryLabel.setText("Siap diimport: " + ready + "   |   Dilewati: " + skipped);
+        summaryLabel.setText("Siap diimpor: " + ready + "   |   Dilewati: " + skipped);
         importBtn.setDisable(ready == 0);
         applyFilter();
         tableView.refresh();
@@ -390,7 +390,7 @@ public class StudentImportDialog {
         };
 
         task.setOnSucceeded(eh -> {
-            new Alert(Alert.AlertType.INFORMATION, task.getValue() + " siswa berhasil diimport.").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, task.getValue() + " siswa berhasil diimpor.").showAndWait();
             if (onImported != null) {
                 onImported.run();
             }

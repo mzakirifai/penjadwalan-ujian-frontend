@@ -55,6 +55,7 @@ public class RoomAllocationController {
     @FXML private ComboBox<ExamSession> comboSession;
     @FXML private Label lblSessionInfo, lblRoomHint, lblStatus, lblSeatsTitle;
     @FXML private Button btnSelectAll, btnAutoRooms, btnGenerate, btnAutoSupervisor, btnSave, btnExport;
+    @FXML private Button btnImportSupervisor;
     @FXML private ListView<RoomAvailability> listRooms;
 
     @FXML private TableView<RoomAssignment> tableRooms;
@@ -160,6 +161,9 @@ public class RoomAllocationController {
         btnAutoRooms.setOnAction(e -> autoSelectRooms());
         btnGenerate.setOnAction(e -> generate());
         btnAutoSupervisor.setOnAction(e -> autoSupervisors());
+        btnImportSupervisor.setOnAction(e -> importSupervisors());
+        btnImportSupervisor.setVisible(AuthContext.isAdmin());
+        btnImportSupervisor.setManaged(AuthContext.isAdmin());
         btnSave.setOnAction(e -> save());
         btnExport.setOnAction(e -> export());
         btnManual.setOnAction(e -> manual());
@@ -506,6 +510,21 @@ public class RoomAllocationController {
         } catch (Exception ex) {
             error(ex);
         }
+    }
+
+    /** Impor jadwal pengawas sekolah (format matriks) untuk banyak sesi sekaligus, lalu muat ulang sesi yang tampil. */
+    private void importSupervisors() {
+        if (currentPlan != null && !saved) {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Penempatan sesi yang sedang tampil belum disimpan. Setelah impor, sesi ini dimuat ulang dari database "
+                            + "dan perubahan yang belum disimpan akan hilang. Lanjutkan?", ButtonType.YES, ButtonType.NO);
+            confirm.setHeaderText(null);
+            if (confirm.showAndWait().filter(b -> b == ButtonType.YES).isEmpty()) {
+                return;
+            }
+        }
+        co.id.component.SupervisorImportDialog.show((javafx.scene.layout.Region) btnImportSupervisor.getScene().getRoot(),
+                btnImportSupervisor.getScene().getWindow(), () -> openSession(currentSession));
     }
 
     private void autoSupervisors() {

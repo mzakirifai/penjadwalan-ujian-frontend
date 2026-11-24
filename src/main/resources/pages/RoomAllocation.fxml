@@ -60,6 +60,7 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Isi tiap ruangan" styleClass="form-field-label"/>
                     <HBox HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnImportSupervisor" text="Impor Pengawas (Excel)"/>
                     <Button fx:id="btnAutoSupervisor" text="Isi Pengawas Otomatis"/>
                 </HBox>
                 <Label fx:id="lblStatus" wrapText="true" maxWidth="Infinity"/>

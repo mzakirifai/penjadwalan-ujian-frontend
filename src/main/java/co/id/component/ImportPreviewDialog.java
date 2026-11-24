@@ -31,11 +31,11 @@ import javafx.stage.StageStyle;
 
 /**
  * Dialog pratinjau import yang bisa dipakai untuk data apa saja (Guru, Mapel, ...).
- * Menampilkan semua baris dari Excel beserta statusnya; hanya baris tanpa error yang diimport.
+ * Menampilkan semua baris dari Excel beserta statusnya; hanya baris tanpa error yang diimpor.
  * Tidak ada data yang masuk database sebelum tombol Import ditekan.
  */
 public class ImportPreviewDialog<T> {
-    private static final String READY = "Siap diimport";
+    private static final String READY = "Siap diimpor";
 
     private final String title;
     private final String fileName;
@@ -99,7 +99,18 @@ public class ImportPreviewDialog<T> {
         tableView.getColumns().add(rowCol);
         for (int c = 0; c < columns.size(); c++) {
             final int index = c;
-            tableView.getColumns().add(column(columns.get(c), 100, i -> index < i.getCells().size() ? i.getCells().get(index) : ""));
+            // lebar awal mengikuti isi terpanjang (judul atau data), supaya kolom pendek seperti "No"
+            // tidak memakan tempat kolom nama
+            int longest = columns.get(c).length();
+            for (ImportItem<T> item : items) {
+                if (index < item.getCells().size() && item.getCells().get(index) != null) {
+                    longest = Math.max(longest, item.getCells().get(index).length());
+                }
+            }
+            TableColumn<ImportItem<T>, String> dataCol = column(columns.get(c), Math.max(50, Math.min(260, longest * 7 + 16)),
+                    i -> index < i.getCells().size() ? i.getCells().get(index) : "");
+            dataCol.setMinWidth(Math.max(45, Math.min(160, longest * 7 + 16)));
+            tableView.getColumns().add(dataCol);
         }
 
         TableColumn<ImportItem<T>, String> statusCol = column("Status", 260, i -> i.isValid() ? (i.getWarning() == null ? READY : READY + " (" + i.getWarning() + ")") : i.getError());
@@ -122,7 +133,7 @@ public class ImportPreviewDialog<T> {
         tableView.getColumns().add(statusCol);
         root.setCenter(tableView);
 
-        Label summary = new Label("Siap diimport: " + ready + "   |   Dilewati: " + skipped);
+        Label summary = new Label("Siap diimpor: " + ready + "   |   Dilewati: " + skipped);
         summary.setStyle("-fx-font-weight: bold;");
 
         onlyProblemCheck = new CheckBox("Hanya tampilkan yang bermasalah");
@@ -203,7 +214,7 @@ public class ImportPreviewDialog<T> {
         };
 
         task.setOnSucceeded(eh -> {
-            new Alert(Alert.AlertType.INFORMATION, task.getValue() + " data berhasil diimport.").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, task.getValue() + " data berhasil diimpor.").showAndWait();
             if (onImported != null) {
                 onImported.run();
             }
