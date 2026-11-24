@@ -45,7 +45,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.util.StringConverter;
 
 /**
  * Penempatan ruangan campur: untuk satu sesi ujian (tanggal + jam), siswa dari semua jadwal pada sesi itu
@@ -104,19 +103,24 @@ public class RoomAllocationController {
 
         // Isi sel = RowData-nya sendiri supaya sel selalu diperbarui saat data diganti
         colSupervisor.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue()));
+        // Pengawas dipilih lewat kotak cari: bisa diketik (mis. "agus") lalu pilih dari daftar, atau klik kaca pembesar
         colSupervisor.setCellFactory(col -> new TableCell<>() {
-            private final ComboBox<Teacher> combo = new ComboBox<>(teacherItems);
+            private final co.id.component.LookupBox<Teacher> combo = new co.id.component.LookupBox<>();
             private boolean updating;
 
             {
+                TableColumn<Teacher, String> nameCol = new TableColumn<>("Nama Guru");
+                nameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
+                TableColumn<Teacher, String> nipCol = new TableColumn<>("NIP");
+                nipCol.setCellValueFactory(c -> new SimpleStringProperty(nullToEmpty(c.getValue().getNip())));
+                nameCol.setPrefWidth(280);
+                nipCol.setPrefWidth(140);
+                combo.configure(() -> teacherItems, List.of(nameCol, nipCol), Teacher::getName);
+                combo.setPromptText("Ketik nama pengawas...");
                 combo.setMaxWidth(Double.MAX_VALUE);
-                combo.setConverter(new StringConverter<>() {
-                    @Override public String toString(Teacher t) { return t == null ? "" : t.getName(); }
-                    @Override public Teacher fromString(String s) { return null; }
-                });
-                combo.valueProperty().addListener((obs, oldVal, newVal) -> {
+                combo.selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                     RoomAssignment row = getItem();
-                    if (!updating && row != null && newVal != null) {
+                    if (!updating && row != null && newVal != null && newVal != oldVal) {
                         row.setSupervisor(newVal == noTeacher ? null : newVal);
                         markUnsaved();
                     }
@@ -131,7 +135,7 @@ public class RoomAllocationController {
                     return;
                 }
                 updating = true;
-                combo.setValue(teacherFor(row.getSupervisor()));
+                combo.setSelectedItem(teacherFor(row.getSupervisor()));
                 updating = false;
                 setGraphic(combo);
             }
