@@ -1,359 +1,425 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportClassScore" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c06ab045-da66-44dd-a22b-817fb4fb28dd">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<style name="Crosstab_CH" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab_CG" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab_CT" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab_CD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<parameter name="CLASSROOM_NAME" class="java.lang.String"/>
-	<parameter name="MAJOR_NAME" class="java.lang.String"/>
-	<parameter name="EXAM_TYPE_LABEL" class="java.lang.String"/>
-	<parameter name="SEMESTER" class="java.lang.String"/>
-	<parameter name="ACADEMIC_YEAR" class="java.lang.String"/>
-	<parameter name="PRINCIPAL_NAME" class="java.lang.String"/>
-	<parameter name="PRINCIPAL_NIP" class="java.lang.String"/>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
-	<field name="nis" class="java.lang.String"/>
-	<field name="studentName" class="java.lang.String"/>
-	<field name="subjectName" class="java.lang.String"/>
-	<field name="score" class="java.lang.Integer"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band height="204" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<image>
-				<reportElement x="-20" y="-20" width="842" height="224" uuid="5c92cbb5-7a94-4dc3-aecb-9aa265e00280"/>
-				<imageExpression><![CDATA["images/kop_adi_luhur.png"]]></imageExpression>
-			</image>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="159" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<staticText>
-				<reportElement x="113" y="2" width="574" height="30" uuid="0c58ca1e-aa42-48d7-b392-b12a6080b2bc"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[REKAP NILAI KELAS]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="113" y="33" width="574" height="30" uuid="30056f70-517b-4fad-84c6-f0195e33fc41"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="18" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{EXAM_TYPE_LABEL}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="13" y="82" width="127" height="20" uuid="f5752a55-a5cf-4334-a2cd-e0cb307027a4"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Kelas			:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="140" y="82" width="230" height="20" uuid="2254af7d-4edd-4079-a044-062e8b7aa2f3"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{CLASSROOM_NAME}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="13" y="102" width="127" height="20" uuid="388c5a78-3fd9-4650-9bdd-ec3d3cc9f1da"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Jurusan			:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="140" y="102" width="230" height="20" uuid="4211b597-c274-4195-a23f-394ddd9feb43"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{MAJOR_NAME}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="13" y="122" width="127" height="20" uuid="c05658f6-b549-4495-8349-7e3e394f9b75"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Semester		:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="140" y="122" width="230" height="20" uuid="a2984496-d355-4a30-961a-c76ad912d060"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{SEMESTER}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="13" y="139" width="127" height="20" uuid="bd1b0552-12d9-4c03-ad8e-dc1699ccbe3c"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Tahun Akademik	:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="140" y="139" width="230" height="20" uuid="7d871426-2a4d-4f53-bc96-cb5fae863d31"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{ACADEMIC_YEAR}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</band>
-	</columnHeader>
-	<detail>
-		<band splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</band>
-	</detail>
-	<columnFooter>
-		<band splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</band>
-	</columnFooter>
-	<pageFooter>
-		<band splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</band>
-	</pageFooter>
-	<summary>
-		<band height="185" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<crosstab>
-				<reportElement x="13" y="0" width="789" height="76" uuid="df418363-e2f0-4484-a00d-cb86354ce242">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<crosstabHeaderCell>
-					<cellContents mode="Opaque" style="Crosstab_CH">
-						<staticText>
-							<reportElement x="0" y="0" width="45" height="48" uuid="9c6f1a10-1111-4111-8111-a11111111101"/>
-							<box>
-								<pen lineWidth="0.5" lineColor="#000000"/>
-							</box>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="10" isBold="true"/>
-							</textElement>
-							<text><![CDATA[NIS]]></text>
-						</staticText>
-						<staticText>
-							<reportElement x="45" y="0" width="130" height="48" uuid="9c6f1a10-1111-4111-8111-a11111111102"/>
-							<box>
-								<pen lineWidth="0.5" lineColor="#000000"/>
-							</box>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="10" isBold="true"/>
-							</textElement>
-							<text><![CDATA[Nama Siswa]]></text>
-						</staticText>
-					</cellContents>
-				</crosstabHeaderCell>
-				<rowGroup name="nis" width="45" totalPosition="End">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{nis}]]></bucketExpression>
-					</bucket>
-					<crosstabRowHeader>
-						<cellContents mode="Opaque" style="Crosstab_CH">
-							<textField>
-								<reportElement x="0" y="0" width="45" height="20" uuid="2f398d92-76d1-42b7-b0ef-66fe872767e5"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{nis}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabRowHeader>
-					<crosstabTotalRowHeader>
-						<cellContents mode="Opaque" style="Crosstab_CT">
-							<staticText>
-								<reportElement x="0" y="0" width="175" height="20" uuid="62939594-440e-4fe4-89ca-f4d6df4f1e7e"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="10" isBold="true"/>
-								</textElement>
-								<text><![CDATA[Rata-rata Kelas]]></text>
-							</staticText>
-						</cellContents>
-					</crosstabTotalRowHeader>
-				</rowGroup>
-				<rowGroup name="studentName" width="130">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{studentName}]]></bucketExpression>
-					</bucket>
-					<crosstabRowHeader>
-						<cellContents mode="Opaque" style="Crosstab_CH">
-							<textField>
-								<reportElement x="0" y="0" width="130" height="20" uuid="cba9780f-1679-4f66-85c4-e0202468923a"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{studentName}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabRowHeader>
-					<crosstabTotalRowHeader>
-						<cellContents/>
-					</crosstabTotalRowHeader>
-				</rowGroup>
-				<columnGroup name="subjectName" height="48" totalPosition="End">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{subjectName}]]></bucketExpression>
-					</bucket>
-					<crosstabColumnHeader>
-						<cellContents mode="Opaque" style="Crosstab_CH">
-							<textField>
-								<reportElement x="0" y="0" width="45" height="48" uuid="070df7bf-0571-4973-8b56-4a74da694ceb"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="7" isBold="true"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{subjectName}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabColumnHeader>
-					<crosstabTotalColumnHeader>
-						<cellContents mode="Opaque" style="Crosstab_CT">
-							<staticText>
-								<reportElement x="0" y="0" width="45" height="48" uuid="61fc49bc-7baa-4ed9-bcbe-1ce41d608c5b"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="7" isBold="true"/>
-								</textElement>
-								<text><![CDATA[Rata-rata]]></text>
-							</staticText>
-						</cellContents>
-					</crosstabTotalColumnHeader>
-				</columnGroup>
-				<measure name="score_MEASURE" class="java.lang.Integer" calculation="Average">
-					<measureExpression><![CDATA[$F{score}]]></measureExpression>
-				</measure>
-				<crosstabCell width="45" height="20">
-					<cellContents mode="Opaque" style="Crosstab_CD">
-						<textField>
-							<reportElement x="0" y="0" width="45" height="20" uuid="986f6b6a-a84c-48e3-a614-9ff893a841a5"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="10"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$V{score_MEASURE}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="45" height="20" columnTotalGroup="subjectName">
-					<cellContents mode="Opaque" style="Crosstab_CT">
-						<textField>
-							<reportElement x="0" y="0" width="45" height="20" uuid="7e7cd664-9430-4068-9bff-ef4536bdc492"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="10" isBold="true"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$V{score_MEASURE}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="45" height="20" rowTotalGroup="nis">
-					<cellContents mode="Opaque" style="Crosstab_CT">
-						<textField>
-							<reportElement x="0" y="0" width="45" height="20" uuid="cc3267e7-ace0-4461-9282-376e4e67cb8b"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="10" isBold="true"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$V{score_MEASURE}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="45" height="20" rowTotalGroup="nis" columnTotalGroup="subjectName">
-					<cellContents mode="Opaque" style="Crosstab_CT">
-						<textField>
-							<reportElement x="0" y="0" width="45" height="20" uuid="3189753a-0dcb-4c72-880c-5290d0711f22"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="10" isBold="true"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$V{score_MEASURE}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="60" height="20" rowTotalGroup="studentName" columnTotalGroup="subjectName">
-					<cellContents/>
-				</crosstabCell>
-			</crosstab>
-			<staticText>
-				<reportElement positionType="Float" x="600" y="104" width="100" height="30" uuid="519496bc-c742-4dbb-9137-9ca4748789d6">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Kepala Sekolah]]></text>
-			</staticText>
-			<textField>
-				<reportElement positionType="Float" x="600" y="80" width="190" height="30" uuid="90813475-632e-415c-b16f-fa1dd17e672a">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Jakarta, " +
-new java.text.SimpleDateFormat(
-    "EEEE, dd MMMM yyyy",
-    new java.util.Locale("id", "ID")
-).format(new java.util.Date())]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="ScaleFont">
-				<reportElement positionType="Float" x="600" y="150" width="180" height="17" uuid="a37cebf9-2b61-44b8-af9d-4bb5517da4f9">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["(" + ($P{PRINCIPAL_NAME} != null ? $P{PRINCIPAL_NAME} : "") + ")"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="600" y="167" width="150" height="15" uuid="6c8071d7-719f-47f9-a096-ff2c5aea8176">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["NIP. " + ($P{PRINCIPAL_NIP} != null && !$P{PRINCIPAL_NIP}.trim().isEmpty() ? $P{PRINCIPAL_NIP} : "-")]]></textFieldExpression>
-			</textField>
-		</band>
-	</summary>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportClassScore" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="c06ab045-da66-44dd-a22b-817fb4fb28dd">
+  <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+  <parameter name="CLASSROOM_NAME" class="java.lang.String"/>
+  <parameter name="MAJOR_NAME" class="java.lang.String"/>
+  <parameter name="EXAM_TYPE_LABEL" class="java.lang.String"/>
+  <parameter name="SEMESTER" class="java.lang.String"/>
+  <parameter name="ACADEMIC_YEAR" class="java.lang.String"/>
+  <parameter name="PRINCIPAL_NAME" class="java.lang.String"/>
+  <parameter name="PRINCIPAL_NIP" class="java.lang.String"/>
+  <queryString><![CDATA[]]></queryString>
+  <field name="rowNo" class="java.lang.Integer"/>
+  <field name="nisn" class="java.lang.String"/>
+  <field name="nis" class="java.lang.String"/>
+  <field name="studentName" class="java.lang.String"/>
+  <field name="subjectName" class="java.lang.String"/>
+  <field name="score" class="java.lang.Integer"/>
+  <title>
+    <band height="284" splitType="Stretch">
+      <image scaleImage="FillFrame">
+        <reportElement x="-20" y="-20" width="842" height="211" uuid="6fe0938f-b96e-4f75-a302-4d628bfda069"/>
+        <imageExpression><![CDATA["images/kop_adi_luhur.png"]]></imageExpression>
+      </image>
+      <staticText>
+        <reportElement x="0" y="198" width="802" height="22" uuid="33520050-37e7-4cbd-8e6d-3d507c9e58eb"/>
+        <textElement textAlignment="Center" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="16" isBold="true"/>
+        </textElement>
+        <text><![CDATA[REKAP NILAI KELAS]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="0" y="220" width="802" height="18" uuid="a6144620-43bc-4951-afa8-237ea3f84887"/>
+        <textElement textAlignment="Center" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="13" isBold="true"/>
+        </textElement>
+        <textFieldExpression><![CDATA[$P{EXAM_TYPE_LABEL}]]></textFieldExpression>
+      </textField>
+      <staticText>
+        <reportElement x="0" y="246" width="95" height="16" uuid="975e1fa1-13d9-4247-baf7-381fa513a313"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[Kelas]]></text>
+      </staticText>
+      <staticText>
+        <reportElement x="95" y="246" width="10" height="16" uuid="256df676-b605-4bbe-9535-6a7865c3ec7d"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[:]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="105" y="246" width="300" height="16" uuid="c869095b-728c-4690-8a6d-ff13c736f75c"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="true"/>
+        </textElement>
+        <textFieldExpression><![CDATA[$P{CLASSROOM_NAME}]]></textFieldExpression>
+      </textField>
+      <staticText>
+        <reportElement x="0" y="262" width="95" height="16" uuid="8645448c-5ac4-4179-a4ed-541cf49be7d6"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[Jurusan]]></text>
+      </staticText>
+      <staticText>
+        <reportElement x="95" y="262" width="10" height="16" uuid="647007d7-8009-4ac8-97cb-d84e7db06095"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[:]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="105" y="262" width="300" height="16" uuid="e73f26d8-b90e-4f03-8ff8-e0caee08fdde"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="true"/>
+        </textElement>
+        <textFieldExpression><![CDATA[$P{MAJOR_NAME}]]></textFieldExpression>
+      </textField>
+      <staticText>
+        <reportElement x="540" y="246" width="105" height="16" uuid="7c439ed4-3fa7-4208-94be-cb7dfdd2c5de"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[Semester]]></text>
+      </staticText>
+      <staticText>
+        <reportElement x="645" y="246" width="10" height="16" uuid="4a1c8d0c-6984-41fb-abab-01ace96e7bdc"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[:]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="655" y="246" width="147" height="16" uuid="099250a0-c6d8-4b8b-b339-1ff323c1a136"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="true"/>
+        </textElement>
+        <textFieldExpression><![CDATA[$P{SEMESTER}]]></textFieldExpression>
+      </textField>
+      <staticText>
+        <reportElement x="540" y="262" width="105" height="16" uuid="116f964c-d3f8-444a-bd3e-963f2750f0f4"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[Tahun Akademik]]></text>
+      </staticText>
+      <staticText>
+        <reportElement x="645" y="262" width="10" height="16" uuid="6f4a97d4-af2d-481a-b5b1-84ea4934dd04"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="false"/>
+        </textElement>
+        <text><![CDATA[:]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="655" y="262" width="147" height="16" uuid="53b188ce-8d37-4bed-b2a6-5f9a51564164"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="11" isBold="true"/>
+        </textElement>
+        <textFieldExpression><![CDATA[$P{ACADEMIC_YEAR}]]></textFieldExpression>
+      </textField>
+    </band>
+  </title>
+  <pageFooter>
+    <band height="16" splitType="Stretch">
+      <textField>
+        <reportElement x="0" y="2" width="400" height="14" uuid="5a0bfc06-9c50-414e-a415-041ff00c8245"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="8" isBold="false"/>
+        </textElement>
+        <textFieldExpression><![CDATA["Rekap Nilai Kelas " + ($P{CLASSROOM_NAME} != null ? $P{CLASSROOM_NAME} : "") + " - " + ($P{EXAM_TYPE_LABEL} != null ? $P{EXAM_TYPE_LABEL} : "")]]></textFieldExpression>
+      </textField>
+      <textField>
+        <reportElement x="602" y="2" width="170" height="14" uuid="f785f368-6430-43b4-9d88-9a9f1f35c960"/>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="8" isBold="false"/>
+        </textElement>
+        <textFieldExpression><![CDATA["Halaman " + $V{PAGE_NUMBER} + " dari"]]></textFieldExpression>
+      </textField>
+      <textField evaluationTime="Report">
+        <reportElement x="772" y="2" width="30" height="14" uuid="a8ad15cf-2b8f-439f-a5b8-3777c49d85da"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle">
+          <font fontName="Times New Roman" size="8" isBold="false"/>
+        </textElement>
+        <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+      </textField>
+    </band>
+  </pageFooter>
+  <summary>
+    <band height="250" splitType="Stretch">
+      <crosstab ignoreWidth="false" horizontalPosition="Center">
+        <reportElement x="0" y="0" width="802" height="136" uuid="2be6d25a-5e13-4534-8d46-64180d3704dc"/>
+        <crosstabHeaderCell>
+          <cellContents mode="Opaque" backcolor="#E3E3E3">
+            <staticText>
+              <reportElement x="0" y="0" width="24" height="100" uuid="0b598134-7d96-4be5-bd6e-e95727b1cebe"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="10" isBold="true"/>
+              </textElement>
+              <text><![CDATA[No]]></text>
+            </staticText>
+            <staticText>
+              <reportElement x="24" y="0" width="64" height="100" uuid="2c4b341d-e633-45ea-87d9-904a7eac4508"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="10" isBold="true"/>
+              </textElement>
+              <text><![CDATA[NISN]]></text>
+            </staticText>
+            <staticText>
+              <reportElement x="88" y="0" width="40" height="100" uuid="3eb37682-39ac-41ae-9201-d78032da6f42"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="10" isBold="true"/>
+              </textElement>
+              <text><![CDATA[NIS]]></text>
+            </staticText>
+            <staticText>
+              <reportElement x="128" y="0" width="150" height="100" uuid="6c76376d-2fa2-4403-8736-ffff418bd216"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="10" isBold="true"/>
+              </textElement>
+              <text><![CDATA[Nama Siswa]]></text>
+            </staticText>
+          </cellContents>
+        </crosstabHeaderCell>
+        <rowGroup name="rowNo" width="24" totalPosition="End">
+          <bucket class="java.lang.Integer">
+            <bucketExpression><![CDATA[$F{rowNo}]]></bucketExpression>
+          </bucket>
+          <crosstabRowHeader>
+            <cellContents>
+              <textField textAdjust="ScaleFont">
+                <reportElement x="0" y="0" width="24" height="18" uuid="67242c43-29a3-416d-9920-7b868047289d"/>
+                <box>
+                  <pen lineWidth="0.5" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                  <font fontName="Times New Roman" size="10" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{rowNo}]]></textFieldExpression>
+              </textField>
+            </cellContents>
+          </crosstabRowHeader>
+          <crosstabTotalRowHeader>
+            <cellContents mode="Opaque" backcolor="#F2F2F2">
+              <staticText>
+                <reportElement x="0" y="0" width="278" height="18" uuid="a994730b-2c2e-4118-9c6c-b866b001c2f7"/>
+                <box>
+                  <pen lineWidth="0.5" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                  <font fontName="Times New Roman" size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Rata-rata Kelas]]></text>
+              </staticText>
+            </cellContents>
+          </crosstabTotalRowHeader>
+        </rowGroup>
+        <rowGroup name="nisn" width="64">
+          <bucket class="java.lang.String">
+            <bucketExpression><![CDATA[$F{nisn} == null || $F{nisn}.trim().isEmpty() ? "-" : $F{nisn}]]></bucketExpression>
+          </bucket>
+          <crosstabRowHeader>
+            <cellContents>
+              <textField textAdjust="ScaleFont">
+                <reportElement x="0" y="0" width="64" height="18" uuid="aa4043a4-f04d-4426-a67d-20557eabcc65"/>
+                <box>
+                  <pen lineWidth="0.5" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                  <font fontName="Times New Roman" size="10" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{nisn}]]></textFieldExpression>
+              </textField>
+            </cellContents>
+          </crosstabRowHeader>
+          <crosstabTotalRowHeader>
+            <cellContents/>
+          </crosstabTotalRowHeader>
+        </rowGroup>
+        <rowGroup name="nis" width="40">
+          <bucket class="java.lang.String">
+            <bucketExpression><![CDATA[$F{nis} == null ? "-" : $F{nis}]]></bucketExpression>
+          </bucket>
+          <crosstabRowHeader>
+            <cellContents>
+              <textField textAdjust="ScaleFont">
+                <reportElement x="0" y="0" width="40" height="18" uuid="714b2579-4245-4e11-b822-37e093ce0d4f"/>
+                <box>
+                  <pen lineWidth="0.5" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                  <font fontName="Times New Roman" size="10" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{nis}]]></textFieldExpression>
+              </textField>
+            </cellContents>
+          </crosstabRowHeader>
+          <crosstabTotalRowHeader>
+            <cellContents/>
+          </crosstabTotalRowHeader>
+        </rowGroup>
+        <rowGroup name="studentName" width="150">
+          <bucket class="java.lang.String">
+            <bucketExpression><![CDATA[$F{studentName}]]></bucketExpression>
+          </bucket>
+          <crosstabRowHeader>
+            <cellContents>
+              <textField textAdjust="ScaleFont">
+                <reportElement x="0" y="0" width="150" height="18" uuid="2bcc524b-aa0c-4efd-9cd9-514508ff6cd2"/>
+                <box leftPadding="4" rightPadding="2">
+                  <pen lineWidth="0.5" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                  <font fontName="Times New Roman" size="10" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{studentName}]]></textFieldExpression>
+              </textField>
+            </cellContents>
+          </crosstabRowHeader>
+          <crosstabTotalRowHeader>
+            <cellContents/>
+          </crosstabTotalRowHeader>
+        </rowGroup>
+        <columnGroup name="subjectName" height="100" totalPosition="End">
+          <bucket class="java.lang.String">
+            <bucketExpression><![CDATA[$F{subjectName}]]></bucketExpression>
+          </bucket>
+          <crosstabColumnHeader>
+            <cellContents mode="Opaque" backcolor="#E3E3E3">
+              <textField>
+                <reportElement x="0" y="0" width="34" height="100" uuid="c855f3d7-ef4d-499c-b923-47fe367d7632"/>
+                <box topPadding="3" bottomPadding="3" leftPadding="1" rightPadding="1">
+                  <pen lineWidth="0.5" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+                  <font fontName="Times New Roman" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{subjectName}]]></textFieldExpression>
+              </textField>
+            </cellContents>
+          </crosstabColumnHeader>
+          <crosstabTotalColumnHeader>
+            <cellContents mode="Opaque" backcolor="#E3E3E3">
+              <staticText>
+                <reportElement x="0" y="0" width="44" height="100" uuid="db892ff9-3f01-420a-bcab-62966e3253aa"/>
+                <box>
+                  <pen lineWidth="0.5" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                  <font fontName="Times New Roman" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Rata-rata]]></text>
+              </staticText>
+            </cellContents>
+          </crosstabTotalColumnHeader>
+        </columnGroup>
+        <measure name="score_COUNT" class="java.lang.Integer" calculation="Count">
+          <measureExpression><![CDATA[$F{score}]]></measureExpression>
+        </measure>
+        <measure name="score_MEASURE" class="java.lang.Double" calculation="Average">
+          <measureExpression><![CDATA[$F{score} == null ? null : Double.valueOf($F{score}.doubleValue())]]></measureExpression>
+        </measure>
+        <crosstabCell width="34" height="18">
+          <cellContents>
+            <textField>
+              <reportElement x="0" y="0" width="34" height="18" uuid="a61957cb-2184-4ee1-b4a7-f65fa2650188"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="10" isBold="false"/>
+              </textElement>
+              <textFieldExpression><![CDATA[$V{score_MEASURE} == null || $V{score_COUNT} == null || $V{score_COUNT} == 0 ? "-" : new java.text.DecimalFormat("0", new java.text.DecimalFormatSymbols(new java.util.Locale("id", "ID"))).format($V{score_MEASURE})]]></textFieldExpression>
+            </textField>
+          </cellContents>
+        </crosstabCell>
+        <crosstabCell width="44" height="18" columnTotalGroup="subjectName">
+          <cellContents mode="Opaque" backcolor="#F2F2F2">
+            <textField>
+              <reportElement x="0" y="0" width="44" height="18" uuid="0df6ea1f-77f8-4f37-9e6e-7bacc87815b6"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="10" isBold="true"/>
+              </textElement>
+              <textFieldExpression><![CDATA[$V{score_MEASURE} == null || $V{score_COUNT} == null || $V{score_COUNT} == 0 ? "-" : new java.text.DecimalFormat("0.00", new java.text.DecimalFormatSymbols(new java.util.Locale("id", "ID"))).format($V{score_MEASURE})]]></textFieldExpression>
+            </textField>
+          </cellContents>
+        </crosstabCell>
+        <crosstabCell width="34" height="18" rowTotalGroup="rowNo">
+          <cellContents mode="Opaque" backcolor="#F2F2F2">
+            <textField>
+              <reportElement x="0" y="0" width="34" height="18" uuid="9cd61779-d45c-4154-b46a-961a79be75a3"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="9" isBold="true"/>
+              </textElement>
+              <textFieldExpression><![CDATA[$V{score_MEASURE} == null || $V{score_COUNT} == null || $V{score_COUNT} == 0 ? "-" : new java.text.DecimalFormat("0.00", new java.text.DecimalFormatSymbols(new java.util.Locale("id", "ID"))).format($V{score_MEASURE})]]></textFieldExpression>
+            </textField>
+          </cellContents>
+        </crosstabCell>
+        <crosstabCell width="44" height="18" rowTotalGroup="rowNo" columnTotalGroup="subjectName">
+          <cellContents mode="Opaque" backcolor="#F2F2F2">
+            <textField>
+              <reportElement x="0" y="0" width="44" height="18" uuid="8a6ebfd4-c666-425c-9f93-b2b42eff881b"/>
+              <box>
+                <pen lineWidth="0.5" lineColor="#000000"/>
+              </box>
+              <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="Times New Roman" size="10" isBold="true"/>
+              </textElement>
+              <textFieldExpression><![CDATA[$V{score_MEASURE} == null || $V{score_COUNT} == null || $V{score_COUNT} == 0 ? "-" : new java.text.DecimalFormat("0.00", new java.text.DecimalFormatSymbols(new java.util.Locale("id", "ID"))).format($V{score_MEASURE})]]></textFieldExpression>
+            </textField>
+          </cellContents>
+        </crosstabCell>
+      </crosstab>
+      <frame>
+        <reportElement positionType="Float" x="540" y="154" width="262" height="96" uuid="935ab73a-f9a1-4c5c-81ca-4d5646591288"/>
+        <textField>
+          <reportElement x="0" y="0" width="262" height="16" uuid="cc505914-165f-4161-a726-bc56cec19ed0"/>
+          <textElement textAlignment="Left" verticalAlignment="Middle">
+            <font fontName="Times New Roman" size="11" isBold="false"/>
+          </textElement>
+          <textFieldExpression><![CDATA["Jakarta, " + new java.text.SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id", "ID")).format(new java.util.Date())]]></textFieldExpression>
+        </textField>
+        <staticText>
+          <reportElement x="0" y="16" width="262" height="16" uuid="2f109228-30c2-4183-bd22-aadaf24aa7cf"/>
+          <textElement textAlignment="Left" verticalAlignment="Middle">
+            <font fontName="Times New Roman" size="11" isBold="false"/>
+          </textElement>
+          <text><![CDATA[Kepala Sekolah]]></text>
+        </staticText>
+        <textField textAdjust="ScaleFont">
+          <reportElement x="0" y="62" width="262" height="16" uuid="6b9ae54a-a03c-4018-8e0b-70ab6ed349bd"/>
+          <textElement textAlignment="Left" verticalAlignment="Middle">
+            <font fontName="Times New Roman" size="11" isBold="true"/>
+          </textElement>
+          <textFieldExpression><![CDATA["(" + ($P{PRINCIPAL_NAME} != null && !$P{PRINCIPAL_NAME}.trim().isEmpty() ? $P{PRINCIPAL_NAME} : "..............................") + ")"]]></textFieldExpression>
+        </textField>
+        <textField>
+          <reportElement x="0" y="78" width="262" height="16" uuid="fe326ffa-432d-4af6-9a2c-208e97254ee7"/>
+          <textElement textAlignment="Left" verticalAlignment="Middle">
+            <font fontName="Times New Roman" size="11" isBold="false"/>
+          </textElement>
+          <textFieldExpression><![CDATA["NIP. " + ($P{PRINCIPAL_NIP} != null && !$P{PRINCIPAL_NIP}.trim().isEmpty() ? $P{PRINCIPAL_NIP} : "-")]]></textFieldExpression>
+        </textField>
+      </frame>
+    </band>
+  </summary>
 </jasperReport>
